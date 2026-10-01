@@ -1,0 +1,10 @@
+java TCPServer -port 50001 -key a -value 1
+java UDPServer -port 50002 -key b -value 2
+java TCPServer -port 50003 -key c -value 3
+java TCPClient -address 127.0.0.1 -port 60001 -command GET NAMES
+
+
+java Proxy -port 60001 -server 127.0.0.1 50001 -server 127.0.0.1 60002
+java Proxy -port 60002 -server 127.0.0.1 50002 -server 127.0.0.1 60003
+java Proxy -port 60003 -server 127.0.0.1 50003 -server 127.0.0.1 60004
+java Proxy -port 60004 -server 127.0.0.1 60001

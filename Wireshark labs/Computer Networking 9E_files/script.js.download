@@ -1,0 +1,28 @@
+// Set navbar button active when linked
+$(document).ready(function() {
+	var path = $(location).attr('pathname').split('/').pop();
+	$('.nav-item a').each(function() {
+		if($(this).attr('href') == path) {
+			$(this).parent().addClass('active');
+		}
+		else if(path == '' && $(this).attr('href') == 'index.php') { // index page
+			$(this).parent().addClass('active');
+		}
+	});
+	$('.dropdown-item').each(function() {
+		if($(this).attr('href') == path) {
+			$(this).parent().parent().addClass('active');
+		}
+	});
+});
+
+// Makes dropdowns maintain their color-scheme when a menu-entry is clicked
+$(document).on('focus', '.dropdown-item', function() {
+	$(this).parent().prev().css('color', '#FFFFFF');
+	$(this).parent().prev().css('border-color', '#FFFFFF');
+	$(this).parent().prev().css('background-color', '#840E0E');
+});
+
+$(document).on('mouseup', '.dropdown-item', function() {
+	$(this).parent().prev().css('background-color', '#9c1207');
+});

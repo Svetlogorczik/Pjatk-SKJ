@@ -1,0 +1,14 @@
+leftIP = localhost
+leftPort = 7000
+rightIP =
+rightPort = 
+myLeftPort = 6000
+myRightPort = 
+
+WindowSizeX=300
+WindowSizeY=700
+WindowLocationX=600
+WindowLocationY=0
+
+Sleep = 5
+NumberOfLocalThreads = 5

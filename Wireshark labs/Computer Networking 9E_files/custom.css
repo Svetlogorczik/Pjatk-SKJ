@@ -1,0 +1,226 @@
+/*
+ * These Font sizes are used to make the text in the header section bigger
+*/
+.larger-fontsize {
+	font-size: 1.2rem;
+}
+.large-fontsize {
+	font-size: 1.1rem;
+}
+
+/*
+ * This updates the navbar color to be a darker red
+*/
+
+.bg-danger {
+	background-color: #C8102E !important;
+}
+
+/*
+ * This makes the text-danger a darker red.  THis wasa #9c1207 and is now #C8102E, aboive and below
+*/
+
+.text-dark-red {
+	color: #C8102E;
+}
+
+.highlight {
+	font-weight: 900;
+	color: #C8102E;
+}
+
+.highlight a {
+	font-weight: 900;
+	color: #C8102E;
+}
+
+/*
+ * This is used to change the color of the buttons in the navbar
+ * to white text with a white outline, which still have a white ouline
+ * when hovered over
+*/
+.btn-outline-primary {
+	color: #FFFFFF;
+	/* border-color: #FFFFFF; */
+	border-width: 0px;
+	box-shadow: 0 0 0 0rem rgba(0,90,90,0.5) !important;
+}
+.btn-outline-primary:hover {
+	border-color: #FFFFFF;
+	background-color: #BD1414;
+}
+.btn-outline-primary:active {
+	border-color: #FFFFFF !important;
+	background-color: #840E0E !important;
+	box-shadow: 0 0 0 0rem rgba(0,90,90,0.5) !important;
+}
+
+/*
+ * Makes modal buttons fit the theme
+*/
+
+.btn-primary {
+	color: #FFFFFF;
+	background-color: #840E0E !important;
+	border-color: #840E0E !important;
+	border-width: 1px;
+}
+.btn-primary:hover {
+	color: #FFFFFF;
+	background-color: #BD1414 !important;
+}
+.btn-primary:active {
+	border-color: #FFFFFF !important;
+	background-color: #840E0E !important;
+	box-shadow: 0 0 0 0rem rgba(0,90,90,0.5) !important;
+}
+
+.btn-secondary {
+	color: #840E0E !important;
+	border-color: #840E0E !important;
+	border-width: 1px;
+}
+
+/*
+ * Added margins for buttons in row
+*/
+.btn-group button {
+	margin: 5px;
+}
+
+/*
+ * This updates the navbar toggler 'hamburger' to be white with
+ * a white outline, which fills in dark red when hovered over
+*/
+.navbar-light .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1.0)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+.navbar-light .navbar-toggler {
+	border-color: #FFFFFF;
+}
+.navbar-light .navbar-toggler:hover {
+	background-color: #BD1414;
+}
+.navbar-light .navbar-toggler:active {
+	background-color: #840E0E;
+}
+
+/*
+ * Makes modal window bigger
+*/
+
+.modal-xl {
+   width: 90%;
+   max-width:1200px;
+}
+
+
+/*
+ * Changes expand/collapse link size and color
+*/
+.accordion {
+	color: #BD1414;
+	font-size: 10px;
+	display: inline-block;
+	padding-bottom: 5px;
+}
+.accordion:hover {
+	color: #840E0E;
+	text-decoration: none;
+}
+
+.btn-small {
+	padding-top: 4px;
+	padding-bottom: 4px;
+	font-size: 24px;
+}
+
+/*
+ * Changes padding of OL and LI elements
+*/
+.padded-ol li {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+/*
+ * Changes text color for navbar text blocks (h5 in this case)
+*/
+.navbar-tag {
+	color: white;
+}
+
+/* Adds a thin border to select and input elements, which gets hidden when focused */
+
+select.form-control {
+	text-indent: -4px;
+	border: 1px solid;
+	border-color: #840E0E;
+}
+
+select.form-control:focus {
+	border: 0px;
+}
+
+input.form-control {
+	border: 1px solid;
+	border-color: #840E0E;
+}
+
+input.form-control:focus {
+	border: 0px;
+}
+
+/* Active navbar item */
+
+.active .btn-outline-primary {
+	background-color: black;
+}
+
+.active .btn.btn-outline-primary.dropdown-toggle {
+	color: #FFFFFF;
+}
+
+.active .btn.btn-outline-primary.dropdown-toggle:focus {
+	background-color: black !important;
+}
+
+.btn.btn-outline-primary.dropdown-toggle {
+	color: #FFFFFF;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.btn.btn-outline-primary.dropdown-toggle:hover {
+	color: #FFFFFF;
+}
+
+.btn.btn-outline-primary.dropdown-toggle:focus {
+	color: #FFFFFF;
+	border-color: #FFFFFF !important;
+	background-color: #840E0E !important;
+	box-shadow: 0 0 0 0rem rgba(0,90,90,0.5) !important;
+}
+
+.dropdown-item:active {
+	background-color: #840E0E;
+}
+
+/* Changes background color */
+
+.jumbotron {
+	background-color: #FFFFFF;
+	padding-top: 25px;
+	padding-bottom: 25px;
+}
+
+/* Font Change */
+* {
+	font-family: "Arial", sans-serif !important;
+}
+
+/* Link Color Change */
+
+a {
+	color: #9c1207;
+}
