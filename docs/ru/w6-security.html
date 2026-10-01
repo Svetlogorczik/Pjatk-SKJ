@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Безопасность сетей — кто такие «плохие парни» и что они умеют — SKJ</title>
+<meta name="description" content="Вредоносное ПО (вирусы, черви, шпионы, ботнеты), атаки DoS/DDoS, перехват пакетов (sniffing) и подмена IP-адреса (spoofing).">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/w6-security.html">
+<link rel="alternate" hreflang="en" href="../en/w6-security.html">
+<link rel="alternate" hreflang="ru" href="../ru/w6-security.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="w6-security">
+<a class="skip-link" href="#main">Перейти к содержимому</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Меню" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Сети + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Язык"><a class="lang-switch__link" href="../pl/w6-security.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../en/w6-security.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../ru/w6-security.html" hreflang="ru" lang="ru" data-lang="ru" aria-current="true" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Сменить тему (светлая / тёмная)" title="Сменить тему (светлая / тёмная)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Меню">
+<div class="sidebar__head"><span class="sidebar__title">Меню</span><button type="button" class="sidebar__close" data-nav-close aria-label="Закрыть меню">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Сети + Java</a>
+<div class="nav__progress progress" data-progress data-label="Ваш прогресс"><span class="progress__label">Ваш прогресс</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Старт</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Старт и настройка</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="course.html" data-page-link="course"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Сдача предмета и даты</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Словарь PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">Все конспекты</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Лекции</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Интернет и протоколы</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Край сети</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Ядро сети</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Структура Интернета</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Задержки и пропускная способность</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link nav__link--active" href="w6-security.html" data-page-link="w6-security" aria-current="page"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Безопасность</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Уровни и инкапсуляция</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">История Интернета</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Упражнения (ćwiczenia)</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Эстафета процессов (первый запуск)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP в Java: мини HTTP-сервер</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Клиент текстового протокола</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP вместе</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS вручную (UDP, байты)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP в Wireshark</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Коллоквиум</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Коллоквиум: тренировка</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Проект</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Проект: сеть proxy</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Лекции · W6</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">🛡️</span>Безопасность сетей — кто такие «плохие парни» и что они умеют</h1>
+<p class="article__lead">Вредоносное ПО (вирусы, черви, шпионы, ботнеты), атаки DoS/DDoS, перехват пакетов (sniffing) и подмена IP-адреса (spoofing).</p>
+<div class="article__meta"><span class="badge badge--lecture">📘 Лекция + дополнения</span><span class="article__source">По материалам: Лекция 1 — Chapter 1, слайды 1-57…1-62 (Kurose &amp; Ross)</span><span class="article__time">⏱ 4 мин чтения</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Краткая шпаргалка для ćwiczeń и проекта"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Конспект</span></button><button type="button" class="button button--ghost" data-done-toggle="w6-security" aria-pressed="false" data-label-off="Отметить как пройденное" data-label-on="Пройдено"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Отметить как пройденное</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">На этой странице</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#коротко">Коротко</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#чем-занимается-сетевая-безопасность">Чем занимается сетевая безопасность?</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#malware-вредоносное-по">Malware — вредоносное ПО</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#отказ-в-обслуживании-dos-и-ddos">Отказ в обслуживании: DoS и DDoS</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#перехват-пакетов-sniffing">Перехват пакетов: sniffing</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#поддельная-личность-ip-spoofing">Поддельная личность: IP spoofing</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#проверь-себя">Проверь себя  ✍️</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="коротко">Коротко<a class="content__anchor" href="#коротко" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Интернет <strong>изначально не проектировали с расчётом на безопасность</strong> — предполагалось, что пользователи доверяют друг другу. Сегодня разработчики «догоняют» атакующих, а безопасность касается <strong>всех уровней</strong>.</li>
+<li class="content__list-item"><strong>Malware</strong>: <strong>вирус</strong> (нужно, чтобы ты что-то запустил), <strong>червь</strong> (запускается сам), <strong>spyware</strong> (шпионит); заражённые компьютеры образуют <strong>ботнет</strong>.</li>
+<li class="content__list-item"><strong>DoS / DDoS</strong>: завалить сервер или канал фальшивым трафиком, чтобы настоящие пользователи не могли им пользоваться.</li>
+<li class="content__list-item"><strong>Sniffing</strong>: в широковещательной среде (WiFi, общий Ethernet) можно перехватить чужие пакеты — Wireshark как раз и есть сниффер.</li>
+<li class="content__list-item"><strong>IP spoofing</strong>: отправка пакета с <strong>поддельным адресом отправителя</strong>.</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="чем-занимается-сетевая-безопасность">Чем занимается сетевая безопасность?<a class="content__anchor" href="#чем-занимается-сетевая-безопасность" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">По лекции эта область изучает три вещи:</p>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item">как <strong>атакующие</strong> могут атаковать компьютерные сети,</li>
+<li class="content__list-item">как <strong>защищать</strong> сети от атак,</li>
+<li class="content__list-item">как <strong>проектировать</strong> архитектуры, устойчивые к атакам.</li>
+</ol>
+<p class="content__paragraph">Проблема: Интернет <strong>изначально не проектировали с расчётом на безопасность</strong>. Исходная идея — <em>«группа доверяющих друг другу пользователей, подключённых к прозрачной сети»</em>. Поэтому разработчики протоколов <strong>догоняют</strong> (<em>playing catch-up</em>), а вопросы безопасности есть <strong>на всех уровнях</strong> (про уровни — <a class="content__link" href="w7-layers.html">W7</a>).</p>
+<h2 class="content__heading content__heading--h2" id="malware-вредоносное-по">Malware — вредоносное ПО<a class="content__anchor" href="#malware-вредоносное-по" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Вредоносное ПО может попасть на хост как:</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Вид</th><th class="content__table-heading">Как распространяется</th><th class="content__table-heading">Главное отличие</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><strong>Вирус</strong></td><td class="content__table-cell">самовоспроизводящееся заражение через <strong>получение и запуск</strong> объекта, например вложения в письме</td><td class="content__table-cell">нужно <strong>твоё действие</strong> (открыть файл)</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>Червь</strong> (<em>worm</em>)</td><td class="content__table-cell">самовоспроизводящееся заражение через <strong>пассивное получение</strong> объекта, который <strong>сам запускается</strong></td><td class="content__table-cell">распространяется <strong>без твоего участия</strong></td></tr></tbody></table></div>
+<p class="content__paragraph">Кроме того:</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>Spyware</strong> может записывать нажатия клавиш, посещённые сайты и отправлять эти данные на сервер атакующего.</li>
+<li class="content__list-item">Заражённый хост могут включить в <strong>ботнет</strong> — армию захваченных компьютеров, которую используют для <strong>спама</strong> или атак <strong>DDoS</strong>.</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="отказ-в-обслуживании-dos-и-ddos">Отказ в обслуживании: DoS и DDoS<a class="content__anchor" href="#отказ-в-обслуживании-dos-и-ddos" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph"><strong>Denial of Service (DoS)</strong> — атакующие делают ресурсы (сервер, пропускную способность) <strong>недоступными для нормального трафика</strong>, <strong>заваливая</strong> их фальшивым трафиком.</p>
+<p class="content__paragraph">Схема атаки с лекции (<strong>распределённый</strong> DoS, то есть DDoS):</p>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><strong>Выбрать цель</strong> (например, сервер магазина).</li>
+<li class="content__list-item"><strong>Взломать хосты</strong> в разных местах сети (собрать ботнет).</li>
+<li class="content__list-item"><strong>Слать пакеты</strong> на цель со всех захваченных хостов одновременно.</li>
+</ol>
+</div>
+
+<aside class="callout callout--own"><div class="callout__header"><span class="callout__icon" aria-hidden="true">✍️</span><span class="callout__label">Добавлено автором сайта — этого нет в лекции</span><span class="callout__title">Связь с W5 и с твоим проектом</span></div><div class="callout__body"><ul class="content__list content__list--bullet">
+<li class="content__list-item">DDoS — это намеренный разгон интенсивности трафика до <span class="formula formula--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mi>a</mi><mi mathvariant="normal">/</mi><mi>R</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">La/R &gt; 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">a</span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> (см. <a class="content__link" href="w5-performance.html">W5</a>): очереди растут без конца, и нормальные пакеты теряются.</li>
+<li class="content__list-item">«Мини-DoS» можно случайно устроить самому себе: если твой сервер или proxy обслуживает клиентов <strong>по очереди</strong> и бесконечно ждёт одного медленного клиента, все остальные стоят. Решение: <strong>таймауты</strong> (<code class="content__code">setSoTimeout</code>) и <strong>потоки</strong> на клиентов.</li>
+</ul>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="перехват-пакетов-sniffing">Перехват пакетов: sniffing<a class="content__anchor" href="#перехват-пакетов-sniffing" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph"><strong>Перехват пакетов</strong> (<em>packet sniffing</em>):</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">работает в <strong>широковещательной среде</strong> — общий Ethernet, беспроводные сети, где сигнал доходит сразу до многих устройств,</li>
+<li class="content__list-item">сетевая карта в режиме <strong>«promiscuous»</strong> читает и записывает <strong>все</strong> проходящие пакеты, а не только адресованные ей — <strong>включая пароли!</strong></li>
+</ul>
+<p class="content__paragraph">На слайде: C перехватывает пакет <code class="content__code">src:B dest:A payload</code>, который вовсе не для него.</p>
+<p class="content__paragraph"><strong>Wireshark</strong>, которым мы пользуемся на лабораторных, — это как раз (бесплатный) <strong>сниффер пакетов</strong>.</p>
+
+<aside class="callout callout--own"><div class="callout__header"><span class="callout__icon" aria-hidden="true">✍️</span><span class="callout__label">Добавлено автором сайта — этого нет в лекции</span><span class="callout__title">Посмотри своими глазами — HTTP Basic Auth</span></div><div class="callout__body"><p class="content__paragraph">В <a class="content__link" href="c2-http.html">C2</a> ты увидишь в Wireshark заголовок <code class="content__code">Authorization: Basic c3R1ZGVudDpzaWVjMTIz</code>. Это <strong>не шифрование</strong>, а кодирование Base64 — любой, кто перехватит пакет, прочитает логин и пароль:</p>
+
+<figure class="code-block code-block--collapsible" data-lines="34">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">Base64Peek.java</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c2/Base64Peek.java" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Скачать</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+<span class="hljs-keyword">import</span> java.util.Base64;
+
+<span class="hljs-comment">/**
+ * Shows that &quot;Authorization: Basic ...&quot; is NOT encryption - anyone can decode it.
+ *
+ * Run:  java Base64Peek                      (uses a sample header)
+ *       java Base64Peek &quot;Basic dGVzdDoxMjM=&quot;  (decode your own header)
+ *       java Base64Peek encode login:password
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Base64Peek</span> {
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> {
+        <span class="hljs-keyword">if</span> (args.length == <span class="hljs-number">2</span> &amp;&amp; args[<span class="hljs-number">0</span>].equals(<span class="hljs-string">&quot;encode&quot;</span>)) {
+            <span class="hljs-type">String</span> <span class="hljs-variable">encoded</span> <span class="hljs-operator">=</span> Base64.getEncoder().encodeToString(args[<span class="hljs-number">1</span>].getBytes(StandardCharsets.UTF_8));
+            System.out.println(<span class="hljs-string">&quot;Authorization: Basic &quot;</span> + encoded);
+            <span class="hljs-keyword">return</span>;
+        }
+
+        <span class="hljs-type">String</span> <span class="hljs-variable">header</span> <span class="hljs-operator">=</span> args.length &gt; <span class="hljs-number">0</span> ? args[<span class="hljs-number">0</span>] : <span class="hljs-string">&quot;Basic c3R1ZGVudDpzaWVjMTIz&quot;</span>;
+        <span class="hljs-type">String</span> <span class="hljs-variable">base64</span> <span class="hljs-operator">=</span> header.startsWith(<span class="hljs-string">&quot;Basic &quot;</span>) ? header.substring(<span class="hljs-string">&quot;Basic &quot;</span>.length()) : header;
+
+        <span class="hljs-type">byte</span>[] <span class="hljs-variable">raw</span> <span class="hljs-operator">=</span> Base64.getDecoder().decode(base64.trim());
+        <span class="hljs-type">String</span> <span class="hljs-variable">text</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(raw, StandardCharsets.UTF_8);   <span class="hljs-comment">// &quot;login:password&quot;</span>
+
+        <span class="hljs-type">int</span> <span class="hljs-variable">colon</span> <span class="hljs-operator">=</span> text.indexOf(<span class="hljs-string">&#x27;:&#x27;</span>);
+        System.out.println(<span class="hljs-string">&quot;Base64   : &quot;</span> + base64);
+        System.out.println(<span class="hljs-string">&quot;Decoded  : &quot;</span> + text);
+        <span class="hljs-keyword">if</span> (colon &gt;= <span class="hljs-number">0</span>) {
+            System.out.println(<span class="hljs-string">&quot;Login    : &quot;</span> + text.substring(<span class="hljs-number">0</span>, colon));
+            System.out.println(<span class="hljs-string">&quot;Password : &quot;</span> + text.substring(colon + <span class="hljs-number">1</span>));
+        }
+    }
+}</code></pre>
+<button type="button" class="code-block__expand" aria-expanded="false" data-expand="Показать весь код" data-collapse="Свернуть код">Показать весь код</button>
+</figure>
+<p class="content__paragraph">Поэтому пароли передают только через <strong>HTTPS</strong> (TLS шифрует данные). Подробнее о криптографии — в главе 8 учебника.</p>
+</div></aside>
+
+<aside class="callout callout--warning"><div class="callout__header"><span class="callout__icon" aria-hidden="true">⚠️</span><span class="callout__label">Внимание</span><span class="callout__title">Этика и закон <span class="badge badge--own" title="Этот фрагмент дописал автор сайта — его нет в материалах занятий">✍️ от автора</span></span></div><div class="callout__body"><p class="content__paragraph">Перехватывай <strong>только свой трафик</strong> или сеть, где у тебя есть разрешение (например, лаборатория). Перехват чужой переписки без разрешения в Польше — преступление (в частности, ст. 267 Уголовного кодекса), как и в большинстве стран.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="поддельная-личность-ip-spoofing">Поддельная личность: IP spoofing<a class="content__anchor" href="#поддельная-личность-ip-spoofing" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph"><strong>IP spoofing</strong> — отправка пакета с <strong>поддельным адресом источника</strong>. На слайде хост C отправляет пакет с полем <code class="content__code">src:B</code>, притворяясь B.</p>
+<p class="content__paragraph">Зачем? Например, чтобы скрыть настоящий источник DDoS-атаки или «подставить» кого-то другого. Лекция обещает: <em>о безопасности будет ещё много — по всему курсу, особенно в главе 8.</em></p>
+
+<aside class="callout callout--own"><div class="callout__header"><span class="callout__icon" aria-hidden="true">✍️</span><span class="callout__label">Добавлено автором сайта — этого нет в лекции</span><span class="callout__title">Интересно: почему spoofing проще сделать с UDP, чем с TCP?</span></div><div class="callout__body"><p class="content__paragraph">TCP требует <strong>трёхэтапного рукопожатия</strong> (см. <a class="content__link" href="c7-tcp-wireshark.html">C7</a>): ответ сервера уходит на <strong>настоящий</strong> адрес B, поэтому атакующий C его не увидит и не завершит соединение. В UDP никакого «рукопожатия» нет, и поддельная датаграмма просто принимается.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="проверь-себя">Проверь себя <span class="badge badge--own" title="Этот фрагмент дописал автор сайта — его нет в материалах занятий">✍️ от автора</span><a class="content__anchor" href="#проверь-себя" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Проверь себя</span><span class="callout__title">Чем вирус отличается от червя?</span></summary><div class="callout__body"><p class="content__paragraph">Вирусу нужно действие пользователя (запуск заражённого объекта, например вложения). Червь распространяется сам — достаточно, чтобы хост пассивно получил объект, который сам выполнится.</p>
+</div></details>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Проверь себя</span><span class="callout__title">Что такое ботнет и для чего он нужен?</span></summary><div class="callout__body"><p class="content__paragraph">Сеть захваченных (заражённых) компьютеров под управлением атакующего. Используется для спама и DDoS-атак.</p>
+</div></details>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Проверь себя</span><span class="callout__title">Почему перехват особенно прост в WiFi?</span></summary><div class="callout__body"><p class="content__paragraph">Потому что радио — широковещательная среда: сигнал доходит до всех устройств в зоне, а карта в режиме promiscuous запишет все пакеты.</p>
+</div></details>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Проверь себя</span><span class="callout__title">Защищает ли пароль кодирование Base64?</span></summary><div class="callout__body"><p class="content__paragraph">Нет. Base64 — просто другая запись, которую любой может обратить. Защищает шифрование (например, HTTPS/TLS).</p>
+</div></details>
+
+
+
+</div>
+<nav class="pager" aria-label="Предыдущая тема / Следующая тема">
+<a class="pager__link pager__link--prev" href="w5-performance.html"><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="pager__text"><span class="pager__label">Предыдущая тема</span><span class="pager__title">Производительность сети — задержки, потери и пропускная способность</span></span></a>
+<a class="pager__link pager__link--next" href="w7-layers.html"><span class="pager__text"><span class="pager__label">Следующая тема</span><span class="pager__title">Уровни протоколов, инкапсуляция и модель OSI</span></span><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="На этой странице"><p class="toc__title">На этой странице</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#коротко">Коротко</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#чем-занимается-сетевая-безопасность">Чем занимается сетевая безопасность?</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#malware-вредоносное-по">Malware — вредоносное ПО</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#отказ-в-обслуживании-dos-и-ddos">Отказ в обслуживании: DoS и DDoS</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#перехват-пакетов-sniffing">Перехват пакетов: sniffing</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#поддельная-личность-ip-spoofing">Поддельная личность: IP spoofing</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#проверь-себя">Проверь себя  ✍️</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Конспект: Безопасность сетей — кто такие «плохие парни» и что они умеют</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Печать"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Печать</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Закрыть"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Закрыть</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-w6-security-атаки-табличка-для-запоминания">Атаки — табличка для запоминания<a class="content__anchor" href="#cs-w6-security-атаки-табличка-для-запоминания" aria-hidden="true" tabindex="-1">#</a></h3>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Атака</th><th class="content__table-heading">Что делает</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">Вирус</td><td class="content__table-cell">заражение после <strong>запуска</strong> объекта (вложения)</td></tr><tr class="content__table-row"><td class="content__table-cell">Червь</td><td class="content__table-cell">заражение, которое <strong>запускается само</strong></td></tr><tr class="content__table-row"><td class="content__table-cell">Spyware</td><td class="content__table-cell">пишет нажатия клавиш, сайты, отправляет данные</td></tr><tr class="content__table-row"><td class="content__table-cell">Ботнет</td><td class="content__table-cell">армия заражённых хостов (спам, DDoS)</td></tr><tr class="content__table-row"><td class="content__table-cell">DoS/DDoS</td><td class="content__table-cell">завалить ресурс фальшивым трафиком</td></tr><tr class="content__table-row"><td class="content__table-cell">Sniffing</td><td class="content__table-cell">перехват пакетов в широковещательной среде</td></tr><tr class="content__table-row"><td class="content__table-cell">IP spoofing</td><td class="content__table-cell">поддельный адрес отправителя</td></tr></tbody></table></div>
+<h3 class="content__heading content__heading--h3" id="cs-w6-security-факты-с-лекции">Факты с лекции<a class="content__anchor" href="#cs-w6-security-факты-с-лекции" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Интернет делали для «доверяющих друг другу пользователей» → безопасность добавляли потом, <strong>на всех уровнях</strong>.</li>
+<li class="content__list-item">DDoS: 1) выбрать цель, 2) захватить хосты (ботнет), 3) слать пакеты на цель.</li>
+<li class="content__list-item">Wireshark = бесплатный сниффер пакетов.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-w6-security-практика-от-автора">Практика (от автора)<a class="content__anchor" href="#cs-w6-security-практика-от-автора" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Base64 ≠ шифрование → пароли только через HTTPS.</li>
+<li class="content__list-item">Таймауты и потоки защищают сервер от «зависания» из-за одного клиента.</li>
+<li class="content__list-item">Перехватывай только свой трафик.</li>
+</ul>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ Все конспекты</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Неофициальные учебные материалы. Задания переделаны (другой текст, та же логика), чтобы ничего не копировать из работ прошлых лет.</p>
+<p class="footer__text footer__text--small">Лекции по материалам: J. F. Kurose, K. W. Ross, «Computer Networking: A Top-Down Approach» (слайды © 1996–2020 J.F. Kurose &amp; K.W. Ross) и Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Исходный код сайта</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+<script src="../assets/vendor/katex/contrib/copy-tex.min.js" defer></script>
+</body>
+</html>

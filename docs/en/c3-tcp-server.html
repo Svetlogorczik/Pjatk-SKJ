@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TCP sockets in Java — your own mini HTTP server and client — SKJ</title>
+<meta name="description" content="We write a client that sends a correct HTTP/1.1 request and reads the whole response, and a server with three pages that answers 200, 304 or 404. Step by step: streams, readLine, flush, the empty line.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/c3-tcp-server.html">
+<link rel="alternate" hreflang="en" href="../en/c3-tcp-server.html">
+<link rel="alternate" hreflang="ru" href="../ru/c3-tcp-server.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="c3-tcp-server">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Menu" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Networks + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Language"><a class="lang-switch__link" href="../pl/c3-tcp-server.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../en/c3-tcp-server.html" hreflang="en" lang="en" data-lang="en" aria-current="true" title="English">EN</a><a class="lang-switch__link" href="../ru/c3-tcp-server.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Toggle theme (light / dark)" title="Toggle theme (light / dark)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Menu">
+<div class="sidebar__head"><span class="sidebar__title">Menu</span><button type="button" class="sidebar__close" data-nav-close aria-label="Close menu">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Networks + Java</a>
+<div class="nav__progress progress" data-progress data-label="Your progress"><span class="progress__label">Your progress</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Start</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Start &amp; setup</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="course.html" data-page-link="course"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Course rules &amp; dates</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Glossary PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">All cheat sheets</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Lectures</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Internet &amp; protocols</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Network edge</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Network core</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Internet structure</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Delay &amp; throughput</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Security</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Layers &amp; encapsulation</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">Internet history</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Labs</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Process relay (first run)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link nav__link--active" href="c3-tcp-server.html" data-page-link="c3-tcp-server" aria-current="page"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP in Java: mini HTTP server</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Text-protocol client</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP together</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS by hand (UDP, bytes)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP in Wireshark</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Practical test</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Practical test: training</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Project</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Project: proxy network</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Labs · C3</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">🖥️</span>TCP sockets in Java — your own mini HTTP server and client</h1>
+<p class="article__lead">We write a client that sends a correct HTTP/1.1 request and reads the whole response, and a server with three pages that answers 200, 304 or 404. Step by step: streams, readLine, flush, the empty line.</p>
+<div class="article__meta"><span class="badge badge--lab">🔁 Lab (rewritten version)</span><span class="article__source">Based on: logic of lab 3 (HTTP client + server handling 304 and 404) — rewritten task</span><span class="article__time">⏱ 6 min read</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Short summary for labs and the project"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Cheat sheet</span></button><button type="button" class="button button--ghost" data-done-toggle="c3-tcp-server" aria-pressed="false" data-label-off="Mark as done" data-label-on="Done"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Mark as done</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">On this page</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#in-short">In short</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#what-a-conversation-over-tcp-sockets-looks-like">What a conversation over TCP sockets looks like</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#why-does-the-server-answer-400-bad-request">Why does the server answer 400 Bad Request?</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-server-miniwebserver">The server: MiniWebServer</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-client-httpprobe">The client: HttpProbe</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#running-it">Running it</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#tasks">Tasks</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="in-short">In short<a class="content__anchor" href="#in-short" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">TCP server: <code class="content__code">new ServerSocket(port)</code> → <code class="content__code">accept()</code> → streams → read the request → send the response → <code class="content__code">close()</code>.</li>
+<li class="content__list-item">TCP client: <code class="content__code">new Socket(host, port)</code> → send the request → <strong><code class="content__code">flush()</code></strong> → read the response until the end.</li>
+<li class="content__list-item">HTTP/1.1 requires: lines ending with <strong><code class="content__code">\r\n</code></strong>, a <strong><code class="content__code">Host</code></strong> header, and an <strong>empty line</strong> after the headers.</li>
+<li class="content__list-item">Server logic: no such page → <strong>404</strong>; the page hasn&#39;t changed since <code class="content__code">If-Modified-Since</code> → <strong>304</strong> (no body); otherwise → <strong>200</strong> with the body.</li>
+</ul>
+
+<aside class="callout callout--origin"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🔁</span><span class="callout__label">Where this task comes from (original class task, summarised)</span></div><div class="callout__body"><p class="content__paragraph">In lab 3 there was a TCP client sending a GET request (goal: get <code class="content__code">200 OK</code> instead of <code class="content__code">400</code> and see the <strong>whole</strong> response), and a simple server handling 3 &quot;fake&quot; files: it returned <code class="content__code">304</code> when the request had a last-modification date and <code class="content__code">404</code> for missing files. Below is <strong>our version</strong>: correct HTTP/1.1 with the real HTTP date format, full header parsing and extra 400/405 codes.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="what-a-conversation-over-tcp-sockets-looks-like">What a conversation over TCP sockets looks like<a class="content__anchor" href="#what-a-conversation-over-tcp-sockets-looks-like" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<figure class="diagram"><svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TCP sockets">
+  <defs><marker id="st-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="diagram__arrow diagram__arrow--accent" d="M0 0 10 5 0 10z"/></marker></defs>
+  <text class="diagram__text diagram__text--bold" x="170" y="22" text-anchor="middle">Server (TCP)</text>
+  <text class="diagram__text diagram__text--bold" x="590" y="22" text-anchor="middle">Client (TCP)</text>
+  <rect class="diagram__box" x="20" y="36" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="60" text-anchor="middle">new ServerSocket(port)</text>
+  <rect class="diagram__box diagram__box--warn" x="20" y="92" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="116" text-anchor="middle">Socket s = ss.accept()  ⏳</text>
+  <rect class="diagram__box" x="20" y="160" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="184" text-anchor="middle">in.readLine()  ⏳</text>
+  <rect class="diagram__box" x="20" y="230" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="254" text-anchor="middle">out.println(answer); flush()</text>
+  <rect class="diagram__box" x="20" y="300" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="324" text-anchor="middle">s.close()</text>
+  <rect class="diagram__box diagram__box--warn" x="440" y="92" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="116" text-anchor="middle">new Socket(host, port)</text>
+  <rect class="diagram__box" x="440" y="160" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="184" text-anchor="middle">out.println(request); flush()</text>
+  <rect class="diagram__box" x="440" y="230" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="254" text-anchor="middle">in.readLine()  ⏳</text>
+  <rect class="diagram__box" x="440" y="300" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="324" text-anchor="middle">socket.close()</text>
+  <line class="diagram__line diagram__line--accent" x1="440" y1="111" x2="322" y2="111" marker-end="url(#st-arrow)"/>
+  <text class="diagram__text diagram__text--muted" x="381" y="102" text-anchor="middle">SYN…</text>
+  <line class="diagram__line diagram__line--accent" x1="440" y1="179" x2="322" y2="179" marker-end="url(#st-arrow)"/>
+  <line class="diagram__line diagram__line--accent" x1="320" y1="249" x2="438" y2="249" marker-end="url(#st-arrow)"/>
+  <line class="diagram__line diagram__line--dashed" x1="170" y1="338" x2="170" y2="350"/>
+  <path class="diagram__line diagram__line--dashed" d="M20 319 H8 V111 H18" marker-end="url(#st-arrow)"/>
+</svg>
+<figcaption class="diagram__caption">The server waits in accept()</figcaption></figure>
+<p class="content__paragraph">Java streams are &quot;layered&quot; — we wrap raw bytes in more convenient classes:</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Class</th><th class="content__table-heading">What it gives you</th><th class="content__table-heading">Note</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">InputStream</code> / <code class="content__code">OutputStream</code></td><td class="content__table-cell">raw bytes from the socket</td><td class="content__table-cell"><code class="content__code">socket.getInputStream()</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">InputStreamReader</code></td><td class="content__table-cell">bytes → characters</td><td class="content__table-cell">give an encoding, e.g. <code class="content__code">StandardCharsets.UTF_8</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">BufferedReader</code></td><td class="content__table-cell"><code class="content__code">readLine()</code> — reads a whole line</td><td class="content__table-cell">returns <code class="content__code">null</code> when the other side closed the connection</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">PrintWriter</code> / <code class="content__code">BufferedWriter</code></td><td class="content__table-cell">convenient text writing</td><td class="content__table-cell">data sits in a buffer <strong>until <code class="content__code">flush()</code></strong></td></tr></tbody></table></div>
+
+<aside class="callout callout--danger"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🐞</span><span class="callout__label">Common mistake</span><span class="callout__title">Three mistakes that make a program &quot;hang&quot; <span class="badge badge--own" title="Written by the site author — not part of the course materials">✍️ author&#39;s note</span></span></div><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><strong>No <code class="content__code">flush()</code></strong> — the data stayed in the buffer, the other side got nothing and waits.</li>
+<li class="content__list-item"><strong>No line ending</strong> — <code class="content__code">readLine()</code> on the other side waits for a <code class="content__code">\n</code> that never came (<code class="content__code">print(&quot;abc&quot;)</code> instead of <code class="content__code">println</code>/<code class="content__code">&quot;abc\r\n&quot;</code>).</li>
+<li class="content__list-item"><strong>Reading &quot;until the end&quot; when nobody closes</strong> — the loop <code class="content__code">while ((line = in.readLine()) != null)</code> ends only when the other side <strong>closes the connection</strong>. In HTTP you force that with the <code class="content__code">Connection: close</code> header.</li>
+</ol>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="why-does-the-server-answer-400-bad-request">Why does the server answer 400 Bad Request?<a class="content__anchor" href="#why-does-the-server-answer-400-bad-request" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">A classic problem from class. Compare:</p>
+<figure class="code-block" data-lines="6">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">WRONG:                                        RIGHT:
+GET /index.html HTTP/1.1\r\n                  GET /index.html HTTP/1.1\r\n
+If-Modified-Since: 2018-05-05T11:50:56\r\n    Host: localhost\r\n
+                                              Connection: close\r\n
+                                              If-Modified-Since: Mon, 06 Oct 2025 09:00:00 GMT\r\n
+                                              \r\n</code></pre>
+</figure><div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Problem in the &quot;wrong&quot; version</th><th class="content__table-heading">Effect</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">no <code class="content__code">Host</code> header</td><td class="content__table-cell">real HTTP/1.1 servers answer <strong>400</strong></td></tr><tr class="content__table-row"><td class="content__table-cell">no empty line at the end</td><td class="content__table-cell">the server waits for more headers — it <strong>hangs</strong> or answers after a timeout</td></tr><tr class="content__table-row"><td class="content__table-cell">a date in the wrong format</td><td class="content__table-cell">the server ignores the header or rejects the request</td></tr></tbody></table></div>
+<p class="content__paragraph">An HTTP date <strong>always</strong> has the format <code class="content__code">Mon, 06 Oct 2025 09:00:00 GMT</code> (English abbreviations, GMT zone). <span class="badge badge--own" title="Written by the site author — not part of the course materials">✍️ author&#39;s note</span></p>
+<h2 class="content__heading content__heading--h2" id="the-server-miniwebserver">The server: MiniWebServer<a class="content__anchor" href="#the-server-miniwebserver" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<figure class="code-block code-block--collapsible" data-lines="152">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">MiniWebServer.java</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c3/MiniWebServer.java" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Download</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-keyword">import</span> java.io.BufferedReader;
+<span class="hljs-keyword">import</span> java.io.IOException;
+<span class="hljs-keyword">import</span> java.io.InputStreamReader;
+<span class="hljs-keyword">import</span> java.io.OutputStream;
+<span class="hljs-keyword">import</span> java.net.ServerSocket;
+<span class="hljs-keyword">import</span> java.net.Socket;
+<span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+<span class="hljs-keyword">import</span> java.time.ZoneOffset;
+<span class="hljs-keyword">import</span> java.time.ZonedDateTime;
+<span class="hljs-keyword">import</span> java.time.format.DateTimeFormatter;
+<span class="hljs-keyword">import</span> java.time.format.DateTimeParseException;
+<span class="hljs-keyword">import</span> java.util.HashMap;
+<span class="hljs-keyword">import</span> java.util.LinkedHashMap;
+<span class="hljs-keyword">import</span> java.util.Locale;
+<span class="hljs-keyword">import</span> java.util.Map;
+
+<span class="hljs-comment">/**
+ * A tiny HTTP/1.1 server (one client at a time) that knows three &quot;pages&quot;.
+ *   200 OK            - page exists and is newer than If-Modified-Since (or no such header)
+ *   304 Not Modified  - page exists and did not change since If-Modified-Since
+ *   404 Not Found     - unknown path
+ *   405 / 400         - wrong method / broken request line
+ *
+ * Run:  java MiniWebServer 8080      then open http://localhost:8080/index.html
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MiniWebServer</span> {
+
+    <span class="hljs-comment">/** HTTP dates look like: Tue, 14 Oct 2025 08:15:00 GMT (always English, always GMT). */</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">DateTimeFormatter</span> <span class="hljs-variable">HTTP_DATE</span> <span class="hljs-operator">=</span>
+            DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;EEE, dd MMM yyyy HH:mm:ss &#x27;GMT&#x27;&quot;</span>, Locale.ENGLISH).withZone(ZoneOffset.UTC);
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Page</span> {
+        <span class="hljs-keyword">final</span> String html;
+        <span class="hljs-keyword">final</span> ZonedDateTime lastModified;
+
+        Page(String html, String lastModified) {
+            <span class="hljs-built_in">this</span>.html = html;
+            <span class="hljs-built_in">this</span>.lastModified = ZonedDateTime.parse(lastModified, HTTP_DATE);
+        }
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Map</span>&lt;String, Page&gt; <span class="hljs-variable">pages</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();
+
+    MiniWebServer() {
+        pages.put(<span class="hljs-string">&quot;/index.html&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Page</span>(<span class="hljs-string">&quot;&lt;h1&gt;Start&lt;/h1&gt;&lt;p&gt;Hello from MiniWebServer!&lt;/p&gt;&quot;</span>,
+                <span class="hljs-string">&quot;Mon, 06 Oct 2025 09:00:00 GMT&quot;</span>));
+        pages.put(<span class="hljs-string">&quot;/schedule.html&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Page</span>(<span class="hljs-string">&quot;&lt;h1&gt;Schedule&lt;/h1&gt;&lt;p&gt;Labs every Tuesday.&lt;/p&gt;&quot;</span>,
+                <span class="hljs-string">&quot;Wed, 15 Oct 2025 12:30:00 GMT&quot;</span>));
+        pages.put(<span class="hljs-string">&quot;/contact.html&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Page</span>(<span class="hljs-string">&quot;&lt;h1&gt;Contact&lt;/h1&gt;&lt;p&gt;Room 404 (just kidding).&lt;/p&gt;&quot;</span>,
+                <span class="hljs-string">&quot;Fri, 21 Nov 2025 18:45:00 GMT&quot;</span>));
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-type">int</span> <span class="hljs-variable">port</span> <span class="hljs-operator">=</span> args.length &gt; <span class="hljs-number">0</span> ? Integer.parseInt(args[<span class="hljs-number">0</span>]) : <span class="hljs-number">8080</span>;
+        <span class="hljs-keyword">new</span> <span class="hljs-title class_">MiniWebServer</span>().serve(port);
+    }
+
+    <span class="hljs-type">void</span> <span class="hljs-title function_">serve</span><span class="hljs-params">(<span class="hljs-type">int</span> port)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">ServerSocket</span> <span class="hljs-variable">server</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServerSocket</span>(port)) {
+            log(<span class="hljs-string">&quot;listening on http://localhost:&quot;</span> + port + <span class="hljs-string">&quot;/index.html&quot;</span>);
+            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+                <span class="hljs-keyword">try</span> (<span class="hljs-type">Socket</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> server.accept()) {
+                    handle(client);
+                } <span class="hljs-keyword">catch</span> (IOException e) {
+                    log(<span class="hljs-string">&quot;client error: &quot;</span> + e.getMessage());
+                }
+            }
+        }
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">void</span> <span class="hljs-title function_">handle</span><span class="hljs-params">(Socket client)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(
+                <span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(client.getInputStream(), StandardCharsets.ISO_8859_1));
+        <span class="hljs-type">OutputStream</span> <span class="hljs-variable">out</span> <span class="hljs-operator">=</span> client.getOutputStream();
+
+        <span class="hljs-comment">// 1) Request line: METHOD SP PATH SP VERSION</span>
+        <span class="hljs-type">String</span> <span class="hljs-variable">requestLine</span> <span class="hljs-operator">=</span> in.readLine();
+        <span class="hljs-keyword">if</span> (requestLine == <span class="hljs-literal">null</span> || requestLine.isEmpty()) {
+            <span class="hljs-keyword">return</span>;                                   <span class="hljs-comment">// client connected and said nothing</span>
+        }
+        log(<span class="hljs-string">&quot;request: &quot;</span> + requestLine);
+
+        <span class="hljs-comment">// 2) Header lines until the EMPTY line</span>
+        <span class="hljs-type">Map</span>&lt;String, String&gt; <span class="hljs-variable">headers</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LinkedHashMap</span>&lt;&gt;();
+        String line;
+        <span class="hljs-keyword">while</span> ((line = in.readLine()) != <span class="hljs-literal">null</span> &amp;&amp; !line.isEmpty()) {
+            <span class="hljs-type">int</span> <span class="hljs-variable">colon</span> <span class="hljs-operator">=</span> line.indexOf(<span class="hljs-string">&#x27;:&#x27;</span>);
+            <span class="hljs-keyword">if</span> (colon &gt; <span class="hljs-number">0</span>) {
+                headers.put(line.substring(<span class="hljs-number">0</span>, colon).trim().toLowerCase(Locale.ROOT), line.substring(colon + <span class="hljs-number">1</span>).trim());
+            }
+        }
+        log(<span class="hljs-string">&quot;headers: &quot;</span> + headers);
+
+        <span class="hljs-type">String</span>[] <span class="hljs-variable">parts</span> <span class="hljs-operator">=</span> requestLine.split(<span class="hljs-string">&quot; &quot;</span>);
+        <span class="hljs-keyword">if</span> (parts.length != <span class="hljs-number">3</span> || !parts[<span class="hljs-number">2</span>].startsWith(<span class="hljs-string">&quot;HTTP/&quot;</span>)) {
+            send(out, <span class="hljs-number">400</span>, <span class="hljs-string">&quot;Bad Request&quot;</span>, <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;&lt;h1&gt;400 Bad Request&lt;/h1&gt;&quot;</span>);
+            <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">if</span> (!parts[<span class="hljs-number">0</span>].equals(<span class="hljs-string">&quot;GET&quot;</span>)) {
+            send(out, <span class="hljs-number">405</span>, <span class="hljs-string">&quot;Method Not Allowed&quot;</span>, <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;&lt;h1&gt;405 Only GET is supported&lt;/h1&gt;&quot;</span>);
+            <span class="hljs-keyword">return</span>;
+        }
+
+        <span class="hljs-type">String</span> <span class="hljs-variable">path</span> <span class="hljs-operator">=</span> parts[<span class="hljs-number">1</span>].equals(<span class="hljs-string">&quot;/&quot;</span>) ? <span class="hljs-string">&quot;/index.html&quot;</span> : parts[<span class="hljs-number">1</span>];
+        <span class="hljs-type">Page</span> <span class="hljs-variable">page</span> <span class="hljs-operator">=</span> pages.get(path);
+        <span class="hljs-keyword">if</span> (page == <span class="hljs-literal">null</span>) {
+            send(out, <span class="hljs-number">404</span>, <span class="hljs-string">&quot;Not Found&quot;</span>, <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;&lt;h1&gt;404 Not Found&lt;/h1&gt;&lt;p&gt;&quot;</span> + path + <span class="hljs-string">&quot;&lt;/p&gt;&quot;</span>);
+            <span class="hljs-keyword">return</span>;
+        }
+
+        <span class="hljs-comment">// 3) Conditional GET</span>
+        <span class="hljs-type">String</span> <span class="hljs-variable">since</span> <span class="hljs-operator">=</span> headers.get(<span class="hljs-string">&quot;if-modified-since&quot;</span>);
+        <span class="hljs-keyword">if</span> (since != <span class="hljs-literal">null</span>) {
+            <span class="hljs-keyword">try</span> {
+                <span class="hljs-type">ZonedDateTime</span> <span class="hljs-variable">clientCopy</span> <span class="hljs-operator">=</span> ZonedDateTime.parse(since, HTTP_DATE);
+                <span class="hljs-keyword">if</span> (!page.lastModified.isAfter(clientCopy)) {
+                    send(out, <span class="hljs-number">304</span>, <span class="hljs-string">&quot;Not Modified&quot;</span>, page, <span class="hljs-literal">null</span>);   <span class="hljs-comment">// no body!</span>
+                    <span class="hljs-keyword">return</span>;
+                }
+            } <span class="hljs-keyword">catch</span> (DateTimeParseException e) {
+                log(<span class="hljs-string">&quot;bad If-Modified-Since date, ignoring it: &quot;</span> + since);
+            }
+        }
+        send(out, <span class="hljs-number">200</span>, <span class="hljs-string">&quot;OK&quot;</span>, page, page.html);
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">void</span> <span class="hljs-title function_">send</span><span class="hljs-params">(OutputStream out, <span class="hljs-type">int</span> code, String reason, Page page, String body)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-type">byte</span>[] <span class="hljs-variable">bodyBytes</span> <span class="hljs-operator">=</span> body == <span class="hljs-literal">null</span> ? <span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">0</span>] : body.getBytes(StandardCharsets.UTF_8);
+        <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">head</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>();
+        head.append(<span class="hljs-string">&quot;HTTP/1.1 &quot;</span>).append(code).append(<span class="hljs-string">&#x27; &#x27;</span>).append(reason).append(<span class="hljs-string">&quot;\r\n&quot;</span>);
+        head.append(<span class="hljs-string">&quot;Date: &quot;</span>).append(HTTP_DATE.format(ZonedDateTime.now(ZoneOffset.UTC))).append(<span class="hljs-string">&quot;\r\n&quot;</span>);
+        head.append(<span class="hljs-string">&quot;Server: MiniWebServer/1.0\r\n&quot;</span>);
+        <span class="hljs-keyword">if</span> (page != <span class="hljs-literal">null</span>) {
+            head.append(<span class="hljs-string">&quot;Last-Modified: &quot;</span>).append(HTTP_DATE.format(page.lastModified)).append(<span class="hljs-string">&quot;\r\n&quot;</span>);
+        }
+        <span class="hljs-keyword">if</span> (body != <span class="hljs-literal">null</span>) {
+            head.append(<span class="hljs-string">&quot;Content-Type: text/html; charset=utf-8\r\n&quot;</span>);
+            head.append(<span class="hljs-string">&quot;Content-Length: &quot;</span>).append(bodyBytes.length).append(<span class="hljs-string">&quot;\r\n&quot;</span>);
+        }
+        head.append(<span class="hljs-string">&quot;Connection: close\r\n&quot;</span>);
+        head.append(<span class="hljs-string">&quot;\r\n&quot;</span>);                                   <span class="hljs-comment">// empty line = end of headers</span>
+
+        out.write(head.toString().getBytes(StandardCharsets.ISO_8859_1));
+        out.write(bodyBytes);
+        out.flush();
+        log(<span class="hljs-string">&quot;response: &quot;</span> + code + <span class="hljs-string">&quot; &quot;</span> + reason);
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">log</span><span class="hljs-params">(String text)</span> {
+        System.out.println(<span class="hljs-string">&quot;[server] &quot;</span> + text);
+    }
+}</code></pre>
+<button type="button" class="code-block__expand" aria-expanded="false" data-expand="Show full code" data-collapse="Collapse code">Show full code</button>
+</figure>
+<p class="content__paragraph">What the server does, step by step:</p>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item">It opens a port (<code class="content__code">ServerSocket</code>) and waits for a client in a loop (<code class="content__code">accept()</code>).</li>
+<li class="content__list-item">It reads the <strong>request line</strong>, e.g. <code class="content__code">GET /index.html HTTP/1.1</code>.</li>
+<li class="content__list-item">It reads the <strong>headers</strong> line by line until the <strong>empty line</strong>; stores them in a map (names in lowercase).</li>
+<li class="content__list-item">It checks the format: 3 parts and an <code class="content__code">HTTP/...</code> version — otherwise <strong>400</strong>. A method other than GET — <strong>405</strong>.</li>
+<li class="content__list-item">It looks the page up in the map. Not there — <strong>404</strong>.</li>
+<li class="content__list-item">If there is <code class="content__code">If-Modified-Since</code> and the page is <strong>not newer</strong> than that date — <strong>304</strong> without a body.</li>
+<li class="content__list-item">In all other cases — <strong>200</strong> with the body, <code class="content__code">Content-Length</code> and <code class="content__code">Last-Modified</code>.</li>
+<li class="content__list-item">It closes the connection (<code class="content__code">try-with-resources</code>).</li>
+</ol>
+</div>
+
+<aside class="callout callout--note"><div class="callout__header"><span class="callout__icon" aria-hidden="true">📌</span><span class="callout__label">Remember</span><span class="callout__title">The 304 logic in one sentence</span></div><div class="callout__body"><p class="content__paragraph">&quot;Send the body only if the page on the server is <strong>newer</strong> than the client&#39;s copy&quot;: <code class="content__code">if (!page.lastModified.isAfter(clientCopy)) → 304</code>.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="the-client-httpprobe">The client: HttpProbe<a class="content__anchor" href="#the-client-httpprobe" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<figure class="code-block code-block--collapsible" data-lines="60">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">HttpProbe.java</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c3/HttpProbe.java" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Download</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-keyword">import</span> java.io.BufferedReader;
+<span class="hljs-keyword">import</span> java.io.IOException;
+<span class="hljs-keyword">import</span> java.io.InputStreamReader;
+<span class="hljs-keyword">import</span> java.io.OutputStream;
+<span class="hljs-keyword">import</span> java.net.Socket;
+<span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+
+<span class="hljs-comment">/**
+ * Sends ONE correct HTTP/1.1 GET request and prints the WHOLE response.
+ *
+ * Run:  java HttpProbe localhost 8080 /index.html
+ *       java HttpProbe localhost 8080 /index.html &quot;Mon, 06 Oct 2025 09:00:00 GMT&quot;
+ *       java HttpProbe gaia.cs.umass.edu 80 /wireshark-labs/INTRO-wireshark-file1.html
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HttpProbe</span> {
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-keyword">if</span> (args.length &lt; <span class="hljs-number">3</span>) {
+            System.err.println(<span class="hljs-string">&quot;Usage: java HttpProbe &lt;host&gt; &lt;port&gt; &lt;path&gt; [If-Modified-Since date]&quot;</span>);
+            System.exit(<span class="hljs-number">1</span>);
+        }
+        <span class="hljs-type">String</span> <span class="hljs-variable">host</span> <span class="hljs-operator">=</span> args[<span class="hljs-number">0</span>];
+        <span class="hljs-type">int</span> <span class="hljs-variable">port</span> <span class="hljs-operator">=</span> Integer.parseInt(args[<span class="hljs-number">1</span>]);
+        <span class="hljs-type">String</span> <span class="hljs-variable">path</span> <span class="hljs-operator">=</span> args[<span class="hljs-number">2</span>];
+
+        <span class="hljs-comment">// Every line ends with CRLF and the headers end with an EMPTY line.</span>
+        <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>();
+        request.append(<span class="hljs-string">&quot;GET &quot;</span>).append(path).append(<span class="hljs-string">&quot; HTTP/1.1\r\n&quot;</span>);
+        request.append(<span class="hljs-string">&quot;Host: &quot;</span>).append(host).append(<span class="hljs-string">&quot;\r\n&quot;</span>);    <span class="hljs-comment">// required in HTTP/1.1</span>
+        request.append(<span class="hljs-string">&quot;User-Agent: HttpProbe/1.0\r\n&quot;</span>);
+        request.append(<span class="hljs-string">&quot;Connection: close\r\n&quot;</span>);                 <span class="hljs-comment">// server closes -&gt; we know when to stop</span>
+        <span class="hljs-keyword">if</span> (args.length &gt; <span class="hljs-number">3</span>) {
+            request.append(<span class="hljs-string">&quot;If-Modified-Since: &quot;</span>).append(args[<span class="hljs-number">3</span>]).append(<span class="hljs-string">&quot;\r\n&quot;</span>);
+        }
+        request.append(<span class="hljs-string">&quot;\r\n&quot;</span>);
+
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">Socket</span> <span class="hljs-variable">socket</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Socket</span>(host, port)) {
+            <span class="hljs-type">OutputStream</span> <span class="hljs-variable">out</span> <span class="hljs-operator">=</span> socket.getOutputStream();
+            out.write(request.toString().getBytes(StandardCharsets.ISO_8859_1));
+            out.flush();
+            System.out.print(request.toString().replaceAll(<span class="hljs-string">&quot;(?m)^&quot;</span>, <span class="hljs-string">&quot;&gt; &quot;</span>));
+
+            <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(
+                    <span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(socket.getInputStream(), StandardCharsets.UTF_8));
+            <span class="hljs-type">String</span> <span class="hljs-variable">statusLine</span> <span class="hljs-operator">=</span> in.readLine();
+            <span class="hljs-keyword">if</span> (statusLine == <span class="hljs-literal">null</span>) {
+                System.out.println(<span class="hljs-string">&quot;(server closed the connection without an answer)&quot;</span>);
+                <span class="hljs-keyword">return</span>;
+            }
+            System.out.println(<span class="hljs-string">&quot;&lt; &quot;</span> + statusLine);
+            <span class="hljs-type">String</span>[] <span class="hljs-variable">status</span> <span class="hljs-operator">=</span> statusLine.split(<span class="hljs-string">&quot; &quot;</span>, <span class="hljs-number">3</span>);         <span class="hljs-comment">// HTTP/1.1 200 OK</span>
+
+            String line;
+            <span class="hljs-keyword">while</span> ((line = in.readLine()) != <span class="hljs-literal">null</span>) {             <span class="hljs-comment">// until the server closes</span>
+                System.out.println(<span class="hljs-string">&quot;&lt; &quot;</span> + line);
+            }
+            System.out.println(<span class="hljs-string">&quot;\nStatus code: &quot;</span> + status[<span class="hljs-number">1</span>] + (status.length &gt; <span class="hljs-number">2</span> ? <span class="hljs-string">&quot; (&quot;</span> + status[<span class="hljs-number">2</span>] + <span class="hljs-string">&quot;)&quot;</span> : <span class="hljs-string">&quot;&quot;</span>));
+        }
+    }
+}</code></pre>
+<button type="button" class="code-block__expand" aria-expanded="false" data-expand="Show full code" data-collapse="Collapse code">Show full code</button>
+</figure>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">It builds the request with <code class="content__code">\r\n</code> at the end of every line and an <strong>empty line</strong> at the end.</li>
+<li class="content__list-item">It sends <code class="content__code">Connection: close</code>, so the server closes the connection after the response and the <code class="content__code">readLine() != null</code> loop ends — we get the <strong>whole</strong> response.</li>
+<li class="content__list-item">The first response line is the status line: <code class="content__code">split(&quot; &quot;, 3)</code> gives the version, the code and the phrase.</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="running-it">Running it<a class="content__anchor" href="#running-it" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><code class="content__code">javac MiniWebServer.java HttpProbe.java</code></li>
+<li class="content__list-item">Terminal 1: <code class="content__code">java MiniWebServer 8080</code></li>
+<li class="content__list-item">Terminal 2: <code class="content__code">java HttpProbe localhost 8080 /index.html</code> → <strong>200</strong></li>
+<li class="content__list-item"><code class="content__code">java HttpProbe localhost 8080 /index.html &quot;Mon, 06 Oct 2025 09:00:00 GMT&quot;</code> → <strong>304</strong></li>
+<li class="content__list-item"><code class="content__code">java HttpProbe localhost 8080 /missing.html</code> → <strong>404</strong></li>
+<li class="content__list-item">Open <code class="content__code">http://localhost:8080/schedule.html</code> in a browser and watch the traffic in Wireshark (Loopback, filter <code class="content__code">tcp.port == 8080</code>).</li>
+</ol>
+</div>
+<p class="content__paragraph">The output of step 4 (a real printout from testing this page):</p>
+<figure class="code-block" data-lines="13">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">&gt; GET /index.html HTTP/1.1
+&gt; Host: localhost
+&gt; User-Agent: HttpProbe/1.0
+&gt; Connection: close
+&gt; If-Modified-Since: Mon, 06 Oct 2025 09:00:00 GMT
+&gt;
+&lt; HTTP/1.1 304 Not Modified
+&lt; Date: Thu, 01 Oct 2026 08:35:08 GMT
+&lt; Server: MiniWebServer/1.0
+&lt; Last-Modified: Mon, 06 Oct 2025 09:00:00 GMT
+&lt; Connection: close
+&lt;
+Status code: 304 (Not Modified)</code></pre>
+</figure><h2 class="content__heading content__heading--h2" id="tasks">Tasks<a class="content__anchor" href="#tasks" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">1. A fourth page</span></div><div class="callout__body"><p class="content__paragraph">Add a page <code class="content__code">/faq.html</code> modified on 1 December 2025, 10:00 GMT. Check 200 and 304.</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><p class="content__paragraph">In the constructor: <code class="content__code">pages.put(&quot;/faq.html&quot;, new Page(&quot;&lt;h1&gt;FAQ&lt;/h1&gt;&quot;, &quot;Mon, 01 Dec 2025 10:00:00 GMT&quot;));</code> — the date must be in exactly the HTTP format (the weekday must match the date, otherwise parsing throws an exception).</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">2. The HEAD method</span></div><div class="callout__body"><p class="content__paragraph"><code class="content__code">HEAD</code> works like <code class="content__code">GET</code>, but the server sends <strong>only the headers</strong> (with the same <code class="content__code">Content-Length</code>), no body. Add it.</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><p class="content__paragraph">Instead of rejecting everything except GET: <code class="content__code">boolean head = parts[0].equals(&quot;HEAD&quot;); if (!head &amp;&amp; !parts[0].equals(&quot;GET&quot;)) → 405</code>. In <code class="content__code">send</code> print <code class="content__code">Content-Length</code> as before, but when <code class="content__code">head == true</code> <strong>don&#39;t call</strong> <code class="content__code">out.write(bodyBytes)</code>. Test: <code class="content__code">curl -I http://localhost:8080/index.html</code>.</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">3. Many clients at once</span></div><div class="callout__body"><p class="content__paragraph">Right now the server handles clients <strong>one by one</strong>. Make every client handled in a separate thread.</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><figure class="code-block" data-lines="10">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+    <span class="hljs-type">Socket</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> server.accept();
+    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; {
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">Socket</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> client) {
+            handle(c);
+        } <span class="hljs-keyword">catch</span> (IOException e) {
+            log(<span class="hljs-string">&quot;client error: &quot;</span> + e.getMessage());
+        }
+    }).start();
+}</code></pre>
+</figure><p class="content__paragraph">The <code class="content__code">pages</code> map is only read, so it is safe for many threads. If you ever modify it — use <code class="content__code">ConcurrentHashMap</code>.</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">4. Require the Host header</span></div><div class="callout__body"><p class="content__paragraph">According to HTTP/1.1, a request without a <code class="content__code">Host</code> header should get <strong>400</strong>. Add this rule and test it with <code class="content__code">nc</code>/<code class="content__code">telnet</code>.</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><p class="content__paragraph">After reading the headers: <code class="content__code">if (parts[2].equals(&quot;HTTP/1.1&quot;) &amp;&amp; !headers.containsKey(&quot;host&quot;)) { send(out, 400, &quot;Bad Request&quot;, null, &quot;&lt;h1&gt;Host header required&lt;/h1&gt;&quot;); return; }</code>. Test: <code class="content__code">printf &#39;GET / HTTP/1.1\r\n\r\n&#39; | nc localhost 8080</code>.</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">5. A real server</span></div><div class="callout__body"><p class="content__paragraph">Use <code class="content__code">HttpProbe</code> on a page from the HTTP lab (address in <a class="content__link" href="c2-http.html">C2</a>), port 80. Then repeat with <code class="content__code">If-Modified-Since</code> equal to the date from <code class="content__code">Last-Modified</code>. What do you get?</p>
+</div></aside>
+
+
+
+</div>
+<nav class="pager" aria-label="Previous topic / Next topic">
+<a class="pager__link pager__link--prev" href="c2-http.html"><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="pager__text"><span class="pager__label">Previous topic</span><span class="pager__title">Wireshark and HTTP — reading a browser&#39;s conversation with a server</span></span></a>
+<a class="pager__link pager__link--next" href="c4-text-protocol.html"><span class="pager__text"><span class="pager__label">Next topic</span><span class="pager__title">Talking to a text server — a line-by-line client</span></span><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="On this page"><p class="toc__title">On this page</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#in-short">In short</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#what-a-conversation-over-tcp-sockets-looks-like">What a conversation over TCP sockets looks like</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#why-does-the-server-answer-400-bad-request">Why does the server answer 400 Bad Request?</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-server-miniwebserver">The server: MiniWebServer</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-client-httpprobe">The client: HttpProbe</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#running-it">Running it</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#tasks">Tasks</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Cheat sheet: TCP sockets in Java — your own mini HTTP server and client</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Print"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Print</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Close"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Close</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-c3-tcp-server-tcp-server-skeleton">TCP server — skeleton<a class="content__anchor" href="#cs-c3-tcp-server-tcp-server-skeleton" aria-hidden="true" tabindex="-1">#</a></h3>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item"><code class="content__code">ServerSocket ss = new ServerSocket(port);</code></li>
+<li class="content__list-item"><code class="content__code">Socket s = ss.accept();</code> (waits)</li>
+<li class="content__list-item"><code class="content__code">BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), UTF_8));</code></li>
+<li class="content__list-item"><code class="content__code">PrintWriter out = new PrintWriter(new OutputStreamWriter(s.getOutputStream(), UTF_8));</code></li>
+<li class="content__list-item">read → process → <code class="content__code">out.print(...); out.flush();</code></li>
+<li class="content__list-item"><code class="content__code">s.close();</code> (and go back to <code class="content__code">accept()</code>)</li>
+</ol>
+<h3 class="content__heading content__heading--h3" id="cs-c3-tcp-server-tcp-client-skeleton">TCP client — skeleton<a class="content__anchor" href="#cs-c3-tcp-server-tcp-client-skeleton" aria-hidden="true" tabindex="-1">#</a></h3>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item"><code class="content__code">Socket s = new Socket(host, port);</code></li>
+<li class="content__list-item">send lines + <code class="content__code">flush()</code></li>
+<li class="content__list-item">read <code class="content__code">while ((line = in.readLine()) != null)</code> (if the server closes) or until an end marker</li>
+<li class="content__list-item"><code class="content__code">s.close();</code></li>
+</ol>
+<h3 class="content__heading content__heading--h3" id="cs-c3-tcp-server-http-1-1-request-template">HTTP/1.1 request — template<a class="content__anchor" href="#cs-c3-tcp-server-http-1-1-request-template" aria-hidden="true" tabindex="-1">#</a></h3>
+<figure class="code-block" data-lines="5">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">GET /path HTTP/1.1\r\n
+Host: server-name\r\n
+Connection: close\r\n
+[If-Modified-Since: Mon, 06 Oct 2025 09:00:00 GMT\r\n]
+\r\n</code></pre>
+</figure><h3 class="content__heading content__heading--h3" id="cs-c3-tcp-server-server-decision">Server decision<a class="content__anchor" href="#cs-c3-tcp-server-server-decision" aria-hidden="true" tabindex="-1">#</a></h3>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Condition</th><th class="content__table-heading">Response</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">bad request line</td><td class="content__table-cell">400</td></tr><tr class="content__table-row"><td class="content__table-cell">method ≠ GET</td><td class="content__table-cell">405</td></tr><tr class="content__table-row"><td class="content__table-cell">no page</td><td class="content__table-cell">404</td></tr><tr class="content__table-row"><td class="content__table-cell">page not newer than If-Modified-Since</td><td class="content__table-cell">304 (no body)</td></tr><tr class="content__table-row"><td class="content__table-cell">otherwise</td><td class="content__table-cell">200 + body</td></tr></tbody></table></div>
+<h3 class="content__heading content__heading--h3" id="cs-c3-tcp-server-hangs-check">&quot;Hangs&quot;? Check<a class="content__anchor" href="#cs-c3-tcp-server-hangs-check" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph"><code class="content__code">flush()</code> · line ending <code class="content__code">\r\n</code> · empty line after headers · <code class="content__code">Connection: close</code>.</p>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ All cheat sheets</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Unofficial study notes. The tasks were rewritten (different wording, same logic) so that nothing from previous years is copied.</p>
+<p class="footer__text footer__text--small">Lectures based on: J. F. Kurose, K. W. Ross, “Computer Networking: A Top-Down Approach” (slides © 1996–2020 J.F. Kurose &amp; K.W. Ross) and Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Site source code</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+</body>
+</html>

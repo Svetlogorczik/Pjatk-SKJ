@@ -1,0 +1,36 @@
+<svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="d_proc + d_queue + d_trans + d_prop">
+  <defs><marker id="dl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="diagram__arrow" d="M0 0 10 5 0 10z"/></marker></defs>
+  <rect class="diagram__box" x="20" y="60" width="80" height="60" rx="10"/>
+  <text class="diagram__text diagram__text--bold" x="60" y="96" text-anchor="middle">A</text>
+  <line class="diagram__line" x1="100" y1="90" x2="170" y2="90" marker-end="url(#dl-arrow)"/>
+  <rect class="diagram__box diagram__box--accent" x="175" y="35" width="270" height="110" rx="14"/>
+  <text class="diagram__text diagram__text--bold" x="310" y="58" text-anchor="middle">{{router}}</text>
+  <rect class="diagram__box diagram__box--own" x="190" y="72" width="62" height="50" rx="8"/>
+  <text class="diagram__text diagram__text--muted" x="221" y="102" text-anchor="middle">CPU</text>
+  <rect class="diagram__box diagram__box--warn" x="270" y="82" width="26" height="30" rx="4"/>
+  <rect class="diagram__box diagram__box--warn" x="300" y="82" width="26" height="30" rx="4"/>
+  <rect class="diagram__box diagram__box--warn" x="330" y="82" width="26" height="30" rx="4"/>
+  <text class="diagram__text diagram__text--muted" x="313" y="134" text-anchor="middle">{{packets}}</text>
+  <rect class="diagram__box diagram__box--task" x="372" y="78" width="58" height="38" rx="6"/>
+  <text class="diagram__text diagram__text--muted" x="401" y="102" text-anchor="middle">L / R</text>
+  <line class="diagram__line diagram__line--accent" x1="445" y1="90" x2="640" y2="90" marker-end="url(#dl-arrow)"/>
+  <text class="diagram__text diagram__text--muted" x="542" y="80" text-anchor="middle">{{link2}}</text>
+  <rect class="diagram__box" x="650" y="60" width="90" height="60" rx="10"/>
+  <text class="diagram__text diagram__text--bold" x="695" y="96" text-anchor="middle">B</text>
+  <rect class="diagram__box diagram__box--own" x="20" y="185" width="150" height="44" rx="6"/>
+  <rect class="diagram__box diagram__box--warn" x="175" y="185" width="190" height="44" rx="6"/>
+  <rect class="diagram__box diagram__box--task" x="370" y="185" width="150" height="44" rx="6"/>
+  <rect class="diagram__box diagram__box--accent" x="525" y="185" width="215" height="44" rx="6"/>
+  <text class="diagram__text diagram__text--bold" x="95" y="212" text-anchor="middle">d_proc</text>
+  <text class="diagram__text diagram__text--bold" x="270" y="212" text-anchor="middle">d_queue</text>
+  <text class="diagram__text diagram__text--bold" x="445" y="212" text-anchor="middle">d_trans</text>
+  <text class="diagram__text diagram__text--bold" x="632" y="212" text-anchor="middle">d_prop</text>
+  <text class="diagram__text diagram__text--muted" x="95" y="250" text-anchor="middle">{{proc}}</text>
+  <text class="diagram__text diagram__text--muted" x="270" y="250" text-anchor="middle">{{queue}}</text>
+  <text class="diagram__text diagram__text--muted" x="445" y="250" text-anchor="middle">{{trans}}</text>
+  <text class="diagram__text diagram__text--muted" x="632" y="250" text-anchor="middle">{{prop}}</text>
+  <text class="diagram__text diagram__text--muted" x="95" y="272" text-anchor="middle">{{dependsCpu}}</text>
+  <text class="diagram__text diagram__text--muted" x="270" y="272" text-anchor="middle">{{dependsLoad}}</text>
+  <text class="diagram__text diagram__text--muted" x="445" y="272" text-anchor="middle">{{dependsL}}</text>
+  <text class="diagram__text diagram__text--muted" x="632" y="272" text-anchor="middle">{{dependsD}}</text>
+</svg>

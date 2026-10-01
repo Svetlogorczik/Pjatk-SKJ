@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DNS изнутри — запрос, собранный вручную, байт за байтом — SKJ</title>
+<meta name="description" content="Собираем в Java DNS-запрос из байтов, отправляем его по UDP на порт 53 и раскодируем ответ — заголовок, флаги, сжатые имена, TTL, адреса. Плюс анализ DNS в nslookup и Wireshark.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/c6-dns.html">
+<link rel="alternate" hreflang="en" href="../en/c6-dns.html">
+<link rel="alternate" hreflang="ru" href="../ru/c6-dns.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="c6-dns">
+<a class="skip-link" href="#main">Перейти к содержимому</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Меню" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Сети + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Язык"><a class="lang-switch__link" href="../pl/c6-dns.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../en/c6-dns.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../ru/c6-dns.html" hreflang="ru" lang="ru" data-lang="ru" aria-current="true" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Сменить тему (светлая / тёмная)" title="Сменить тему (светлая / тёмная)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Меню">
+<div class="sidebar__head"><span class="sidebar__title">Меню</span><button type="button" class="sidebar__close" data-nav-close aria-label="Закрыть меню">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Сети + Java</a>
+<div class="nav__progress progress" data-progress data-label="Ваш прогресс"><span class="progress__label">Ваш прогресс</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Старт</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Старт и настройка</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="course.html" data-page-link="course"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Сдача предмета и даты</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Словарь PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">Все конспекты</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Лекции</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Интернет и протоколы</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Край сети</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Ядро сети</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Структура Интернета</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Задержки и пропускная способность</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Безопасность</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Уровни и инкапсуляция</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">История Интернета</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Упражнения (ćwiczenia)</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Эстафета процессов (первый запуск)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP в Java: мини HTTP-сервер</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Клиент текстового протокола</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP вместе</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link nav__link--active" href="c6-dns.html" data-page-link="c6-dns" aria-current="page"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS вручную (UDP, байты)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP в Wireshark</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Коллоквиум</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Коллоквиум: тренировка</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Проект</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Проект: сеть proxy</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Упражнения (ćwiczenia) · C6</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">📇</span>DNS изнутри — запрос, собранный вручную, байт за байтом</h1>
+<p class="article__lead">Собираем в Java DNS-запрос из байтов, отправляем его по UDP на порт 53 и раскодируем ответ — заголовок, флаги, сжатые имена, TTL, адреса. Плюс анализ DNS в nslookup и Wireshark.</p>
+<div class="article__meta"><span class="badge badge--lab">🔁 Ćwiczenia (переделанная версия)</span><span class="article__source">По материалам: логика ćwiczeń 6 (DNS-запрос в виде массива байт к 8.8.8.8 и разбор ответа) и «Wireshark Lab: DNS» (Kurose &amp; Ross) — задания переделаны</span><span class="article__time">⏱ 8 мин чтения</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Краткая шпаргалка для ćwiczeń и проекта"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Конспект</span></button><button type="button" class="button button--ghost" data-done-toggle="c6-dns" aria-pressed="false" data-label-off="Отметить как пройденное" data-label-on="Пройдено"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Отметить как пройденное</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">На этой странице</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#коротко">Коротко</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#что-делает-dns">Что делает DNS?  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#формат-dns-сообщения">Формат DNS-сообщения</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#заголовок-12-баит">Заголовок — 12 байт</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#флаги-16-бит">Флаги (16 бит)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#вопрос-question">Вопрос (question)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#запись-ответа-resource-record">Запись ответа (resource record)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#пример-баит-за-баитом-настоящие-данные-из-проверки-этои-страницы">Пример байт за байтом (настоящие данные из проверки этой страницы)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#программа-dnslookup">Программа DnsLookup</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#запуск">Запуск</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#dns-в-nslookup-и-wireshark">DNS в nslookup и Wireshark</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#nslookup-основы-из-лабораторнои">nslookup — основы (из лабораторной)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#кэш-dns-на-твоем-компьютере-из-лабораторнои">Кэш DNS на твоём компьютере (из лабораторной)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#вопросы-по-перехвату">Вопросы по перехвату</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#задания">Задания</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="коротко">Коротко<a class="content__anchor" href="#коротко" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>DNS</strong> переводит имена (например, <code class="content__code">pjwstk.edu.pl</code>) в IP-адреса. Запросы обычно идут <strong>по UDP на порт 53</strong>.</li>
+<li class="content__list-item">DNS-сообщение = <strong>заголовок 12 байт</strong> + секция <strong>вопросов</strong> + секции <strong>ответов</strong>, <strong>авторитетная</strong> и <strong>дополнительная</strong>.</li>
+<li class="content__list-item">Доменное имя записывается <strong>метками</strong>: <code class="content__code">07 example 03 com 00</code>.</li>
+<li class="content__list-item">В ответах имена часто <strong>сжаты</strong>: два байта <code class="content__code">C0 0C</code> = «имя, как по смещению 12».</li>
+<li class="content__list-item">В Java <code class="content__code">byte</code> со знаком (−128…127) — всегда делай <strong><code class="content__code">&amp; 0xFF</code></strong>.</li>
+</ul>
+
+<aside class="callout callout--origin"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🔁</span><span class="callout__label">Откуда задание (исходное задание с занятий, кратко)</span></div><div class="callout__body"><p class="content__paragraph">На ćwiczeniach 6 DNS-запрос был записан в программе готовым массивом байт (для одного конкретного домена), отправлялся по UDP на публичный DNS-сервер на порт 53, а ответ нужно было разобрать на поля: ID, флаги, счётчики, имя, тип, класс, TTL и IP-адрес. Плюс лабораторная Wireshark DNS (nslookup, кэш DNS, отслеживание запросов). Наша версия <strong>сама собирает</strong> запрос для любого домена и типа, поддерживает сжатие имён и несколько типов записей.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="что-делает-dns">Что делает DNS? <span class="badge badge--own" title="Этот фрагмент дописал автор сайта — его нет в материалах занятий">✍️ от автора</span><a class="content__anchor" href="#что-делает-dns" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Компьютеры знают IP-адреса, людям удобнее имена. Когда ты вводишь <code class="content__code">www.example.com</code>:</p>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Твой компьютер проверяет <strong>свой кэш DNS</strong> — может, ответ уже известен.</li>
+<li class="content__list-item">Если нет, спрашивает <strong>локальный DNS-сервер</strong> (провайдера или, например, <code class="content__code">8.8.8.8</code>).</li>
+<li class="content__list-item">Локальный сервер при необходимости спрашивает <strong>корневой</strong> → <strong>TLD</strong> (<code class="content__code">.com</code>) → <strong>авторитетный</strong> сервер для <code class="content__code">example.com</code> и запоминает результат на время <strong>TTL</strong>.</li>
+<li class="content__list-item">Твой компьютер получает ответ — с точки зрения клиента это один вопрос и один ответ.</li>
+</ol>
+</div>
+<p class="content__paragraph">Типы записей, которые встретятся:</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Тип</th><th class="content__table-heading">Код</th><th class="content__table-heading">Что содержит</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><strong>A</strong></td><td class="content__table-cell">1</td><td class="content__table-cell">адрес IPv4</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>NS</strong></td><td class="content__table-cell">2</td><td class="content__table-cell">имя авторитетного сервера домена</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>CNAME</strong></td><td class="content__table-cell">5</td><td class="content__table-cell">«это псевдоним, настоящее имя…»</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>SOA</strong></td><td class="content__table-cell">6</td><td class="content__table-cell">информация о зоне (часто в ответе «такого имени нет»)</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>MX</strong></td><td class="content__table-cell">15</td><td class="content__table-cell">почтовый сервер (с приоритетом)</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>AAAA</strong></td><td class="content__table-cell">28</td><td class="content__table-cell">адрес IPv6</td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="формат-dns-сообщения">Формат DNS-сообщения<a class="content__anchor" href="#формат-dns-сообщения" aria-hidden="true" tabindex="-1">#</a></h2>
+<h3 class="content__heading content__heading--h3" id="заголовок-12-баит">Заголовок — 12 байт<a class="content__anchor" href="#заголовок-12-баит" aria-hidden="true" tabindex="-1">#</a></h3>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Байты</th><th class="content__table-heading">Поле</th><th class="content__table-heading">Значение</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">0–1</td><td class="content__table-cell"><strong>ID</strong></td><td class="content__table-cell">номер запроса; у ответа <strong>тот же</strong> ID</td></tr><tr class="content__table-row"><td class="content__table-cell">2–3</td><td class="content__table-cell"><strong>Flags</strong></td><td class="content__table-cell">флаги (ниже)</td></tr><tr class="content__table-row"><td class="content__table-cell">4–5</td><td class="content__table-cell"><strong>QDCOUNT</strong></td><td class="content__table-cell">число вопросов</td></tr><tr class="content__table-row"><td class="content__table-cell">6–7</td><td class="content__table-cell"><strong>ANCOUNT</strong></td><td class="content__table-cell">число записей ответа</td></tr><tr class="content__table-row"><td class="content__table-cell">8–9</td><td class="content__table-cell"><strong>NSCOUNT</strong></td><td class="content__table-cell">число авторитетных записей</td></tr><tr class="content__table-row"><td class="content__table-cell">10–11</td><td class="content__table-cell"><strong>ARCOUNT</strong></td><td class="content__table-cell">число дополнительных записей</td></tr></tbody></table></div>
+<p class="content__paragraph">2-байтовые числа записаны <strong>big-endian</strong> (сначала старший байт): <code class="content__code">00 02</code> = 2.</p>
+<h3 class="content__heading content__heading--h3" id="флаги-16-бит">Флаги (16 бит)<a class="content__anchor" href="#флаги-16-бит" aria-hidden="true" tabindex="-1">#</a></h3>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Бит(ы)</th><th class="content__table-heading">Поле</th><th class="content__table-heading">Значение</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">15</td><td class="content__table-cell"><strong>QR</strong></td><td class="content__table-cell">0 = запрос, 1 = ответ</td></tr><tr class="content__table-row"><td class="content__table-cell">14–11</td><td class="content__table-cell"><strong>OPCODE</strong></td><td class="content__table-cell">0 = обычный запрос</td></tr><tr class="content__table-row"><td class="content__table-cell">10</td><td class="content__table-cell"><strong>AA</strong></td><td class="content__table-cell">авторитетный ответ</td></tr><tr class="content__table-row"><td class="content__table-cell">9</td><td class="content__table-cell"><strong>TC</strong></td><td class="content__table-cell">ответ обрезан (<em>truncated</em>)</td></tr><tr class="content__table-row"><td class="content__table-cell">8</td><td class="content__table-cell"><strong>RD</strong></td><td class="content__table-cell">прошу рекурсию (<em>recursion desired</em>)</td></tr><tr class="content__table-row"><td class="content__table-cell">7</td><td class="content__table-cell"><strong>RA</strong></td><td class="content__table-cell">сервер умеет рекурсию (<em>recursion available</em>)</td></tr><tr class="content__table-row"><td class="content__table-cell">6–4</td><td class="content__table-cell"><strong>Z</strong></td><td class="content__table-cell">зарезервировано (0)</td></tr><tr class="content__table-row"><td class="content__table-cell">3–0</td><td class="content__table-cell"><strong>RCODE</strong></td><td class="content__table-cell">0 = OK, 3 = <strong>NXDOMAIN</strong> (такого имени нет)</td></tr></tbody></table></div>
+
+<aside class="callout callout--example"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🧩</span><span class="callout__label">Пример</span><span class="callout__title">Разбор флагов по шагам <span class="badge badge--own" title="Этот фрагмент дописал автор сайта — его нет в материалах занятий">✍️ от автора</span></span></div><div class="callout__body"><p class="content__paragraph">У запроса флаги <code class="content__code">0x0100</code>, у ответа <code class="content__code">0x8180</code>.</p>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item"><code class="content__code">0x0100</code> = <code class="content__code">0000 0001 0000 0000</code> → только бит 8 = 1 → <strong>RD = 1</strong> («ищи за меня до конца»).</li>
+<li class="content__list-item"><code class="content__code">0x8180</code> = <code class="content__code">1000 0001 1000 0000</code> → бит 15 (<strong>QR = 1</strong>, это ответ), бит 8 (<strong>RD = 1</strong>, скопирован из вопроса), бит 7 (<strong>RA = 1</strong>, сервер умеет рекурсию), RCODE = 0 (OK).</li>
+<li class="content__list-item">В Java: <code class="content__code">int qr = flags &gt;&gt; 15 &amp; 1; int rcode = flags &amp; 0xF;</code></li>
+</ol>
+</div></aside>
+<h3 class="content__heading content__heading--h3" id="вопрос-question">Вопрос (question)<a class="content__anchor" href="#вопрос-question" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>QNAME</strong> — имя как цепочка меток: байт длины + буквы, в конце байт <code class="content__code">00</code>.</li>
+<li class="content__list-item"><strong>QTYPE</strong> — 2 байта, например <code class="content__code">00 01</code> = A.</li>
+<li class="content__list-item"><strong>QCLASS</strong> — 2 байта, <code class="content__code">00 01</code> = IN (Internet).</li>
+</ul>
+<p class="content__paragraph"><code class="content__code">www.example.com</code> → <code class="content__code">03 77 77 77 07 65 78 61 6D 70 6C 65 03 63 6F 6D 00</code> (3 буквы <code class="content__code">www</code>, 7 букв <code class="content__code">example</code>, 3 буквы <code class="content__code">com</code>, конец).</p>
+<h3 class="content__heading content__heading--h3" id="запись-ответа-resource-record">Запись ответа (resource record)<a class="content__anchor" href="#запись-ответа-resource-record" aria-hidden="true" tabindex="-1">#</a></h3>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Поле</th><th class="content__table-heading">Размер</th><th class="content__table-heading">Заметки</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">NAME</td><td class="content__table-cell">переменный</td><td class="content__table-cell">часто <strong>указатель</strong> <code class="content__code">C0 0C</code></td></tr><tr class="content__table-row"><td class="content__table-cell">TYPE</td><td class="content__table-cell">2 B</td><td class="content__table-cell">например, 1 = A</td></tr><tr class="content__table-row"><td class="content__table-cell">CLASS</td><td class="content__table-cell">2 B</td><td class="content__table-cell">1 = IN</td></tr><tr class="content__table-row"><td class="content__table-cell">TTL</td><td class="content__table-cell"><strong>4 B</strong></td><td class="content__table-cell">сколько секунд можно держать в кэше</td></tr><tr class="content__table-row"><td class="content__table-cell">RDLENGTH</td><td class="content__table-cell">2 B</td><td class="content__table-cell">длина данных</td></tr><tr class="content__table-row"><td class="content__table-cell">RDATA</td><td class="content__table-cell">RDLENGTH</td><td class="content__table-cell">например, 4 байта адреса IPv4</td></tr></tbody></table></div>
+
+<aside class="callout callout--note"><div class="callout__header"><span class="callout__icon" aria-hidden="true">📌</span><span class="callout__label">Запомни</span><span class="callout__title">Сжатие имён (указатель)</span></div><div class="callout__body"><p class="content__paragraph">Если байт длины начинается с битов <code class="content__code">11</code> (то есть <code class="content__code">&gt;= 0xC0</code>), это <strong>не</strong> метка, а <strong>указатель</strong>: два байта, 14 бит которых — смещение в сообщении. <code class="content__code">C0 0C</code> → смещение <code class="content__code">0x0C</code> = 12 — там начинается имя из вопроса (сразу после 12-байтового заголовка). Так имя не повторяется в каждом ответе.</p>
+<p class="content__paragraph">Смещение считается так: <code class="content__code">((b1 &amp; 0x3F) &lt;&lt; 8) | (b2 &amp; 0xFF)</code>.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="пример-баит-за-баитом-настоящие-данные-из-проверки-этои-страницы">Пример байт за байтом (настоящие данные из проверки этой страницы)<a class="content__anchor" href="#пример-баит-за-баитом-настоящие-данные-из-проверки-этои-страницы" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Запрос <code class="content__code">example.com</code>, тип A (29 байт):</p>
+<figure class="code-block" data-lines="2">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">70 C5 01 00 00 01 00 00 00 00 00 00 07 65 78 61
+6D 70 6C 65 03 63 6F 6D 00 00 01 00 01</code></pre>
+</figure><div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Байты</th><th class="content__table-heading">Значение</th><th class="content__table-heading">Смысл</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">70 C5</code></td><td class="content__table-cell">ID = 0x70C5</td><td class="content__table-cell">случайный номер запроса</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">01 00</code></td><td class="content__table-cell">флаги 0x0100</td><td class="content__table-cell">RD = 1</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">00 01</code></td><td class="content__table-cell">QDCOUNT = 1</td><td class="content__table-cell">один вопрос</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">00 00</code> ×3</td><td class="content__table-cell">0, 0, 0</td><td class="content__table-cell">ответов и доп. записей нет</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">07 65 78 61 6D 70 6C 65</code></td><td class="content__table-cell">7 + «example»</td><td class="content__table-cell">первая метка</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">03 63 6F 6D</code></td><td class="content__table-cell">3 + «com»</td><td class="content__table-cell">вторая метка</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">00</code></td><td class="content__table-cell">—</td><td class="content__table-cell">конец имени</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">00 01</code></td><td class="content__table-cell">QTYPE = 1</td><td class="content__table-cell">A</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">00 01</code></td><td class="content__table-cell">QCLASS = 1</td><td class="content__table-cell">IN</td></tr></tbody></table></div>
+<p class="content__paragraph">Ответ от <code class="content__code">8.8.8.8</code> (61 байт):</p>
+<figure class="code-block" data-lines="4">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">70 C5 81 80 00 01 00 02 00 00 00 00 07 65 78 61
+6D 70 6C 65 03 63 6F 6D 00 00 01 00 01 C0 0C 00
+01 00 01 00 00 01 2C 00 04 AC 42 93 F3 C0 0C 00
+01 00 01 00 00 01 2C 00 04 68 14 17 9A</code></pre>
+</figure><div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Байты</th><th class="content__table-heading">Смысл</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">70 C5</code></td><td class="content__table-cell">тот же ID — это ответ на <strong>наш</strong> вопрос</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">81 80</code></td><td class="content__table-cell">QR = 1, RD = 1, RA = 1, RCODE = 0</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">00 01 00 02 00 00 00 00</code></td><td class="content__table-cell">1 вопрос, <strong>2 ответа</strong></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">07 65 … 00 00 01 00 01</code></td><td class="content__table-cell">повторённый вопрос</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">C0 0C</code></td><td class="content__table-cell">NAME = указатель на смещение 12 → <code class="content__code">example.com</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">00 01 00 01</code></td><td class="content__table-cell">TYPE = A, CLASS = IN</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">00 00 01 2C</code></td><td class="content__table-cell">TTL = 0x12C = <strong>300 с</strong></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">00 04</code></td><td class="content__table-cell">RDLENGTH = 4</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">AC 42 93 F3</code></td><td class="content__table-cell">172.66.147.243 (0xAC = 172, 0x42 = 66, 0x93 = 147, 0xF3 = 243)</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">C0 0C … 68 14 17 9A</code></td><td class="content__table-cell">второй ответ: 104.20.23.154</td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="программа-dnslookup">Программа DnsLookup<a class="content__anchor" href="#программа-dnslookup" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<figure class="code-block code-block--collapsible" data-lines="189">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">DnsLookup.java</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c6/DnsLookup.java" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Скачать</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-keyword">import</span> java.io.ByteArrayOutputStream;
+<span class="hljs-keyword">import</span> java.io.DataOutputStream;
+<span class="hljs-keyword">import</span> java.io.IOException;
+<span class="hljs-keyword">import</span> java.net.DatagramPacket;
+<span class="hljs-keyword">import</span> java.net.DatagramSocket;
+<span class="hljs-keyword">import</span> java.net.InetAddress;
+<span class="hljs-keyword">import</span> java.net.SocketTimeoutException;
+<span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+<span class="hljs-keyword">import</span> java.util.Random;
+
+<span class="hljs-comment">/**
+ * Builds a DNS query BY HAND (byte by byte), sends it over UDP to port 53 and decodes the answer.
+ *
+ * Run:  java DnsLookup example.com
+ *       java DnsLookup pjwstk.edu.pl MX
+ *       java DnsLookup www.wikipedia.org A 1.1.1.1
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DnsLookup</span> {
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-keyword">if</span> (args.length &lt; <span class="hljs-number">1</span>) {
+            System.err.println(<span class="hljs-string">&quot;Usage: java DnsLookup &lt;domain&gt; [A|AAAA|NS|MX|CNAME] [dns-server]&quot;</span>);
+            System.exit(<span class="hljs-number">1</span>);
+        }
+        <span class="hljs-type">String</span> <span class="hljs-variable">domain</span> <span class="hljs-operator">=</span> args[<span class="hljs-number">0</span>];
+        <span class="hljs-type">int</span> <span class="hljs-variable">qtype</span> <span class="hljs-operator">=</span> typeCode(args.length &gt; <span class="hljs-number">1</span> ? args[<span class="hljs-number">1</span>] : <span class="hljs-string">&quot;A&quot;</span>);
+        <span class="hljs-type">String</span> <span class="hljs-variable">server</span> <span class="hljs-operator">=</span> args.length &gt; <span class="hljs-number">2</span> ? args[<span class="hljs-number">2</span>] : <span class="hljs-string">&quot;8.8.8.8&quot;</span>;
+
+        <span class="hljs-type">int</span> <span class="hljs-variable">id</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>().nextInt(<span class="hljs-number">0x10000</span>);
+        <span class="hljs-type">byte</span>[] <span class="hljs-variable">query</span> <span class="hljs-operator">=</span> buildQuery(id, domain, qtype);
+        System.out.println(<span class="hljs-string">&quot;Query (&quot;</span> + query.length + <span class="hljs-string">&quot; bytes):&quot;</span>);
+        System.out.println(hex(query, query.length));
+
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">DatagramSocket</span> <span class="hljs-variable">socket</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DatagramSocket</span>()) {
+            socket.setSoTimeout(<span class="hljs-number">3000</span>);
+            socket.send(<span class="hljs-keyword">new</span> <span class="hljs-title class_">DatagramPacket</span>(query, query.length, InetAddress.getByName(server), <span class="hljs-number">53</span>));
+            <span class="hljs-type">DatagramPacket</span> <span class="hljs-variable">reply</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DatagramPacket</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">512</span>], <span class="hljs-number">512</span>);   <span class="hljs-comment">// classic DNS/UDP limit</span>
+            socket.receive(reply);
+            System.out.println(<span class="hljs-string">&quot;Answer (&quot;</span> + reply.getLength() + <span class="hljs-string">&quot; bytes) from &quot;</span> + server + <span class="hljs-string">&quot;:&quot;</span>);
+            System.out.println(hex(reply.getData(), reply.getLength()));
+            decode(reply.getData(), reply.getLength(), id);
+        } <span class="hljs-keyword">catch</span> (SocketTimeoutException e) {
+            System.out.println(<span class="hljs-string">&quot;No answer within 3 s (UDP datagram lost or port 53 blocked).&quot;</span>);
+        }
+    }
+
+    <span class="hljs-comment">/** Header (12 bytes) + Question (QNAME, QTYPE, QCLASS). */</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-type">byte</span>[] <span class="hljs-title function_">buildQuery</span><span class="hljs-params">(<span class="hljs-type">int</span> id, String domain, <span class="hljs-type">int</span> qtype)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-type">ByteArrayOutputStream</span> <span class="hljs-variable">bytes</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ByteArrayOutputStream</span>();
+        <span class="hljs-type">DataOutputStream</span> <span class="hljs-variable">out</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DataOutputStream</span>(bytes);   <span class="hljs-comment">// writeShort = 2 bytes, big-endian</span>
+        out.writeShort(id);          <span class="hljs-comment">// ID - we will match the answer by it</span>
+        out.writeShort(<span class="hljs-number">0x0100</span>);      <span class="hljs-comment">// flags: QR=0 (query), OPCODE=0, RD=1 (recursion desired)</span>
+        out.writeShort(<span class="hljs-number">1</span>);           <span class="hljs-comment">// QDCOUNT: 1 question</span>
+        out.writeShort(<span class="hljs-number">0</span>);           <span class="hljs-comment">// ANCOUNT</span>
+        out.writeShort(<span class="hljs-number">0</span>);           <span class="hljs-comment">// NSCOUNT</span>
+        out.writeShort(<span class="hljs-number">0</span>);           <span class="hljs-comment">// ARCOUNT</span>
+        <span class="hljs-keyword">for</span> (String label : domain.split(<span class="hljs-string">&quot;\\.&quot;</span>)) {          <span class="hljs-comment">// www.example.com -&gt; 3 www 7 example 3 com 0</span>
+            <span class="hljs-type">byte</span>[] <span class="hljs-variable">ascii</span> <span class="hljs-operator">=</span> label.getBytes(StandardCharsets.US_ASCII);
+            out.writeByte(ascii.length);
+            out.write(ascii);
+        }
+        out.writeByte(<span class="hljs-number">0</span>);            <span class="hljs-comment">// end of the name</span>
+        out.writeShort(qtype);       <span class="hljs-comment">// QTYPE</span>
+        out.writeShort(<span class="hljs-number">1</span>);           <span class="hljs-comment">// QCLASS = IN (Internet)</span>
+        <span class="hljs-keyword">return</span> bytes.toByteArray();
+    }
+
+    <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">decode</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] m, <span class="hljs-type">int</span> length, <span class="hljs-type">int</span> expectedId)</span> {
+        <span class="hljs-type">int</span> <span class="hljs-variable">id</span> <span class="hljs-operator">=</span> u16(m, <span class="hljs-number">0</span>);
+        <span class="hljs-type">int</span> <span class="hljs-variable">flags</span> <span class="hljs-operator">=</span> u16(m, <span class="hljs-number">2</span>);
+        System.out.printf(<span class="hljs-string">&quot;ID: 0x%04X %s%n&quot;</span>, id, id == expectedId ? <span class="hljs-string">&quot;(matches our query)&quot;</span> : <span class="hljs-string">&quot;(DIFFERENT - not our answer!)&quot;</span>);
+        System.out.printf(<span class="hljs-string">&quot;Flags: 0x%04X  QR=%d OPCODE=%d AA=%d TC=%d RD=%d RA=%d RCODE=%d%n&quot;</span>, flags,
+                flags &gt;&gt; <span class="hljs-number">15</span> &amp; <span class="hljs-number">1</span>, flags &gt;&gt; <span class="hljs-number">11</span> &amp; <span class="hljs-number">0xF</span>, flags &gt;&gt; <span class="hljs-number">10</span> &amp; <span class="hljs-number">1</span>, flags &gt;&gt; <span class="hljs-number">9</span> &amp; <span class="hljs-number">1</span>, flags &gt;&gt; <span class="hljs-number">8</span> &amp; <span class="hljs-number">1</span>, flags &gt;&gt; <span class="hljs-number">7</span> &amp; <span class="hljs-number">1</span>, flags &amp; <span class="hljs-number">0xF</span>);
+        <span class="hljs-type">String</span>[] <span class="hljs-variable">rcodes</span> <span class="hljs-operator">=</span> {<span class="hljs-string">&quot;NOERROR&quot;</span>, <span class="hljs-string">&quot;FORMERR&quot;</span>, <span class="hljs-string">&quot;SERVFAIL&quot;</span>, <span class="hljs-string">&quot;NXDOMAIN (no such name)&quot;</span>, <span class="hljs-string">&quot;NOTIMP&quot;</span>, <span class="hljs-string">&quot;REFUSED&quot;</span>};
+        <span class="hljs-type">int</span> <span class="hljs-variable">rcode</span> <span class="hljs-operator">=</span> flags &amp; <span class="hljs-number">0xF</span>;
+        System.out.println(<span class="hljs-string">&quot;RCODE &quot;</span> + rcode + <span class="hljs-string">&quot; = &quot;</span> + (rcode &lt; rcodes.length ? rcodes[rcode] : <span class="hljs-string">&quot;?&quot;</span>));
+        <span class="hljs-type">int</span> <span class="hljs-variable">qd</span> <span class="hljs-operator">=</span> u16(m, <span class="hljs-number">4</span>), an = u16(m, <span class="hljs-number">6</span>), ns = u16(m, <span class="hljs-number">8</span>), ar = u16(m, <span class="hljs-number">10</span>);
+        System.out.println(<span class="hljs-string">&quot;Questions: &quot;</span> + qd + <span class="hljs-string">&quot;, Answer RRs: &quot;</span> + an + <span class="hljs-string">&quot;, Authority RRs: &quot;</span> + ns + <span class="hljs-string">&quot;, Additional RRs: &quot;</span> + ar);
+
+        <span class="hljs-type">int</span>[] <span class="hljs-variable">pos</span> <span class="hljs-operator">=</span> {<span class="hljs-number">12</span>};
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; qd; i++) {
+            <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> readName(m, pos);
+            System.out.println(<span class="hljs-string">&quot;Question: &quot;</span> + name + <span class="hljs-string">&quot;  type=&quot;</span> + typeName(u16(m, pos[<span class="hljs-number">0</span>])) + <span class="hljs-string">&quot; class=&quot;</span> + u16(m, pos[<span class="hljs-number">0</span>] + <span class="hljs-number">2</span>));
+            pos[<span class="hljs-number">0</span>] += <span class="hljs-number">4</span>;
+        }
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; an + ns + ar &amp;&amp; pos[<span class="hljs-number">0</span>] &lt; length; i++) {
+            <span class="hljs-type">String</span> <span class="hljs-variable">section</span> <span class="hljs-operator">=</span> i &lt; an ? <span class="hljs-string">&quot;Answer&quot;</span> : i &lt; an + ns ? <span class="hljs-string">&quot;Authority&quot;</span> : <span class="hljs-string">&quot;Additional&quot;</span>;
+            <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> readName(m, pos);
+            <span class="hljs-type">int</span> <span class="hljs-variable">type</span> <span class="hljs-operator">=</span> u16(m, pos[<span class="hljs-number">0</span>]);
+            <span class="hljs-type">long</span> <span class="hljs-variable">ttl</span> <span class="hljs-operator">=</span> u32(m, pos[<span class="hljs-number">0</span>] + <span class="hljs-number">4</span>);
+            <span class="hljs-type">int</span> <span class="hljs-variable">rdLength</span> <span class="hljs-operator">=</span> u16(m, pos[<span class="hljs-number">0</span>] + <span class="hljs-number">8</span>);
+            <span class="hljs-type">int</span> <span class="hljs-variable">rdata</span> <span class="hljs-operator">=</span> pos[<span class="hljs-number">0</span>] + <span class="hljs-number">10</span>;
+            System.out.println(section + <span class="hljs-string">&quot;: &quot;</span> + name + <span class="hljs-string">&quot;  type=&quot;</span> + typeName(type) + <span class="hljs-string">&quot;  TTL=&quot;</span> + ttl + <span class="hljs-string">&quot; s  data=&quot;</span> + rdata(m, rdata, rdLength, type));
+            pos[<span class="hljs-number">0</span>] = rdata + rdLength;
+        }
+    }
+
+    <span class="hljs-comment">/** Reads a domain name; supports compression pointers (two bytes 11xxxxxx xxxxxxxx). */</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-title function_">readName</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] m, <span class="hljs-type">int</span>[] pos)</span> {
+        <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>();
+        <span class="hljs-type">int</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> pos[<span class="hljs-number">0</span>];
+        <span class="hljs-type">boolean</span> <span class="hljs-variable">jumped</span> <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">guard</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; guard &lt; <span class="hljs-number">128</span>; guard++) {
+            <span class="hljs-type">int</span> <span class="hljs-variable">len</span> <span class="hljs-operator">=</span> m[p] &amp; <span class="hljs-number">0xFF</span>;
+            <span class="hljs-keyword">if</span> (len == <span class="hljs-number">0</span>) {
+                p++;
+                <span class="hljs-keyword">break</span>;
+            }
+            <span class="hljs-keyword">if</span> ((len &amp; <span class="hljs-number">0xC0</span>) == <span class="hljs-number">0xC0</span>) {                  <span class="hljs-comment">// pointer to an earlier place in the message</span>
+                <span class="hljs-type">int</span> <span class="hljs-variable">target</span> <span class="hljs-operator">=</span> ((len &amp; <span class="hljs-number">0x3F</span>) &lt;&lt; <span class="hljs-number">8</span>) | (m[p + <span class="hljs-number">1</span>] &amp; <span class="hljs-number">0xFF</span>);
+                <span class="hljs-keyword">if</span> (!jumped) {
+                    pos[<span class="hljs-number">0</span>] = p + <span class="hljs-number">2</span>;                      <span class="hljs-comment">// after a pointer the name always ends</span>
+                }
+                jumped = <span class="hljs-literal">true</span>;
+                p = target;
+                <span class="hljs-keyword">continue</span>;
+            }
+            <span class="hljs-keyword">if</span> (name.length() &gt; <span class="hljs-number">0</span>) {
+                name.append(<span class="hljs-string">&#x27;.&#x27;</span>);
+            }
+            name.append(<span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(m, p + <span class="hljs-number">1</span>, len, StandardCharsets.US_ASCII));
+            p += <span class="hljs-number">1</span> + len;
+        }
+        <span class="hljs-keyword">if</span> (!jumped) {
+            pos[<span class="hljs-number">0</span>] = p;
+        }
+        <span class="hljs-keyword">return</span> name.length() == <span class="hljs-number">0</span> ? <span class="hljs-string">&quot;.&quot;</span> : name.toString();
+    }
+
+    <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-title function_">rdata</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] m, <span class="hljs-type">int</span> start, <span class="hljs-type">int</span> len, <span class="hljs-type">int</span> type)</span> {
+        <span class="hljs-keyword">switch</span> (type) {
+            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:  <span class="hljs-comment">// A</span>
+                <span class="hljs-keyword">return</span> (m[start] &amp; <span class="hljs-number">0xFF</span>) + <span class="hljs-string">&quot;.&quot;</span> + (m[start + <span class="hljs-number">1</span>] &amp; <span class="hljs-number">0xFF</span>) + <span class="hljs-string">&quot;.&quot;</span> + (m[start + <span class="hljs-number">2</span>] &amp; <span class="hljs-number">0xFF</span>) + <span class="hljs-string">&quot;.&quot;</span> + (m[start + <span class="hljs-number">3</span>] &amp; <span class="hljs-number">0xFF</span>);
+            <span class="hljs-keyword">case</span> <span class="hljs-number">28</span>: { <span class="hljs-comment">// AAAA</span>
+                <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">sb</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>();
+                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; i += <span class="hljs-number">2</span>) {
+                    sb.append(i == <span class="hljs-number">0</span> ? <span class="hljs-string">&quot;&quot;</span> : <span class="hljs-string">&quot;:&quot;</span>).append(Integer.toHexString(u16(m, start + i)));
+                }
+                <span class="hljs-keyword">return</span> sb.toString();
+            }
+            <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:  <span class="hljs-comment">// NS</span>
+            <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>:  <span class="hljs-comment">// CNAME</span>
+                <span class="hljs-keyword">return</span> readName(m, <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[]{start});
+            <span class="hljs-keyword">case</span> <span class="hljs-number">15</span>: <span class="hljs-comment">// MX: preference + name</span>
+                <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;pref &quot;</span> + u16(m, start) + <span class="hljs-string">&quot; &quot;</span> + readName(m, <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[]{start + <span class="hljs-number">2</span>});
+            <span class="hljs-keyword">default</span>:
+                <span class="hljs-keyword">return</span> hex(java.util.Arrays.copyOfRange(m, start, start + len), len).replace(<span class="hljs-string">&#x27;\n&#x27;</span>, <span class="hljs-string">&#x27; &#x27;</span>);
+        }
+    }
+
+    <span class="hljs-keyword">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">typeCode</span><span class="hljs-params">(String t)</span> {
+        <span class="hljs-keyword">switch</span> (t.toUpperCase()) {
+            <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;A&quot;</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;NS&quot;</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;CNAME&quot;</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">5</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;MX&quot;</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">15</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;AAAA&quot;</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">28</span>;
+            <span class="hljs-keyword">default</span>: <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>(<span class="hljs-string">&quot;Unknown type &quot;</span> + t);
+        }
+    }
+
+    <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-title function_">typeName</span><span class="hljs-params">(<span class="hljs-type">int</span> code)</span> {
+        <span class="hljs-keyword">switch</span> (code) {
+            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;A&quot;</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;NS&quot;</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;CNAME&quot;</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-number">6</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;SOA&quot;</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-number">15</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;MX&quot;</span>;
+            <span class="hljs-keyword">case</span> <span class="hljs-number">28</span>: <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;AAAA&quot;</span>;
+            <span class="hljs-keyword">default</span>: <span class="hljs-keyword">return</span> String.valueOf(code);
+        }
+    }
+
+    <span class="hljs-keyword">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">u16</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] m, <span class="hljs-type">int</span> i)</span> {
+        <span class="hljs-keyword">return</span> ((m[i] &amp; <span class="hljs-number">0xFF</span>) &lt;&lt; <span class="hljs-number">8</span>) | (m[i + <span class="hljs-number">1</span>] &amp; <span class="hljs-number">0xFF</span>);
+    }
+
+    <span class="hljs-keyword">static</span> <span class="hljs-type">long</span> <span class="hljs-title function_">u32</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] m, <span class="hljs-type">int</span> i)</span> {
+        <span class="hljs-keyword">return</span> ((<span class="hljs-type">long</span>) u16(m, i) &lt;&lt; <span class="hljs-number">16</span>) | u16(m, i + <span class="hljs-number">2</span>);
+    }
+
+    <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-title function_">hex</span><span class="hljs-params">(<span class="hljs-type">byte</span>[] data, <span class="hljs-type">int</span> length)</span> {
+        <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">sb</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>();
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; length; i++) {
+            sb.append(String.format(<span class="hljs-string">&quot;%02X&quot;</span>, data[i] &amp; <span class="hljs-number">0xFF</span>)).append(i % <span class="hljs-number">16</span> == <span class="hljs-number">15</span> ? <span class="hljs-string">&quot;\n&quot;</span> : <span class="hljs-string">&quot; &quot;</span>);
+        }
+        <span class="hljs-keyword">return</span> sb.toString().trim();
+    }
+}</code></pre>
+<button type="button" class="code-block__expand" aria-expanded="false" data-expand="Показать весь код" data-collapse="Свернуть код">Показать весь код</button>
+</figure>
+<p class="content__paragraph">Главное:</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">DataOutputStream.writeShort</code> пишет 2 байта в порядке <strong>big-endian</strong> — ровно как требует DNS.</li>
+<li class="content__list-item"><code class="content__code">u16</code> / <code class="content__code">u32</code> читают числа без знака: <code class="content__code">(m[i] &amp; 0xFF) &lt;&lt; 8 | (m[i+1] &amp; 0xFF)</code>.</li>
+<li class="content__list-item"><code class="content__code">readName</code> понимает метки <strong>и</strong> указатели; после указателя имя заканчивается, поэтому позиция сдвигается только на 2 байта.</li>
+<li class="content__list-item">Буфер 512 байт — классический лимит DNS по UDP (у больших ответов выставлен TC = 1).</li>
+</ul>
+
+<aside class="callout callout--danger"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🐞</span><span class="callout__label">Частая ошибка</span><span class="callout__title"><code>byte</code> в Java со знаком <span class="badge badge--own" title="Этот фрагмент дописал автор сайта — его нет в материалах занятий">✍️ от автора</span></span></div><div class="callout__body"><p class="content__paragraph">Байт <code class="content__code">0xF3</code> в Java — это <strong>−13</strong>, а не 243. Без <code class="content__code">&amp; 0xFF</code> IP-адрес напечатается как <code class="content__code">-84.66.-109.-13</code>. Всегда: <code class="content__code">int value = b &amp; 0xFF;</code>.</p>
+</div></aside>
+<h3 class="content__heading content__heading--h3" id="запуск">Запуск<a class="content__anchor" href="#запуск" aria-hidden="true" tabindex="-1">#</a></h3>
+<figure class="code-block" data-lines="4">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash">javac DnsLookup.java
+java DnsLookup example.com
+java DnsLookup pjwstk.edu.pl MX
+java DnsLookup www.wikipedia.org A 1.1.1.1</code></pre>
+</figure><p class="content__paragraph">Фрагменты настоящих результатов:</p>
+<figure class="code-block" data-lines="5">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">Answer: pjwstk.edu.pl  type=MX  TTL=3600 s  data=pref 1 ASPMX.L.GOOGLE.COM
+Answer: www.wikipedia.org  type=CNAME  TTL=20707 s  data=dyna.wikimedia.org
+Answer: dyna.wikimedia.org  type=A  TTL=180 s  data=208.80.153.224
+Flags: 0x8183  QR=1 OPCODE=0 AA=0 TC=0 RD=1 RA=1 RCODE=3
+RCODE 3 = NXDOMAIN (no such name)</code></pre>
+</figure><p class="content__paragraph">Обрати внимание на <strong>CNAME</strong>: <code class="content__code">www.wikipedia.org</code> — псевдоним, и сервер сразу добавил запись A для настоящего имени.</p>
+<h2 class="content__heading content__heading--h2" id="dns-в-nslookup-и-wireshark">DNS в nslookup и Wireshark<a class="content__anchor" href="#dns-в-nslookup-и-wireshark" aria-hidden="true" tabindex="-1">#</a></h2>
+<h3 class="content__heading content__heading--h3" id="nslookup-основы-из-лабораторнои">nslookup — основы (из лабораторной)<a class="content__anchor" href="#nslookup-основы-из-лабораторнои" aria-hidden="true" tabindex="-1">#</a></h3>
+<figure class="code-block" data-lines="5">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash">nslookup www.example.com            <span class="hljs-comment"># запись A (по умолчанию)</span>
+nslookup -<span class="hljs-built_in">type</span>=NS example.com       <span class="hljs-comment"># авторитетные серверы домена</span>
+nslookup -<span class="hljs-built_in">type</span>=MX pjwstk.edu.pl     <span class="hljs-comment"># почтовые серверы</span>
+nslookup 8.8.8.8                    <span class="hljs-comment"># обратный запрос: IP -&gt; имя</span>
+nslookup www.example.com 1.1.1.1    <span class="hljs-comment"># спросить конкретный DNS-сервер</span></code></pre>
+</figure><ul class="content__list content__list--bullet">
+<li class="content__list-item">Первые строки вывода — <strong>DNS-сервер, который ответил</strong> (имя и IP).</li>
+<li class="content__list-item"><strong>«Non-authoritative answer»</strong> = ответ из <strong>кэша</strong> какого-то сервера, а не от авторитетного.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="кэш-dns-на-твоем-компьютере-из-лабораторнои">Кэш DNS на твоём компьютере (из лабораторной)<a class="content__anchor" href="#кэш-dns-на-твоем-компьютере-из-лабораторнои" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">Компьютер помнит недавние ответы. Чтобы увидеть запросы в Wireshark, сначала очисти кэш:</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Система</th><th class="content__table-heading">Команда</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">Windows</td><td class="content__table-cell"><code class="content__code">ipconfig /flushdns</code></td></tr><tr class="content__table-row"><td class="content__table-cell">macOS</td><td class="content__table-cell"><code class="content__code">sudo killall -HUP mDNSResponder</code></td></tr><tr class="content__table-row"><td class="content__table-cell">Linux (systemd)</td><td class="content__table-cell"><code class="content__code">sudo resolvectl flush-caches</code></td></tr></tbody></table></div>
+<h3 class="content__heading content__heading--h3" id="вопросы-по-перехвату">Вопросы по перехвату<a class="content__anchor" href="#вопросы-по-перехвату" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">Очисти кэш DNS и браузера, запусти Wireshark с фильтром <code class="content__code">dns</code> (или <code class="content__code">ip.addr == &lt;твой IP&gt;</code>), открой любую страницу через <code class="content__code">http://</code>, а потом сделай несколько <code class="content__code">nslookup</code>.</p>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Задание</span><span class="callout__title">Вопросы D1–D8</span></div><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item">DNS-запрос идёт по UDP или TCP?</li>
+<li class="content__list-item">Какой <strong>порт назначения</strong> у запроса и <strong>порт источника</strong> у ответа?</li>
+<li class="content__list-item">На какой IP-адрес отправлен запрос? Это твой локальный DNS-сервер по умолчанию?</li>
+<li class="content__list-item">Сколько вопросов и ответов в <strong>запросе</strong>? А в <strong>ответе</strong>?</li>
+<li class="content__list-item">Какого <strong>типа</strong> запрос отправляет <code class="content__code">nslookup www...</code>? А <code class="content__code">nslookup -type=NS ...</code>?</li>
+<li class="content__list-item">Что содержат ответы типа NS? Есть ли дополнительные записи (<em>additional</em>) и что в них?</li>
+<li class="content__list-item">Страница ссылается на картинку с <strong>того же</strong> сервера. Виден ли новый DNS-запрос перед вторым GET? Почему?</li>
+<li class="content__list-item">Найди пару запрос–ответ по <strong>ID</strong>. Совпадают?</li>
+</ol>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Показать решение</span><span class="callout__title">Образцовые ответы (конкретные числа зависят от перехвата)</span></summary><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item">UDP.</li>
+<li class="content__list-item">Порт назначения запроса <strong>53</strong>; порт источника ответа <strong>53</strong> (порт клиента случайный).</li>
+<li class="content__list-item">Адрес локального DNS-сервера — сравни с <code class="content__code">ipconfig /all</code> (Windows) или <code class="content__code">resolvectl status</code> / <code class="content__code">/etc/resolv.conf</code> (Linux).</li>
+<li class="content__list-item">Запрос: 1 вопрос, 0 ответов. Ответ: 1 вопрос (повторён) и ≥ 1 ответа.</li>
+<li class="content__list-item"><code class="content__code">nslookup www...</code> → тип <strong>A</strong> (часто ещё отдельно <strong>AAAA</strong>). <code class="content__code">-type=NS</code> → тип <strong>NS</strong>.</li>
+<li class="content__list-item">Имена авторитетных серверов; в секции <em>additional</em> часто их <strong>IP-адреса</strong> (записи A/AAAA) — «бесплатно», хотя мы их не просили.</li>
+<li class="content__list-item">Нет — адрес уже в <strong>кэше DNS</strong> компьютера, поэтому второй GET уходит сразу.</li>
+<li class="content__list-item">Да — у ответа всегда тот же ID, что у запроса; по нему клиент их сопоставляет.</li>
+</ol>
+</div></details></div></aside>
+<h2 class="content__heading content__heading--h2" id="задания">Задания<a class="content__anchor" href="#задания" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Задание</span><span class="callout__title">1. Другой DNS-сервер</span></div><div class="callout__body"><p class="content__paragraph">Спроси одно и то же имя у <code class="content__code">8.8.8.8</code>, <code class="content__code">1.1.1.1</code> и у своего локального сервера. Сравни TTL. Почему они могут отличаться?</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Показать решение</span></summary><div class="callout__body"><p class="content__paragraph">TTL в ответе из кэша — это <strong>оставшееся</strong> время жизни записи: каждый сервер запомнил запись в свой момент, поэтому «отсчитывает» от разной точки.</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Задание</span><span class="callout__title">2. Запись TXT</span></div><div class="callout__body"><p class="content__paragraph">Добавь поддержку типа <strong>TXT</strong> (код 16). RDATA — строка: байт длины + текст (таких строк может быть несколько).</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Показать решение</span></summary><div class="callout__body"><p class="content__paragraph">В <code class="content__code">typeCode</code> добавь <code class="content__code">case &quot;TXT&quot;: return 16;</code>, в <code class="content__code">typeName</code> — <code class="content__code">case 16: return &quot;TXT&quot;;</code>, а в <code class="content__code">rdata</code>: цикл <code class="content__code">int p = start; while (p &lt; start + len) { int l = m[p] &amp; 0xFF; sb.append(new String(m, p + 1, l, StandardCharsets.US_ASCII)); p += 1 + l; }</code>.</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Задание</span><span class="callout__title">3. Разбери байты из Wireshark</span></div><div class="callout__body"><p class="content__paragraph">В Wireshark правый клик по секции DNS ответа → <em>Copy → …as Hex Stream</em>. Вставь в программу как массив байт и пропусти через <code class="content__code">decode(...)</code>. Совпадает ли результат с деревом Wireshark?</p>
+</div></aside>
+
+
+
+</div>
+<nav class="pager" aria-label="Предыдущая тема / Следующая тема">
+<a class="pager__link pager__link--prev" href="c5-tcp-udp.html"><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="pager__text"><span class="pager__label">Предыдущая тема</span><span class="pager__title">TCP и UDP вместе — поток против датаграмм</span></span></a>
+<a class="pager__link pager__link--next" href="c7-tcp-wireshark.html"><span class="pager__text"><span class="pager__label">Следующая тема</span><span class="pager__title">TCP под лупой — номера последовательности, RTT, окно и slow start в Wireshark</span></span><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="На этой странице"><p class="toc__title">На этой странице</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#коротко">Коротко</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#что-делает-dns">Что делает DNS?  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#формат-dns-сообщения">Формат DNS-сообщения</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#заголовок-12-баит">Заголовок — 12 байт</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#флаги-16-бит">Флаги (16 бит)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#вопрос-question">Вопрос (question)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#запись-ответа-resource-record">Запись ответа (resource record)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#пример-баит-за-баитом-настоящие-данные-из-проверки-этои-страницы">Пример байт за байтом (настоящие данные из проверки этой страницы)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#программа-dnslookup">Программа DnsLookup</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#запуск">Запуск</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#dns-в-nslookup-и-wireshark">DNS в nslookup и Wireshark</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#nslookup-основы-из-лабораторнои">nslookup — основы (из лабораторной)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#кэш-dns-на-твоем-компьютере-из-лабораторнои">Кэш DNS на твоём компьютере (из лабораторной)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#вопросы-по-перехвату">Вопросы по перехвату</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#задания">Задания</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Конспект: DNS изнутри — запрос, собранный вручную, байт за байтом</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Печать"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Печать</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Закрыть"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Закрыть</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-c6-dns-заголовок-12-b">Заголовок (12 B)<a class="content__anchor" href="#cs-c6-dns-заголовок-12-b" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">ID(2) · FLAGS(2) · QDCOUNT(2) · ANCOUNT(2) · NSCOUNT(2) · ARCOUNT(2) — big-endian.</p>
+<h3 class="content__heading content__heading--h3" id="cs-c6-dns-флаги">Флаги<a class="content__anchor" href="#cs-c6-dns-флаги" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">QR(15) · OPCODE(14–11) · AA(10) · TC(9) · RD(8) · RA(7) · Z(6–4) · RCODE(3–0).</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">запрос: <code class="content__code">0x0100</code> (RD=1); типичный ответ: <code class="content__code">0x8180</code>; NXDOMAIN: RCODE = 3.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-c6-dns-сборка-запроса-по-шагам">Сборка запроса по шагам<a class="content__anchor" href="#cs-c6-dns-сборка-запроса-по-шагам" aria-hidden="true" tabindex="-1">#</a></h3>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item"><code class="content__code">writeShort(id)</code>, <code class="content__code">writeShort(0x0100)</code>, <code class="content__code">writeShort(1)</code>, 3× <code class="content__code">writeShort(0)</code>.</li>
+<li class="content__list-item">Для каждой метки: <code class="content__code">writeByte(длина)</code> + байты букв; в конце <code class="content__code">writeByte(0)</code>.</li>
+<li class="content__list-item"><code class="content__code">writeShort(QTYPE)</code> (A=1, NS=2, CNAME=5, MX=15, AAAA=28), <code class="content__code">writeShort(1)</code> (IN).</li>
+<li class="content__list-item">Отправить по UDP на <strong>порт 53</strong>, буфер ответа 512 B, таймаут.</li>
+</ol>
+<h3 class="content__heading content__heading--h3" id="cs-c6-dns-разбор-ответа-по-шагам">Разбор ответа по шагам<a class="content__anchor" href="#cs-c6-dns-разбор-ответа-по-шагам" aria-hidden="true" tabindex="-1">#</a></h3>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item">Проверь <strong>ID</strong>, потом флаги и RCODE.</li>
+<li class="content__list-item">Прочитай счётчики.</li>
+<li class="content__list-item">Пропусти вопрос: имя + 4 байта.</li>
+<li class="content__list-item">Для каждой записи: NAME (осторожно с <code class="content__code">C0 xx</code>), TYPE, CLASS, <strong>TTL (4 B)</strong>, RDLENGTH, RDATA.</li>
+<li class="content__list-item">A → 4 байта <code class="content__code">&amp; 0xFF</code> через точки.</li>
+</ol>
+<h3 class="content__heading content__heading--h3" id="cs-c6-dns-ловушки">Ловушки<a class="content__anchor" href="#cs-c6-dns-ловушки" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">byte</code> со знаком → <code class="content__code">&amp; 0xFF</code>.</li>
+<li class="content__list-item">Указатель: <code class="content__code">b &gt;= 0xC0</code>, смещение = <code class="content__code">((b1 &amp; 0x3F) &lt;&lt; 8) | b2</code>; после указателя имя кончается.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-c6-dns-nslookup-wireshark">nslookup / Wireshark<a class="content__anchor" href="#cs-c6-dns-nslookup-wireshark" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">nslookup имя</code>, <code class="content__code">-type=NS</code>, <code class="content__code">-type=MX</code>, <code class="content__code">nslookup IP</code> (обратный).</li>
+<li class="content__list-item">«Non-authoritative» = из кэша.</li>
+<li class="content__list-item">Фильтр <code class="content__code">dns</code>, <code class="content__code">udp.port == 53</code>; очистка: <code class="content__code">ipconfig /flushdns</code>.</li>
+</ul>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ Все конспекты</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Неофициальные учебные материалы. Задания переделаны (другой текст, та же логика), чтобы ничего не копировать из работ прошлых лет.</p>
+<p class="footer__text footer__text--small">Лекции по материалам: J. F. Kurose, K. W. Ross, «Computer Networking: A Top-Down Approach» (слайды © 1996–2020 J.F. Kurose &amp; K.W. Ross) и Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Исходный код сайта</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+</body>
+</html>

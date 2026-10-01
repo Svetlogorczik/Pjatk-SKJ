@@ -1,0 +1,22 @@
+Dokumentacja (nr indeksu).pdf            <- name required by the specification
+
+1. Header table (from the instructor's template)
+   - name and surname, index number
+   - for how many points the project is written (150 / 300 / 400 / 500)
+   - name of your own test script (if any)
+
+2. What works / what does not / known bugs / how to compile and run
+
+3. Network protocol description (the most important part!)
+   3.1 Participants: client, key server, proxy; which transport (TCP/UDP) between whom
+   3.2 Message format: encoding, separators, line ending, max length (UDP: 256 B!)
+   3.3 List of messages - for EACH message:
+         name | sender -> receiver | exact format | meaning | possible answers | errors
+   3.4 Sequences (who sends what, in which order):
+         start-up and discovery, GET NAMES, GET VALUE, SET, QUIT
+   3.5 Cycles: how a request is prevented from circulating forever
+   3.6 Timeouts and failures: what happens when a node does not answer
+   3.7 Example conversations (like in an RFC)
+
+Rule from the template: describe ONLY the network context - no Java classes,
+methods or variables. Someone must be able to implement your proxy in another language.

@@ -1,0 +1,24 @@
+/* Syntax colours for highlight.js tokens (third-party class names, themed with tokens). */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-built_in { color: var(--hl-keyword); }
+.hljs-string,
+.hljs-regexp,
+.hljs-char { color: var(--hl-string); }
+.hljs-number,
+.hljs-symbol { color: var(--hl-number); }
+.hljs-comment,
+.hljs-quote { color: var(--hl-comment); font-style: italic; }
+.hljs-title,
+.hljs-title.function_,
+.hljs-section { color: var(--hl-title); }
+.hljs-type,
+.hljs-title.class_ { color: var(--hl-type); }
+.hljs-attr,
+.hljs-attribute,
+.hljs-variable,
+.hljs-params { color: var(--hl-attr); }
+.hljs-meta { color: var(--hl-meta); }
+.hljs-literal { color: var(--hl-literal); }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: 700; }

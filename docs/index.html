@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SKJ — Sieci komputerowe i programowanie sieciowe w Javie</title>
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<script>
+(function () {
+  var langs = ["pl","en","ru"], pick = null;
+  try { pick = localStorage.getItem('skj-lang'); } catch (e) {}
+  if (langs.indexOf(pick) < 0) {
+    var list = navigator.languages || [navigator.language || ''];
+    for (var i = 0; i < list.length && !pick; i++) {
+      var c = String(list[i]).slice(0, 2).toLowerCase();
+      if (langs.indexOf(c) >= 0) pick = c;
+    }
+  }
+  if (langs.indexOf(pick) < 0) pick = 'pl';
+  location.replace(pick + '/index.html');
+})();
+</script>
+<style>body{font:16px/1.6 system-ui,sans-serif;max-width:32rem;margin:15vh auto;padding:0 1rem;text-align:center}a{display:inline-block;margin:.25rem .5rem}</style>
+</head>
+<body>
+<h1>SKJ</h1>
+<p><a href="pl/index.html" hreflang="pl">Polski</a> <a href="en/index.html" hreflang="en">English</a> <a href="ru/index.html" hreflang="ru">Русский</a></p>
+</body>
+</html>

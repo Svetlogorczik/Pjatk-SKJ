@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SKJ — Компьютерные сети и сетевое программирование на Java</title>
+<meta name="description" content="Лекции простым языком, переделанные задания с ćwiczeń с рабочим кодом на Java, тренировка к коллоквиуму, путеводитель по проекту и конспект к каждой теме — на польском, английском и русском.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/index.html">
+<link rel="alternate" hreflang="en" href="../en/index.html">
+<link rel="alternate" hreflang="ru" href="../ru/index.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page page--home" data-page-id="index">
+<a class="skip-link" href="#main">Перейти к содержимому</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Меню" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Сети + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Язык"><a class="lang-switch__link" href="../pl/index.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../en/index.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../ru/index.html" hreflang="ru" lang="ru" data-lang="ru" aria-current="true" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Сменить тему (светлая / тёмная)" title="Сменить тему (светлая / тёмная)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Меню">
+<div class="sidebar__head"><span class="sidebar__title">Меню</span><button type="button" class="sidebar__close" data-nav-close aria-label="Закрыть меню">✕</button></div>
+<nav class="nav">
+<a class="nav__home nav__home--active" href="index.html">🏠 Сети + Java</a>
+<div class="nav__progress progress" data-progress data-label="Ваш прогресс"><span class="progress__label">Ваш прогресс</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Старт</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Старт и настройка</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="course.html" data-page-link="course"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Сдача предмета и даты</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Словарь PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">Все конспекты</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Лекции</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Интернет и протоколы</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Край сети</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Ядро сети</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Структура Интернета</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Задержки и пропускная способность</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Безопасность</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Уровни и инкапсуляция</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">История Интернета</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Упражнения (ćwiczenia)</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Эстафета процессов (первый запуск)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP в Java: мини HTTP-сервер</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Клиент текстового протокола</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP вместе</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS вручную (UDP, байты)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP в Wireshark</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Коллоквиум</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Коллоквиум: тренировка</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Проект</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Проект: сеть proxy</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article article--home">
+
+
+<div class="article__body content">
+<div class="hero">
+<p class="hero__eyebrow">PJATK · SKJ · неофициальные учебные материалы</p>
+<h1 class="hero__title">Компьютерные сети и Java — <span class="hero__accent">просто и по шагам</span></h1>
+<p class="hero__lead">Лекции простым языком, задания с ćwiczeń, переделанные так, чтобы не копировать работы прошлых лет, рабочий код для скачивания, калькуляторы для формул и конспект к каждой теме.</p>
+<p class="hero__actions"><a class="button button--primary" href="start.html">🧭 Начни отсюда</a> <a class="button button--ghost" href="cheatsheets.html">🗂️ Все конспекты</a></p>
+</div>
+
+<div class="cards"><section class="cards__item card">
+<h2 class="card__title"><span class="card__icon" aria-hidden="true">🧭</span>Старт</h2>
+<ul class="card__list"><li class="card__list-item"><a class="card__link" href="start.html" data-page-link="start"><span class="card__num" aria-hidden="true">🧭</span><span class="card__text">Старт и настройка</span></a></li><li class="card__list-item"><a class="card__link" href="course.html" data-page-link="course"><span class="card__num" aria-hidden="true">🎓</span><span class="card__text">Сдача предмета и даты</span></a></li><li class="card__list-item"><a class="card__link" href="glossary.html" data-page-link="glossary"><span class="card__num" aria-hidden="true">📖</span><span class="card__text">Словарь PL/EN/RU</span></a></li></ul>
+</section><section class="cards__item card">
+<h2 class="card__title"><span class="card__icon" aria-hidden="true">📘</span>Лекции</h2>
+<ul class="card__list"><li class="card__list-item"><a class="card__link" href="w1-internet.html" data-page-link="w1-internet"><span class="card__num">W1</span><span class="card__text">Интернет и протоколы</span></a></li><li class="card__list-item"><a class="card__link" href="w2-edge.html" data-page-link="w2-edge"><span class="card__num">W2</span><span class="card__text">Край сети</span></a></li><li class="card__list-item"><a class="card__link" href="w3-core.html" data-page-link="w3-core"><span class="card__num">W3</span><span class="card__text">Ядро сети</span></a></li><li class="card__list-item"><a class="card__link" href="w4-structure.html" data-page-link="w4-structure"><span class="card__num">W4</span><span class="card__text">Структура Интернета</span></a></li><li class="card__list-item"><a class="card__link" href="w5-performance.html" data-page-link="w5-performance"><span class="card__num">W5</span><span class="card__text">Задержки и пропускная способность</span></a></li><li class="card__list-item"><a class="card__link" href="w6-security.html" data-page-link="w6-security"><span class="card__num">W6</span><span class="card__text">Безопасность</span></a></li><li class="card__list-item"><a class="card__link" href="w7-layers.html" data-page-link="w7-layers"><span class="card__num">W7</span><span class="card__text">Уровни и инкапсуляция</span></a></li><li class="card__list-item"><a class="card__link" href="w8-history.html" data-page-link="w8-history"><span class="card__num">W8</span><span class="card__text">История Интернета</span></a></li></ul>
+</section><section class="cards__item card">
+<h2 class="card__title"><span class="card__icon" aria-hidden="true">🧪</span>Упражнения (ćwiczenia)</h2>
+<ul class="card__list"><li class="card__list-item"><a class="card__link" href="c1-relay.html" data-page-link="c1-relay"><span class="card__num">C1</span><span class="card__text">Эстафета процессов (первый запуск)</span></a></li><li class="card__list-item"><a class="card__link" href="c2-http.html" data-page-link="c2-http"><span class="card__num">C2</span><span class="card__text">Wireshark + HTTP</span></a></li><li class="card__list-item"><a class="card__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="card__num">C3</span><span class="card__text">TCP в Java: мини HTTP-сервер</span></a></li><li class="card__list-item"><a class="card__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="card__num">C4</span><span class="card__text">Клиент текстового протокола</span></a></li><li class="card__list-item"><a class="card__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="card__num">C5</span><span class="card__text">TCP + UDP вместе</span></a></li><li class="card__list-item"><a class="card__link" href="c6-dns.html" data-page-link="c6-dns"><span class="card__num">C6</span><span class="card__text">DNS вручную (UDP, байты)</span></a></li><li class="card__list-item"><a class="card__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="card__num">C7</span><span class="card__text">TCP в Wireshark</span></a></li></ul>
+</section><section class="cards__item card">
+<h2 class="card__title"><span class="card__icon" aria-hidden="true">📝</span>Коллоквиум</h2>
+<ul class="card__list"><li class="card__list-item"><a class="card__link" href="exam.html" data-page-link="exam"><span class="card__num" aria-hidden="true">📝</span><span class="card__text">Коллоквиум: тренировка</span></a></li></ul>
+</section><section class="cards__item card">
+<h2 class="card__title"><span class="card__icon" aria-hidden="true">🛠️</span>Проект</h2>
+<ul class="card__list"><li class="card__list-item"><a class="card__link" href="project.html" data-page-link="project"><span class="card__num" aria-hidden="true">🛠️</span><span class="card__text">Проект: сеть proxy</span></a></li></ul>
+</section></div>
+
+<section class="dates" aria-label="Важные даты"><p class="dates__title">📅 Важные даты <span class="dates__edition">Набор 2025/2026</span></p><ul class="dates__list"><li class="dates__item dates__item--past" data-date="2025-12-05">
+<time class="dates__date" datetime="2025-12-05">05.12.2025</time>
+<span class="dates__label">Спецификация проекта (дата архива с заданием)</span>
+<span class="dates__status" data-past="прошло" data-today="сегодня" data-in-days="через {n} дн." data-days-ago="{n} дн. назад">прошло · 300 дн. назад</span>
+<span class="dates__source">Источник: <code class="content__code">Specyfikacja projektu 2025 2026.zip</code></span>
+</li><li class="dates__item dates__item--past" data-date="2025-12-19">
+<time class="dates__date" datetime="2025-12-19T23:55">19.12.2025, 23:55</time>
+<span class="dates__label">Срок сдачи проекта в GAKKO (преподаватель группы может его изменить)</span>
+<span class="dates__status" data-past="прошло" data-today="сегодня" data-in-days="через {n} дн." data-days-ago="{n} дн. назад">прошло · 286 дн. назад</span>
+<span class="dates__source">Источник: <code class="content__code">Specyfikacja projektu.pdf, pkt 5</code></span>
+</li><li class="dates__item dates__item--past" data-date="2026-01-11">
+<time class="dates__date" datetime="2026-01-11T12:45">11.01.2026, 12:45</time>
+<span class="dates__label">Окончание практического теста (коллоквиум с сервером)</span>
+<span class="dates__status" data-past="прошло" data-today="сегодня" data-in-days="через {n} дн." data-days-ago="{n} дн. назад">прошло · 263 дн. назад</span>
+<span class="dates__source">Источник: <code class="content__code">Test_template/output.txt</code></span>
+</li></ul><p class="dates__note">Архив — это даты прошлого года. Новые сроки объявит преподаватель.</p></section>
+
+<div class="legend"><p class="legend__title">Как читать пометки</p><ul class="legend__list">
+<li class="legend__item"><span class="badge badge--lecture">📘</span> материал основан на лекции / материалах занятий</li>
+<li class="legend__item"><span class="badge badge--own">✍️ от автора</span> дополнение автора сайта (объяснение, пример, совет) — этого нет в материалах</li>
+<li class="legend__item"><span class="badge badge--lab">🔁</span> переделанное задание — та же логика, что на занятиях, но другой текст и другой код</li>
+</ul></div>
+<h2 class="content__heading content__heading--h2" id="что-есть-на-саите">Что есть на сайте<a class="content__anchor" href="#что-есть-на-саите" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>8 тем лекций</strong> (глава 1 Kurose &amp; Ross) — с аналогиями, формулами в KaTeX и вопросами «Проверь себя».</li>
+<li class="content__list-item"><strong>7 ćwiczeń</strong> — HTTP, DNS и TCP в Wireshark и программы с сокетами TCP/UDP. Весь код <strong>проверен</strong> и совместим с Java 8.</li>
+<li class="content__list-item"><strong>Коллоквиум</strong> — свой тренировочный сервер с 5 типами задач и образцовым решением.</li>
+<li class="content__list-item"><strong>Проект</strong> — требования, баллы, план построения proxy, ловушки выданных программ, тестовые скрипты и шаблон документации.</li>
+<li class="content__list-item"><strong>Сдача предмета и даты</strong> — что известно из материалов и что нужно уточнить у преподавателя.</li>
+</ul>
+
+</div>
+
+</article>
+</main>
+
+</div>
+
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Неофициальные учебные материалы. Задания переделаны (другой текст, та же логика), чтобы ничего не копировать из работ прошлых лет.</p>
+<p class="footer__text footer__text--small">Лекции по материалам: J. F. Kurose, K. W. Ross, «Computer Networking: A Top-Down Approach» (слайды © 1996–2020 J.F. Kurose &amp; K.W. Ross) и Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Исходный код сайта</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/dates.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 650;
+  line-height: 1.5;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.badge--own { background: var(--c-own-bg); border-color: color-mix(in srgb, var(--c-own-bd) 40%, transparent); color: var(--c-own-tx); }
+.badge--lecture { background: var(--c-lect-bg); border-color: color-mix(in srgb, var(--c-lect-bd) 40%, transparent); color: var(--c-lect-tx); }
+.badge--lab { background: var(--c-task-bg); border-color: color-mix(in srgb, var(--c-task-bd) 40%, transparent); color: var(--c-task-tx); }

@@ -1,0 +1,41 @@
+/*
+ * SKJ study site — styles entry point.
+ * Methodology: BEM (block__element--modifier). One file per block in ./blocks.
+ * The build (site/build.mjs) inlines these imports into docs/assets/css/main.css.
+ */
+@import url("base/tokens.css");
+@import url("base/reset.css");
+@import url("base/base.css");
+@import url("blocks/skip-link.css");
+@import url("blocks/page.css");
+@import url("blocks/header.css");
+@import url("blocks/logo.css");
+@import url("blocks/lang-switch.css");
+@import url("blocks/theme-toggle.css");
+@import url("blocks/layout.css");
+@import url("blocks/sidebar.css");
+@import url("blocks/nav.css");
+@import url("blocks/progress.css");
+@import url("blocks/article.css");
+@import url("blocks/content.css");
+@import url("blocks/toc.css");
+@import url("blocks/button.css");
+@import url("blocks/badge.css");
+@import url("blocks/callout.css");
+@import url("blocks/code-block.css");
+@import url("blocks/hljs.css");
+@import url("blocks/formula.css");
+@import url("blocks/diagram.css");
+@import url("blocks/steps.css");
+@import url("blocks/timeline.css");
+@import url("blocks/calc.css");
+@import url("blocks/dates.css");
+@import url("blocks/hero.css");
+@import url("blocks/cards.css");
+@import url("blocks/legend.css");
+@import url("blocks/glossary.css");
+@import url("blocks/sheet.css");
+@import url("blocks/cheatsheet.css");
+@import url("blocks/pager.css");
+@import url("blocks/footer.css");
+@import url("base/print.css");

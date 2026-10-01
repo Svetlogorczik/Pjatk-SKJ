@@ -1,0 +1,40 @@
+/* Numbered step list: wraps an ordered list rendered from Markdown. */
+.steps { counter-reset: step; }
+
+.steps .content__list--ordered {
+  list-style: none;
+  padding-left: 0;
+}
+
+.steps .content__list--ordered > .content__list-item {
+  position: relative;
+  counter-increment: step;
+  min-height: 34px;
+  padding: 2px 0 10px 48px;
+}
+
+.steps .content__list--ordered > .content__list-item::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.steps .content__list--ordered > .content__list-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 36px;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-border);
+}

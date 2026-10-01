@@ -1,0 +1,24 @@
+.formula {
+  margin: 1.2em 0 !important;
+  padding: 14px 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid color-mix(in srgb, var(--c-frm-bd) 30%, transparent);
+  border-radius: var(--radius-m);
+  background: var(--c-frm-bg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.formula .katex-display { margin: 0; }
+.formula .katex { font-size: 1.12em; }
+
+.formula--inline {
+  display: inline;
+  margin: 0 !important;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+}
+
+.formula--inline .katex { font-size: 1.04em; }

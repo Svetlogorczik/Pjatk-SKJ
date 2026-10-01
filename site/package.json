@@ -1,0 +1,16 @@
+{
+  "name": "skj-study-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static study site for SKJ (Computer Networks & Network Programming in Java) - PL/EN/RU",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test:java": "node scripts/test-java.mjs"
+  },
+  "devDependencies": {
+    "highlight.js": "^11.12.0",
+    "katex": "^0.18.10",
+    "marked": "^18.0.14"
+  }
+}

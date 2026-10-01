@@ -1,0 +1,15 @@
+<svg viewBox="0 0 760 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="UDP sockets">
+  <defs><marker id="su-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="diagram__arrow diagram__arrow--accent" d="M0 0 10 5 0 10z"/></marker></defs>
+  <text class="diagram__text diagram__text--bold" x="170" y="22" text-anchor="middle">{{server}} (UDP)</text>
+  <text class="diagram__text diagram__text--bold" x="590" y="22" text-anchor="middle">{{client}} (UDP)</text>
+  <rect class="diagram__box" x="20" y="36" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="60" text-anchor="middle">new DatagramSocket(port)</text>
+  <rect class="diagram__box diagram__box--warn" x="20" y="100" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="124" text-anchor="middle">socket.receive(packet)  ⏳</text>
+  <rect class="diagram__box diagram__box--own" x="20" y="164" width="300" height="52" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="185" text-anchor="middle">send(new DatagramPacket(data, len,</text><text class="diagram__text diagram__text--mono" x="170" y="205" text-anchor="middle">p.getAddress(), p.getPort()))</text>
+  <rect class="diagram__box" x="440" y="36" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="60" text-anchor="middle">new DatagramSocket()</text>
+  <rect class="diagram__box" x="440" y="100" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="124" text-anchor="middle">send(packet → host:port)</text>
+  <rect class="diagram__box diagram__box--warn" x="440" y="170" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="194" text-anchor="middle">receive(reply)  ⏳ setSoTimeout!</text>
+  <line class="diagram__line diagram__line--accent" x1="440" y1="119" x2="322" y2="119" marker-end="url(#su-arrow)"/>
+  <line class="diagram__line diagram__line--accent" x1="320" y1="190" x2="438" y2="190" marker-end="url(#su-arrow)"/>
+  <text class="diagram__text diagram__text--muted" x="380" y="235" text-anchor="middle">{{reply}}</text>
+  <text class="diagram__text diagram__text--muted" x="380" y="270" text-anchor="middle">1 send() = 1 datagram = 1 receive()</text>
+</svg>

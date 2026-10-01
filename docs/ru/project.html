@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Проект — сеть proxy, соединяющая TCP- и UDP-серверы — SKJ</title>
+<meta name="description" content="Что нужно сделать в проекте (версия 2025/26), как считаются баллы, как спроектировать proxy по шагам — определение протокола, таблица ключей, пересылка запросов, циклы, QUIT — и как написать документацию протокола.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/project.html">
+<link rel="alternate" hreflang="en" href="../en/project.html">
+<link rel="alternate" hreflang="ru" href="../ru/project.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="project">
+<a class="skip-link" href="#main">Перейти к содержимому</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Меню" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Сети + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Язык"><a class="lang-switch__link" href="../pl/project.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../en/project.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../ru/project.html" hreflang="ru" lang="ru" data-lang="ru" aria-current="true" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Сменить тему (светлая / тёмная)" title="Сменить тему (светлая / тёмная)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Меню">
+<div class="sidebar__head"><span class="sidebar__title">Меню</span><button type="button" class="sidebar__close" data-nav-close aria-label="Закрыть меню">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Сети + Java</a>
+<div class="nav__progress progress" data-progress data-label="Ваш прогресс"><span class="progress__label">Ваш прогресс</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Старт</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Старт и настройка</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="course.html" data-page-link="course"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Сдача предмета и даты</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Словарь PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">Все конспекты</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Лекции</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Интернет и протоколы</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Край сети</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Ядро сети</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Структура Интернета</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Задержки и пропускная способность</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Безопасность</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Уровни и инкапсуляция</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">История Интернета</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Упражнения (ćwiczenia)</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Эстафета процессов (первый запуск)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP в Java: мини HTTP-сервер</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Клиент текстового протокола</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP вместе</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS вручную (UDP, байты)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP в Wireshark</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Коллоквиум</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Коллоквиум: тренировка</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Проект</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link nav__link--active" href="project.html" data-page-link="project" aria-current="page"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Проект: сеть proxy</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Проект</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">🛠️</span>Проект — сеть proxy, соединяющая TCP- и UDP-серверы</h1>
+<p class="article__lead">Что нужно сделать в проекте (версия 2025/26), как считаются баллы, как спроектировать proxy по шагам — определение протокола, таблица ключей, пересылка запросов, циклы, QUIT — и как написать документацию протокола.</p>
+<div class="article__meta"><span class="badge badge--own">✍️ Авторский материал</span><span class="article__source">По материалам: Спецификация проекта 2025/2026 и шаблон документации из репозитория; план решения и советы — авторский материал</span><span class="article__time">⏱ 10 мин чтения</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Краткая шпаргалка для ćwiczeń и проекта"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Конспект</span></button><button type="button" class="button button--ghost" data-done-toggle="project" aria-pressed="false" data-label-off="Отметить как пройденное" data-label-on="Пройдено"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Отметить как пройденное</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">На этой странице</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#коротко">Коротко</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#что-дано-это-не-меняешь">Что дано (это не меняешь)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#запуск-выданных-программ">Запуск выданных программ</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#базовыи-протокол-клиент-сервер">Базовый протокол клиент–сервер</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#что-должен-делать-твои-proxy">Что должен делать твой proxy</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#баллы-набор-2025-26">Баллы (набор 2025/26)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#формальные-требования">Формальные требования</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#план-построения-proxy-по-шагам">План построения proxy по шагам  ✍️</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#кирпичик-1-слушать-tcp-и-udp-одновременно">Кирпичик 1: слушать TCP и UDP одновременно</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#кирпичик-2-спросить-узел-и-не-зависнуть">Кирпичик 2: спросить узел и не зависнуть</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#кирпичик-3-определить-протокол-и-вид-узла-псевдокод">Кирпичик 3: определить протокол и вид узла (псевдокод)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#кирпичик-4-пересылка-без-зацикливания-псевдокод-500-баллов">Кирпичик 4: пересылка без зацикливания (псевдокод, 500 баллов)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#ловушки-выданных-программ-проверено-на-их-коде">Ловушки выданных программ (проверено на их коде)  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#еще-советы">Ещё советы  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#тестовые-скрипты">Тестовые скрипты</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#документация-как-ее-написать">Документация — как её написать</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#проверь-себя">Проверь себя  ✍️</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="коротко">Коротко<a class="content__anchor" href="#коротко" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Тебе дают готовые <strong>серверы ключей</strong> (<code class="content__code">TCPServer</code>, <code class="content__code">UDPServer</code> — каждый хранит одну пару <em>ключ = значение</em>) и <strong>клиентов</strong> (<code class="content__code">TCPClient</code>, <code class="content__code">UDPClient</code>). <strong>Менять их нельзя.</strong></li>
+<li class="content__list-item">Ты пишешь программу <strong><code class="content__code">Proxy</code></strong>, которая объединяет много серверов и других proxy в одну сеть: клиент спрашивает <strong>любой</strong> proxy и получает ответ так, будто спросил «весь мир», — <strong>независимо от протокола</strong> (например, TCP-клиент ↔ UDP-сервер).</li>
+<li class="content__list-item">Нужно <strong>спроектировать и описать свой протокол</strong> между узлами proxy.</li>
+<li class="content__list-item">Баллы: от <strong>150</strong> (один протокол, без других proxy) до <strong>500</strong> (оба протокола, любая сеть proxy <strong>с циклами</strong>).</li>
+<li class="content__list-item">Без <strong>документации в PDF</strong> проект не оценивают. Проекты проверяют <strong>антиплагиатом</strong>.</li>
+</ul>
+
+<aside class="callout callout--warning"><div class="callout__header"><span class="callout__icon" aria-hidden="true">⚠️</span><span class="callout__label">Внимание</span><span class="callout__title">На этой странице нет готового решения <span class="badge badge--own" title="Этот фрагмент дописал автор сайта — его нет в материалах занятий">✍️ от автора</span></span></div><div class="callout__body"><p class="content__paragraph">Я специально не публикую целый <code class="content__code">Proxy.java</code>. Проекты проходят через антиплагиат, а за плагиат ставят <strong>отрицательные баллы</strong> — если много людей скопирует один и тот же код с открытого сайта, пострадают все. Зато здесь есть: точное объяснение задания, план по шагам, маленькие фрагменты-кирпичики, ловушки выданных программ (проверенные на их настоящем коде) и тестовые скрипты.</p>
+</div></aside>
+
+<aside class="callout callout--origin"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🔁</span><span class="callout__label">Откуда задание (исходное задание с занятий, кратко)</span></div><div class="callout__body"><p class="content__paragraph">Спецификация 2025/26 рассказывает историю планеты «Нумерландии», где жители и хранители знаний говорят на двух языках (TCP и UDP), а мудрый правитель строит сеть <strong>посредников</strong>, которые знают оба языка и обмениваются знаниями. Ниже — то же самое простыми словами. <strong>Уточни у преподавателя, такая ли спецификация в твоём наборе</strong> — она могла измениться.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="что-дано-это-не-меняешь">Что дано (это не меняешь)<a class="content__anchor" href="#что-дано-это-не-меняешь" aria-hidden="true" tabindex="-1">#</a></h2>
+<h3 class="content__heading content__heading--h3" id="запуск-выданных-программ">Запуск выданных программ<a class="content__anchor" href="#запуск-выданных-программ" aria-hidden="true" tabindex="-1">#</a></h3>
+<figure class="code-block" data-lines="4">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash">java TCPServer -port &lt;номер&gt; -key &lt;имя&gt; -value &lt;число&gt;
+java UDPServer -port &lt;номер&gt; -key &lt;имя&gt; -value &lt;число&gt;
+java TCPClient -address &lt;адрес&gt; -port &lt;номер&gt; -<span class="hljs-built_in">command</span> &lt;команда&gt;
+java UDPClient -address &lt;адрес&gt; -port &lt;номер&gt; -<span class="hljs-built_in">command</span> &lt;команда&gt;</code></pre>
+</figure><ul class="content__list content__list--bullet">
+<li class="content__list-item">Каждый сервер хранит <strong>один</strong> ключ. Во всей сети для каждого имени ключа <strong>не больше одного</strong> сервера.</li>
+<li class="content__list-item">TCP-клиент говорит только с TCP-сервером, UDP-клиент — только с UDP. Клиент отправляет <strong>одну</strong> команду, читает <strong>один</strong> ответ и завершается.</li>
+<li class="content__list-item">Серверы не держат соединений — обрабатывают запросы <strong>по очереди</strong>.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="базовыи-протокол-клиент-сервер">Базовый протокол клиент–сервер<a class="content__anchor" href="#базовыи-протокол-клиент-сервер" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">Каждая команда и каждый ответ — <strong>одна строка</strong> текста. В UDP всё сообщение помещается в <strong>одну датаграмму</strong>.</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Команда</th><th class="content__table-heading">Ответ</th><th class="content__table-heading">Заметки</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">GET NAMES</code></td><td class="content__table-cell"><code class="content__code">OK &lt;число&gt; &lt;имя1&gt; &lt;имя2&gt; …</code></td><td class="content__table-cell">базовый сервер всегда <code class="content__code">OK 1 &lt;свой ключ&gt;</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">GET VALUE &lt;имя&gt;</code></td><td class="content__table-cell"><code class="content__code">OK &lt;значение&gt;</code> или <code class="content__code">NA</code></td><td class="content__table-cell"><code class="content__code">NA</code> = у меня такого ключа нет</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">SET &lt;имя&gt; &lt;значение&gt;</code></td><td class="content__table-cell"><code class="content__code">OK</code> или <code class="content__code">NA</code></td><td class="content__table-cell">меняет значение ключа</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">QUIT</code></td><td class="content__table-cell"><strong>ответа нет</strong></td><td class="content__table-cell">сервер завершает работу</td></tr><tr class="content__table-row"><td class="content__table-cell">что угодно другое</td><td class="content__table-cell"><code class="content__code">NA</code></td><td class="content__table-cell"></td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="что-должен-делать-твои-proxy">Что должен делать твой proxy<a class="content__anchor" href="#что-должен-делать-твои-proxy" aria-hidden="true" tabindex="-1">#</a></h2>
+<figure class="code-block" data-lines="1">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash">java Proxy -port &lt;порт&gt; -server &lt;адрес&gt; &lt;порт&gt; [-server &lt;адрес&gt; &lt;порт&gt; ...]</code></pre>
+</figure><ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">-port</code> — порт, на котором proxy слушает <strong>сразу по TCP и UDP</strong> (для клиентов и других proxy).</li>
+<li class="content__list-item"><code class="content__code">-server адрес порт</code> — минимум один раз, может быть много раз: узел, к которому proxy должен подключиться, — <strong>сервер ключей или другой proxy</strong>. Одна и та же пара может быть указана нескольким proxy.</li>
+<li class="content__list-item">Proxy может говорить <strong>напрямую только</strong> с узлами из параметров; до остальных добирается <strong>через другие proxy</strong>.</li>
+<li class="content__list-item">Неверные или недостающие параметры → сообщение об ошибке и <strong>завершение программы</strong>.</li>
+</ul>
+<p class="content__paragraph">После запуска proxy:</p>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Открывает порт <strong>TCP и UDP</strong> для клиентов и других proxy.</li>
+<li class="content__list-item">Связывается с узлами из параметров и выясняет, <strong>какие из них серверы, а какие proxy</strong>, и какой <strong>протокол</strong> у каждого сервера.</li>
+<li class="content__list-item">Собирает информацию, <strong>какие ключи есть в сети</strong> и <strong>как до них добраться</strong> (какой сервер или через какой proxy).</li>
+<li class="content__list-item">Обслуживает клиентов обоих протоколов:<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">GET NAMES</code> → список <strong>всех</strong> ключей сети (внимание на <strong>счётчик</strong> на второй позиции!),</li>
+<li class="content__list-item"><code class="content__code">GET VALUE</code> / <code class="content__code">SET</code> → передаёт в сеть так, чтобы дошло до нужного сервера, и возвращает клиенту его ответ; если такого ключа в сети нет, может сразу ответить <code class="content__code">NA</code>,</li>
+<li class="content__list-item"><code class="content__code">QUIT</code> → передаёт дальше в сеть и <strong>выключает свои серверы</strong>, потом завершается сам.</li>
+</ul>
+</li>
+<li class="content__list-item"><strong>Proxy не хранит значения ключей</strong> — он только знает, где они.</li>
+</ol>
+</div>
+
+<figure class="diagram"><svg viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="дерево (без циклов) / граф с циклом">
+  <text class="diagram__text diagram__text--bold" x="180" y="22" text-anchor="middle">дерево (без циклов)</text>
+  <text class="diagram__text diagram__text--bold" x="570" y="22" text-anchor="middle">граф с циклом</text>
+  <line class="diagram__line" x1="380" y1="35" x2="380" y2="320" stroke-dasharray="4 6"/>
+  <g class="diagram__line">
+    <line x1="180" y1="60" x2="180" y2="95"/><line x1="180" y1="125" x2="95" y2="185"/><line x1="180" y1="125" x2="265" y2="185"/>
+    <line x1="215" y1="110" x2="300" y2="110"/><line x1="95" y1="215" x2="95" y2="265"/><line x1="265" y1="215" x2="230" y2="265"/><line x1="265" y1="215" x2="310" y2="265"/>
+  </g>
+  <rect class="diagram__box diagram__box--own" x="140" y="34" width="80" height="26" rx="13"/><text class="diagram__text diagram__text--muted" x="180" y="52" text-anchor="middle">клиент</text>
+  <rect class="diagram__box diagram__box--accent" x="145" y="95" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="180" y="116" text-anchor="middle">P1</text>
+  <rect class="diagram__box diagram__box--accent" x="60" y="185" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="95" y="206" text-anchor="middle">P2</text>
+  <rect class="diagram__box diagram__box--accent" x="230" y="185" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="265" y="206" text-anchor="middle">P3</text>
+  <circle class="diagram__box diagram__box--tip" cx="318" cy="110" r="18"/><text class="diagram__text" x="318" y="115" text-anchor="middle">a</text>
+  <circle class="diagram__box diagram__box--tip" cx="95" cy="283" r="18"/><text class="diagram__text" x="95" y="288" text-anchor="middle">b</text>
+  <circle class="diagram__box diagram__box--tip" cx="230" cy="283" r="18"/><text class="diagram__text" x="230" y="288" text-anchor="middle">c</text>
+  <circle class="diagram__box diagram__box--tip" cx="310" cy="283" r="18"/><text class="diagram__text" x="310" y="288" text-anchor="middle">d</text>
+  <g class="diagram__line diagram__line--accent">
+    <line x1="570" y1="110" x2="480" y2="230"/><line x1="570" y1="110" x2="660" y2="230"/><line x1="480" y1="230" x2="660" y2="230"/>
+  </g>
+  <g class="diagram__line">
+    <line x1="570" y1="60" x2="570" y2="95"/><line x1="605" y1="110" x2="690" y2="110"/><line x1="445" y1="230" x2="420" y2="285"/><line x1="695" y1="230" x2="715" y2="285"/>
+  </g>
+  <rect class="diagram__box diagram__box--own" x="530" y="34" width="80" height="26" rx="13"/><text class="diagram__text diagram__text--muted" x="570" y="52" text-anchor="middle">клиент</text>
+  <rect class="diagram__box diagram__box--accent" x="535" y="95" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="570" y="116" text-anchor="middle">P1</text>
+  <rect class="diagram__box diagram__box--accent" x="445" y="214" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="480" y="235" text-anchor="middle">P2</text>
+  <rect class="diagram__box diagram__box--accent" x="625" y="214" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="660" y="235" text-anchor="middle">P3</text>
+  <circle class="diagram__box diagram__box--tip" cx="708" cy="110" r="18"/><text class="diagram__text" x="708" y="115" text-anchor="middle">a</text>
+  <circle class="diagram__box diagram__box--tip" cx="420" cy="300" r="18"/><text class="diagram__text" x="420" y="305" text-anchor="middle">b</text>
+  <circle class="diagram__box diagram__box--tip" cx="715" cy="300" r="18"/><text class="diagram__text" x="715" y="305" text-anchor="middle">c</text>
+  <text class="diagram__text diagram__text--muted" x="570" y="200" text-anchor="middle">⟳ P1→P2→P3→P1</text>
+</svg>
+<figcaption class="diagram__caption">Слева дерево proxy (без циклов). Справа сеть с циклом P1→P2→P3→P1 — нужна для 500 баллов.</figcaption></figure>
+<h2 class="content__heading content__heading--h2" id="баллы-набор-2025-26">Баллы (набор 2025/26)<a class="content__anchor" href="#баллы-набор-2025-26" aria-hidden="true" tabindex="-1">#</a></h2>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Макс. баллов</th><th class="content__table-heading">Что должен уметь proxy</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><strong>150</strong></td><td class="content__table-cell">соединяет серверы с клиентами (без других proxy), <strong>один</strong> протокол (TCP <strong>или</strong> UDP)</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>300</strong></td><td class="content__table-cell">соединяет серверы с клиентами (без других proxy), <strong>оба</strong> протокола</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>300</strong></td><td class="content__table-cell">серверы + <strong>другие proxy</strong>, сеть — <strong>дерево</strong> (без циклов), <strong>один</strong> протокол</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>400</strong></td><td class="content__table-cell">серверы + другие proxy, <strong>дерево</strong>, <strong>оба</strong> протокола</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>500</strong></td><td class="content__table-cell">серверы + другие proxy, сеть <strong>любая (с циклами)</strong>, <strong>оба</strong> протокола</td></tr></tbody></table></div>
+
+<aside class="callout callout--danger"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🐞</span><span class="callout__label">Частая ошибка</span><span class="callout__title">Важное правило из шаблона документации</span></div><div class="callout__body"><p class="content__paragraph">Проект заявляется «на» конкретное число баллов и проверяется <strong>только</strong> на него. Если проект, заявленный на 400, не выполнит <strong>все</strong> требования для 400, — он получит <strong>0</strong>, а не 300. Лучше заявить меньше, но наверняка.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="формальные-требования">Формальные требования<a class="content__anchor" href="#формальные-требования" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Из спецификации и шаблона документации (набор 2025/26):</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Требование</th><th class="content__table-heading">Детали</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">Язык</td><td class="content__table-cell"><strong>Java 8 (JDK 1.8)</strong>, только стандартные сетевые классы</td></tr><tr class="content__table-row"><td class="content__table-cell">Файлы</td><td class="content__table-cell">только <strong>твои</strong> <code class="content__code">.java</code>, скрипты запуска (по желанию) и <strong>PDF</strong> с документацией</td></tr><tr class="content__table-row"><td class="content__table-cell">Не прикладывать</td><td class="content__table-cell">выданные серверы и клиенты, проект IntelliJ</td></tr><tr class="content__table-row"><td class="content__table-cell">Пакеты</td><td class="content__table-cell">файлы <code class="content__code">.java</code> <strong>без</strong> объявления <code class="content__code">package</code></td></tr><tr class="content__table-row"><td class="content__table-cell">Компиляция</td><td class="content__table-cell">автоматически командой <code class="content__code">javac *.java</code>, запуск скриптом/скриптами</td></tr><tr class="content__table-row"><td class="content__table-cell">Документация</td><td class="content__table-cell">файл <strong>«Dokumentacja (номер индекса).pdf»</strong> — <strong>обязательное</strong> условие оценки</td></tr><tr class="content__table-row"><td class="content__table-cell">Тесты</td><td class="content__table-cell">всё на <strong>localhost</strong>, на одном компьютере; не хардкодь пути, IP, порты</td></tr><tr class="content__table-row"><td class="content__table-cell">Тестовый скрипт</td><td class="content__table-cell">систему (Windows/Linux) выбирает преподаватель ćwiczeń</td></tr><tr class="content__table-row"><td class="content__table-cell">Срок</td><td class="content__table-cell">в GAKKO; в наборе 2025/26: <strong>19.12.2025, 23:55</strong> (преподаватель группы мог его изменить) — см. <a class="content__link" href="course.html">Сдача предмета</a></td></tr><tr class="content__table-row"><td class="content__table-cell">Оценка</td><td class="content__table-cell">сначала правильность и соответствие спецификации, потом качество кода и инженерия</td></tr><tr class="content__table-row"><td class="content__table-cell">Неясности</td><td class="content__table-cell">обсуждай с преподавателем — иначе риск незачёта</td></tr><tr class="content__table-row"><td class="content__table-cell">Плагиат</td><td class="content__table-cell">«сплагиаченные» проекты не проверяются, а за плагиат — <strong>отрицательные баллы</strong></td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="план-построения-proxy-по-шагам">План построения proxy по шагам <span class="badge badge--own" title="Этот фрагмент дописал автор сайта — его нет в материалах занятий">✍️ от автора</span><a class="content__anchor" href="#план-построения-proxy-по-шагам" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Надёжнее всего строить проект <strong>этапами</strong> — каждый этап это рабочая программа на определённое число баллов.</p>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><strong>Параметры.</strong> Прочитай <code class="content__code">-port</code> и список <code class="content__code">-server адрес порт</code>. Проверь числа и полноту; ошибка → сообщение и <code class="content__code">System.exit(1)</code>.</li>
+<li class="content__list-item"><strong>Слушать TCP и UDP</strong> на одном номере порта (это два разных порта — см. <a class="content__link" href="c5-tcp-udp.html">C5</a>). Каждый запрос в своём потоке.</li>
+<li class="content__list-item"><strong>Один обработчик команд</strong> — одна функция получает строку текста и возвращает строку ответа, независимо от того, пришла она по TCP или UDP.</li>
+<li class="content__list-item"><strong>Определение серверов</strong> и <strong>таблица ключей</strong>: имя → (адрес, порт, протокол, вид узла).</li>
+<li class="content__list-item"><strong>GET NAMES / GET VALUE / SET / QUIT</strong> для серверов из параметров → это уже <strong>150–300 баллов</strong>.</li>
+<li class="content__list-item"><strong>Общение с другими proxy</strong>: придумай свои команды (представиться, обменяться списком ключей, передать запрос). Сеть в виде <strong>дерева</strong> → <strong>300–400 баллов</strong>.</li>
+<li class="content__list-item"><strong>Циклы</strong>: идентификатор запроса + память «уже видел» + лимит переходов → <strong>500 баллов</strong>.</li>
+<li class="content__list-item"><strong>Документация</strong> протокола (ниже) и <strong>тестовые скрипты</strong>.</li>
+</ol>
+</div>
+<h3 class="content__heading content__heading--h3" id="кирпичик-1-слушать-tcp-и-udp-одновременно">Кирпичик 1: слушать TCP и UDP одновременно<a class="content__anchor" href="#кирпичик-1-слушать-tcp-и-udp-одновременно" aria-hidden="true" tabindex="-1">#</a></h3>
+
+<figure class="code-block" data-lines="28">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">фрагмент — слушатели TCP + UDP</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-comment">// Fragment: one TCP listener and one UDP listener on THE SAME port number (they do not collide).</span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">startListeners</span><span class="hljs-params">(<span class="hljs-type">int</span> port)</span> <span class="hljs-keyword">throws</span> IOException {
+    <span class="hljs-type">ServerSocket</span> <span class="hljs-variable">tcp</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServerSocket</span>(port);
+    <span class="hljs-type">DatagramSocket</span> <span class="hljs-variable">udp</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DatagramSocket</span>(port);
+
+    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; {                              <span class="hljs-comment">// TCP: one thread per client</span>
+        <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+            <span class="hljs-keyword">try</span> {
+                <span class="hljs-type">Socket</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> tcp.accept();
+                <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; serveTcp(client)).start();
+            } <span class="hljs-keyword">catch</span> (IOException e) {
+                log(<span class="hljs-string">&quot;TCP accept failed: &quot;</span> + e.getMessage());
+            }
+        }
+    }).start();
+
+    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; {                              <span class="hljs-comment">// UDP: one datagram = one request</span>
+        <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+            <span class="hljs-keyword">try</span> {
+                <span class="hljs-type">DatagramPacket</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DatagramPacket</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">256</span>], <span class="hljs-number">256</span>);
+                udp.receive(p);
+                <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; serveUdp(udp, p)).start();   <span class="hljs-comment">// reply to p.getAddress(), p.getPort()</span>
+            } <span class="hljs-keyword">catch</span> (IOException e) {
+                log(<span class="hljs-string">&quot;UDP receive failed: &quot;</span> + e.getMessage());
+            }
+        }
+    }).start();
+}</code></pre>
+</figure>
+<h3 class="content__heading content__heading--h3" id="кирпичик-2-спросить-узел-и-не-зависнуть">Кирпичик 2: спросить узел и не зависнуть<a class="content__anchor" href="#кирпичик-2-спросить-узел-и-не-зависнуть" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">У каждого исходящего запроса к другому узлу <strong>обязательно должен быть таймаут</strong> — иначе один мёртвый узел заморозит весь proxy.</p>
+
+<figure class="code-block" data-lines="16">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">фрагмент — TCP-запрос с таймаутом</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-comment">// Fragment (not a whole class): ask a TCP node one question, wait for ONE line, never hang forever.</span>
+<span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-title function_">askTcp</span><span class="hljs-params">(String host, <span class="hljs-type">int</span> port, String command, <span class="hljs-type">int</span> timeoutMs)</span> {
+    <span class="hljs-keyword">try</span> (<span class="hljs-type">Socket</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Socket</span>()) {
+        s.connect(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InetSocketAddress</span>(host, port), timeoutMs);   <span class="hljs-comment">// connect timeout</span>
+        s.setSoTimeout(timeoutMs);                                 <span class="hljs-comment">// read timeout</span>
+        <span class="hljs-type">PrintWriter</span> <span class="hljs-variable">out</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PrintWriter</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">OutputStreamWriter</span>(s.getOutputStream(), StandardCharsets.UTF_8), <span class="hljs-literal">true</span>);
+        <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(s.getInputStream(), StandardCharsets.UTF_8));
+        out.println(command);
+        <span class="hljs-keyword">if</span> (command.equals(<span class="hljs-string">&quot;QUIT&quot;</span>)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;                                           <span class="hljs-comment">// QUIT gets no answer</span>
+        }
+        <span class="hljs-keyword">return</span> in.readLine();                                      <span class="hljs-comment">// ONE line = the whole answer</span>
+    } <span class="hljs-keyword">catch</span> (IOException e) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;                                               <span class="hljs-comment">// refused / timeout / closed</span>
+    }
+}</code></pre>
+</figure>
+
+<figure class="code-block" data-lines="18">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">фрагмент — UDP-запрос с таймаутом</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-comment">// Fragment (not a whole class): ask a UDP node one question, wait max timeoutMs for ONE datagram.</span>
+<span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-title function_">askUdp</span><span class="hljs-params">(String host, <span class="hljs-type">int</span> port, String command, <span class="hljs-type">int</span> timeoutMs)</span> {
+    <span class="hljs-keyword">try</span> (<span class="hljs-type">DatagramSocket</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DatagramSocket</span>()) {
+        s.setSoTimeout(timeoutMs);
+        <span class="hljs-comment">// The provided UDPServer parses the WHOLE 256-byte buffer with a Scanner,</span>
+        <span class="hljs-comment">// so the last word must be followed by a separator - exactly like UDPClient does.</span>
+        <span class="hljs-type">byte</span>[] <span class="hljs-variable">data</span> <span class="hljs-operator">=</span> (command + <span class="hljs-string">&quot; &quot;</span>).getBytes(StandardCharsets.UTF_8);
+        s.send(<span class="hljs-keyword">new</span> <span class="hljs-title class_">DatagramPacket</span>(data, data.length, InetAddress.getByName(host), port));
+        <span class="hljs-keyword">if</span> (command.equals(<span class="hljs-string">&quot;QUIT&quot;</span>)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        }
+        <span class="hljs-type">DatagramPacket</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DatagramPacket</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[<span class="hljs-number">256</span>], <span class="hljs-number">256</span>);
+        s.receive(p);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(p.getData(), <span class="hljs-number">0</span>, p.getLength(), StandardCharsets.UTF_8).trim();
+    } <span class="hljs-keyword">catch</span> (IOException e) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;                                               <span class="hljs-comment">// timeout = no UDP node there</span>
+    }
+}</code></pre>
+</figure>
+<h3 class="content__heading content__heading--h3" id="кирпичик-3-определить-протокол-и-вид-узла-псевдокод">Кирпичик 3: определить протокол и вид узла (псевдокод)<a class="content__anchor" href="#кирпичик-3-определить-протокол-и-вид-узла-псевдокод" aria-hidden="true" tabindex="-1">#</a></h3>
+
+<figure class="code-block" data-lines="17">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__title">псевдокод — определение</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">for every &quot;-server host port&quot; from the command line:
+
+    answer = askTcp(host, port, &quot;GET NAMES&quot;, 300 ms)
+    if answer != null:                     -&gt; something speaks TCP on that port
+        protocol = TCP
+    else:
+        answer = askUdp(host, port, &quot;GET NAMES&quot;, 300 ms)
+        if answer != null: protocol = UDP
+        else:              retry later (the node may not be started yet)
+
+    is it a key server or another proxy?
+        ask a question that ONLY your proxies understand (your own inter-proxy command)
+        a key server answers &quot;NA&quot; to anything it does not know  -&gt; it is a key server
+        your proxy answers with your own reply                   -&gt; it is a proxy
+
+    NEVER send QUIT, never send a half command (&quot;GET&quot;, &quot;SET a x&quot;) to a provided server:
+    its Scanner throws an exception that is not caught and the server process dies.</code></pre>
+</figure>
+<h3 class="content__heading content__heading--h3" id="кирпичик-4-пересылка-без-зацикливания-псевдокод-500-баллов">Кирпичик 4: пересылка без зацикливания (псевдокод, 500 баллов)<a class="content__anchor" href="#кирпичик-4-пересылка-без-зацикливания-псевдокод-500-баллов" aria-hidden="true" tabindex="-1">#</a></h3>
+
+<figure class="code-block" data-lines="19">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__title">псевдокод — циклы</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">Every request that travels between proxies carries:
+    id    - unique, e.g. &quot;&lt;my port&gt;-&lt;counter&gt;&quot; or a random long
+    ttl   - how many more hops it may make (e.g. starts at 16)
+
+on request(id, ttl, command) from a neighbour:
+    if id in seenIds:        answer &quot;NA&quot;      // already handled -&gt; this was a CYCLE
+                             return
+    add id to seenIds        // (ConcurrentHashMap.newKeySet(), clean it from time to time)
+    if ttl == 0:             answer &quot;NA&quot;; return
+
+    if key is on one of MY servers:
+        return askServer(...)                // TCP or UDP, translated to the base protocol
+    for every neighbour proxy except the one the request came from:
+        answer = forward(id, ttl - 1, command)
+        if answer is not &quot;NA&quot;: return answer
+    return &quot;NA&quot;
+
+QUIT: the same idea - every proxy forwards QUIT (with an id) to its neighbours ONCE,
+      sends &quot;QUIT&quot; to its own servers, and only then exits.</code></pre>
+</figure>
+<h2 class="content__heading content__heading--h2" id="ловушки-выданных-программ-проверено-на-их-коде">Ловушки выданных программ (проверено на их коде) <span class="badge badge--own" title="Этот фрагмент дописал автор сайта — его нет в материалах занятий">✍️ от автора</span><a class="content__anchor" href="#ловушки-выданных-программ-проверено-на-их-коде" aria-hidden="true" tabindex="-1">#</a></h2>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Ловушка</th><th class="content__table-heading">Откуда</th><th class="content__table-heading">Что делать</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">UDP: <code class="content__code">GET NAMES</code> <strong>без пробела в конце</strong> даёт <code class="content__code">NA</code></td><td class="content__table-cell"><code class="content__code">UDPServer</code> читает Scanner&#39;ом <strong>весь 256-байтовый буфер</strong>, и последнее слово склеивается с нулевыми байтами (<code class="content__code">NAMES\0\0…</code>). Поэтому <code class="content__code">UDPClient</code> добавляет пробел. Я проверил: без пробела ответ <code class="content__code">NA</code>, с пробелом <code class="content__code">OK 1 b</code>.</td><td class="content__table-cell">при отправке UDP-серверу добавляй в конце пробел (или <code class="content__code">\n</code>)</td></tr><tr class="content__table-row"><td class="content__table-cell">UDP: ответ <strong>без конца строки</strong></td><td class="content__table-cell"><code class="content__code">UDPServer</code> отправляет <code class="content__code">output.getBytes()</code></td><td class="content__table-cell">читай <code class="content__code">new String(data, 0, getLength())</code> и делай <code class="content__code">trim()</code></td></tr><tr class="content__table-row"><td class="content__table-cell">UDP: буфер клиента <strong>256 B</strong></td><td class="content__table-cell"><code class="content__code">UDPClient</code> принимает в <code class="content__code">new byte[256]</code></td><td class="content__table-cell">ответ <code class="content__code">GET NAMES</code> для UDP-клиента не должен быть длиннее (считай длину!)</td></tr><tr class="content__table-row"><td class="content__table-cell">TCP: клиент читает <strong>одну строку</strong></td><td class="content__table-cell"><code class="content__code">TCPClient</code> делает один <code class="content__code">readLine()</code></td><td class="content__table-cell">ответ = одна строка с <code class="content__code">\n</code> в конце (<code class="content__code">println</code>)</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">QUIT</code> без ответа</td><td class="content__table-cell">оба клиента после <code class="content__code">QUIT</code> ничего не читают</td><td class="content__table-cell">proxy <strong>не</strong> должен ждать ответа после <code class="content__code">QUIT</code></td></tr><tr class="content__table-row"><td class="content__table-cell">неполная команда <strong>убивает сервер</strong></td><td class="content__table-cell">серверы используют <code class="content__code">Scanner.next()</code>/<code class="content__code">nextInt()</code> и ловят только <code class="content__code">IOException</code>; например, <code class="content__code">SET a x</code> даёт <code class="content__code">InputMismatchException</code></td><td class="content__table-cell"><strong>проверяй команды</strong> перед пересылкой; никогда не отправляй «половинки» команд</td></tr><tr class="content__table-row"><td class="content__table-cell">TCP-сервер обслуживает клиентов <strong>по очереди</strong></td><td class="content__table-cell">один цикл <code class="content__code">accept</code></td><td class="content__table-cell">короткие соединения, всегда закрывай сокет после ответа</td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="еще-советы">Ещё советы <span class="badge badge--own" title="Этот фрагмент дописал автор сайта — его нет в материалах занятий">✍️ от автора</span><a class="content__anchor" href="#еще-советы" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>Счётчик в <code class="content__code">GET NAMES</code></strong>: <code class="content__code">OK 3 a b c</code> — число должно равняться количеству имён, и каждое имя должно встречаться <strong>один раз</strong> (в сети с циклом легко получить дубликаты — используй <code class="content__code">Set</code>).</li>
+<li class="content__list-item"><strong>Потоки и общие данные</strong>: таблицу ключей читают и меняют много потоков → <code class="content__code">ConcurrentHashMap</code>, <code class="content__code">ConcurrentHashMap.newKeySet()</code>.</li>
+<li class="content__list-item"><strong>Взаимная блокировка в цикле</strong>: если P1 ждёт ответа P2, а P2 в это же время спрашивает P1 — при обработке в <strong>одном</strong> потоке обе стороны ждут вечно. Каждый запрос — в своём потоке, и везде таймауты.</li>
+<li class="content__list-item"><strong>Порядок запуска</strong>: proxy может стартовать раньше сервера — периодически повторяй определение (как в <a class="content__link" href="c1-relay.html">C1</a>).</li>
+<li class="content__list-item"><strong>Логи</strong>: печатай каждое отправленное и полученное сообщение с именем узла — при 5 открытых окнах это единственный способ что-то понять.</li>
+<li class="content__list-item"><strong>Не придумывай слишком хитрый протокол</strong>: простой и хорошо описанный протокол лучше хитрого и непонятного — за описание протокола тоже снимают баллы.</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="тестовые-скрипты">Тестовые скрипты<a class="content__anchor" href="#тестовые-скрипты" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Скрипты предполагают, что в папке лежат выданные <code class="content__code">TCPServer</code>, <code class="content__code">UDPServer</code>, <code class="content__code">TCPClient</code>, <code class="content__code">UDPClient</code> и <strong>твой</strong> <code class="content__code">Proxy</code>. Порты можно менять.</p>
+
+<figure class="code-block code-block--collapsible" data-lines="40">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__title">test-tree.sh</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/project/test-tree.sh" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Скачать</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash"><span class="hljs-meta">#!/bin/sh</span>
+<span class="hljs-comment"># Test network: a TREE of proxies (no cycles), TCP and UDP key servers mixed.</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment">#            client</span>
+<span class="hljs-comment">#              |</span>
+<span class="hljs-comment">#           [P1:9001] --- TCP a=10</span>
+<span class="hljs-comment">#            /      \</span>
+<span class="hljs-comment">#   [P2:9002]        [P3:9003] --- UDP c=30</span>
+<span class="hljs-comment">#       |                 |</span>
+<span class="hljs-comment">#   UDP b=20          TCP d=40</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># Put this script next to: TCPServer, UDPServer, TCPClient, UDPClient (from the course) and YOUR Proxy.</span>
+javac *.java || <span class="hljs-built_in">exit</span> 1
+
+java TCPServer -port 8101 -key a -value 10 &amp;
+java UDPServer -port 8102 -key b -value 20 &amp;
+java UDPServer -port 8103 -key c -value 30 &amp;
+java TCPServer -port 8104 -key d -value 40 &amp;
+<span class="hljs-built_in">sleep</span> 1
+
+java Proxy -port 9002 -server localhost 8102 &amp;
+java Proxy -port 9003 -server localhost 8103 -server localhost 8104 &amp;
+<span class="hljs-built_in">sleep</span> 1
+java Proxy -port 9001 -server localhost 8101 -server localhost 9002 -server localhost 9003 &amp;
+<span class="hljs-built_in">sleep</span> 2
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;=== expected: OK 4 a b c d (any order)&quot;</span>
+java TCPClient -address localhost -port 9001 -<span class="hljs-built_in">command</span> GET NAMES
+java UDPClient -address localhost -port 9001 -<span class="hljs-built_in">command</span> GET NAMES
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;=== expected: OK 40 (TCP client -&gt; ... -&gt; TCP server behind P3)&quot;</span>
+java UDPClient -address localhost -port 9001 -<span class="hljs-built_in">command</span> GET VALUE d
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;=== expected: OK, then OK 99&quot;</span>
+java TCPClient -address localhost -port 9002 -<span class="hljs-built_in">command</span> SET c 99
+java UDPClient -address localhost -port 9003 -<span class="hljs-built_in">command</span> GET VALUE c
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;=== expected: NA (no such key)&quot;</span>
+java TCPClient -address localhost -port 9001 -<span class="hljs-built_in">command</span> GET VALUE zzz
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;=== QUIT: everything should stop&quot;</span>
+java TCPClient -address localhost -port 9001 -<span class="hljs-built_in">command</span> QUIT
+<span class="hljs-built_in">sleep</span> 2
+<span class="hljs-built_in">jobs</span></code></pre>
+<button type="button" class="code-block__expand" aria-expanded="false" data-expand="Показать весь код" data-collapse="Свернуть код">Показать весь код</button>
+</figure>
+
+<figure class="code-block" data-lines="20">
+<figcaption class="code-block__bar"><span class="code-block__lang">Windows .bat</span><span class="code-block__title">test-tree.bat</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/project/test-tree.bat" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Скачать</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-dos">@<span class="hljs-built_in">echo</span> off
+<span class="hljs-comment">rem Windows version of test-tree.sh - every process in its own window.</span>
+javac *.java
+<span class="hljs-built_in">start</span> &quot;a TCP&quot; <span class="hljs-built_in">cmd</span> /k java TCPServer -port <span class="hljs-number">8101</span> -key a -value <span class="hljs-number">10</span>
+<span class="hljs-built_in">start</span> &quot;b UDP&quot; <span class="hljs-built_in">cmd</span> /k java UDPServer -port <span class="hljs-number">8102</span> -key b -value <span class="hljs-number">20</span>
+<span class="hljs-built_in">start</span> &quot;c UDP&quot; <span class="hljs-built_in">cmd</span> /k java UDPServer -port <span class="hljs-number">8103</span> -key c -value <span class="hljs-number">30</span>
+<span class="hljs-built_in">start</span> &quot;d TCP&quot; <span class="hljs-built_in">cmd</span> /k java TCPServer -port <span class="hljs-number">8104</span> -key d -value <span class="hljs-number">40</span>
+timeout /t <span class="hljs-number">1</span> &gt; <span class="hljs-built_in">nul</span>
+<span class="hljs-built_in">start</span> &quot;P2&quot; <span class="hljs-built_in">cmd</span> /k java Proxy -port <span class="hljs-number">9002</span> -server localhost <span class="hljs-number">8102</span>
+<span class="hljs-built_in">start</span> &quot;P3&quot; <span class="hljs-built_in">cmd</span> /k java Proxy -port <span class="hljs-number">9003</span> -server localhost <span class="hljs-number">8103</span> -server localhost <span class="hljs-number">8104</span>
+timeout /t <span class="hljs-number">1</span> &gt; <span class="hljs-built_in">nul</span>
+<span class="hljs-built_in">start</span> &quot;P1&quot; <span class="hljs-built_in">cmd</span> /k java Proxy -port <span class="hljs-number">9001</span> -server localhost <span class="hljs-number">8101</span> -server localhost <span class="hljs-number">9002</span> -server localhost <span class="hljs-number">9003</span>
+timeout /t <span class="hljs-number">2</span> &gt; <span class="hljs-built_in">nul</span>
+java TCPClient -address localhost -port <span class="hljs-number">9001</span> -command GET NAMES
+java UDPClient -address localhost -port <span class="hljs-number">9001</span> -command GET VALUE d
+java TCPClient -address localhost -port <span class="hljs-number">9002</span> -command <span class="hljs-built_in">SET</span> c <span class="hljs-number">99</span>
+java UDPClient -address localhost -port <span class="hljs-number">9003</span> -command GET VALUE c
+java TCPClient -address localhost -port <span class="hljs-number">9001</span> -command GET VALUE zzz
+<span class="hljs-built_in">pause</span>
+java TCPClient -address localhost -port <span class="hljs-number">9001</span> -command QUIT</code></pre>
+</figure>
+
+<figure class="code-block" data-lines="32">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__title">test-cycle.sh</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/project/test-cycle.sh" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Скачать</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash"><span class="hljs-meta">#!/bin/sh</span>
+<span class="hljs-comment"># Test network WITH A CYCLE (needed for 500 points): P1 -&gt; P2 -&gt; P3 -&gt; P1, plus a shortcut P1 -&gt; P3.</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment">#   [P1:9101] ---&gt; [P2:9102] ---&gt; [P3:9103]</span>
+<span class="hljs-comment">#       ^  \__________________________/ |</span>
+<span class="hljs-comment">#       |_______________________________|</span>
+<span class="hljs-comment">#   key servers: a (TCP) at P1, b (UDP) at P2, c (UDP) at P3</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># A correct proxy must NOT loop forever and must answer every command exactly once.</span>
+javac *.java || <span class="hljs-built_in">exit</span> 1
+
+java TCPServer -port 8201 -key a -value 1 &amp;
+java UDPServer -port 8202 -key b -value 2 &amp;
+java UDPServer -port 8203 -key c -value 3 &amp;
+<span class="hljs-built_in">sleep</span> 1
+
+java Proxy -port 9101 -server localhost 8201 -server localhost 9102 -server localhost 9103 &amp;
+java Proxy -port 9102 -server localhost 8202 -server localhost 9103 &amp;
+java Proxy -port 9103 -server localhost 8203 -server localhost 9101 &amp;
+<span class="hljs-built_in">sleep</span> 3
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;=== expected: OK 3 a b c   (each name ONCE, counter = 3)&quot;</span>
+java TCPClient -address localhost -port 9102 -<span class="hljs-built_in">command</span> GET NAMES
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;=== expected: OK 1&quot;</span>
+java UDPClient -address localhost -port 9103 -<span class="hljs-built_in">command</span> GET VALUE a
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;=== expected: OK, then OK 7&quot;</span>
+java TCPClient -address localhost -port 9101 -<span class="hljs-built_in">command</span> SET b 7
+java TCPClient -address localhost -port 9103 -<span class="hljs-built_in">command</span> GET VALUE b
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;=== QUIT&quot;</span>
+java UDPClient -address localhost -port 9102 -<span class="hljs-built_in">command</span> QUIT
+<span class="hljs-built_in">sleep</span> 2
+<span class="hljs-built_in">jobs</span></code></pre>
+</figure>
+<p class="content__paragraph">Список случаев для проверки:</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><input disabled="" type="checkbox"> <code class="content__code">GET NAMES</code> с любого proxy даёт <strong>все</strong> ключи, каждый один раз, с правильным счётчиком,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> <code class="content__code">GET VALUE</code> для ключа на TCP-сервере и на UDP-сервере, спрашивая и по TCP, и по UDP,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> <code class="content__code">SET</code>, потом <code class="content__code">GET VALUE</code> с <strong>другого</strong> proxy показывает новое значение,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> неизвестный ключ → <code class="content__code">NA</code>, неверная команда → <code class="content__code">NA</code>,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> в сети с циклом ничего не зацикливается (proxy не грузит процессор, логи заканчиваются),</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> <code class="content__code">QUIT</code> останавливает все proxy и серверы,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> неверные параметры <code class="content__code">Proxy</code> → ошибка и завершение.</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="документация-как-ее-написать">Документация — как её написать<a class="content__anchor" href="#документация-как-ее-написать" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Самая важная часть документации — <strong>описание протокола</strong>. Шаблон преподавателя говорит прямо: описание должно позволить кому-то <strong>написать свой proxy на другом языке</strong>, и общим будет только разговор по сети. Образец — документ <strong>RFC</strong>. <strong>Классы, методы и переменные Java не описываем.</strong></p>
+
+<figure class="code-block" data-lines="22">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__title">план документации</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Скопировано!" data-fail="Выделите и скопируйте вручную"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Копировать</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">Dokumentacja (nr indeksu).pdf            &lt;- name required by the specification
+
+1. Header table (from the instructor&#x27;s template)
+   - name and surname, index number
+   - for how many points the project is written (150 / 300 / 400 / 500)
+   - name of your own test script (if any)
+
+2. What works / what does not / known bugs / how to compile and run
+
+3. Network protocol description (the most important part!)
+   3.1 Participants: client, key server, proxy; which transport (TCP/UDP) between whom
+   3.2 Message format: encoding, separators, line ending, max length (UDP: 256 B!)
+   3.3 List of messages - for EACH message:
+         name | sender -&gt; receiver | exact format | meaning | possible answers | errors
+   3.4 Sequences (who sends what, in which order):
+         start-up and discovery, GET NAMES, GET VALUE, SET, QUIT
+   3.5 Cycles: how a request is prevented from circulating forever
+   3.6 Timeouts and failures: what happens when a node does not answer
+   3.7 Example conversations (like in an RFC)
+
+Rule from the template: describe ONLY the network context - no Java classes,
+methods or variables. Someone must be able to implement your proxy in another language.</code></pre>
+</figure>
+
+<aside class="callout callout--own"><div class="callout__header"><span class="callout__icon" aria-hidden="true">✍️</span><span class="callout__label">Добавлено автором сайта — этого нет в лекции</span><span class="callout__title">Как описать одно сообщение (шаблон — заполни своими командами)</span></div><div class="callout__body"><div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Поле описания</th><th class="content__table-heading">Что писать</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">Название</td><td class="content__table-cell">например, «представление proxy»</td></tr><tr class="content__table-row"><td class="content__table-cell">От кого → кому, каким транспортом</td><td class="content__table-cell">proxy → proxy, TCP</td></tr><tr class="content__table-row"><td class="content__table-cell">Точный формат</td><td class="content__table-cell">слова, порядок полей, разделитель (пробел), конец строки</td></tr><tr class="content__table-row"><td class="content__table-cell">Значение полей</td><td class="content__table-cell">что значит каждое поле, диапазон значений</td></tr><tr class="content__table-row"><td class="content__table-cell">Возможные ответы</td><td class="content__table-cell">формат ответов и их смысл</td></tr><tr class="content__table-row"><td class="content__table-cell">Ошибки и таймауты</td><td class="content__table-cell">что делает получатель при неверном формате, что делает отправитель без ответа</td></tr><tr class="content__table-row"><td class="content__table-cell">Пример</td><td class="content__table-cell">одна отправленная и одна полученная строка</td></tr></tbody></table></div>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="проверь-себя">Проверь себя <span class="badge badge--own" title="Этот фрагмент дописал автор сайта — его нет в материалах занятий">✍️ от автора</span><a class="content__anchor" href="#проверь-себя" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Проверь себя</span><span class="callout__title">Почему proxy не может просто запомнить значения ключей?</span></summary><div class="callout__body"><p class="content__paragraph">Потому что спецификация это запрещает — значения живут только на серверах (а <code class="content__code">SET</code> меняет их в одном месте). Запомненная копия быстро устареет.</p>
+</div></details>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Проверь себя</span><span class="callout__title">UDP-клиент спрашивает proxy о ключе, который хранится на TCP-сервере. Что делает proxy?</span></summary><div class="callout__body"><p class="content__paragraph">Получает датаграмму, распознаёт команду, смотрит в таблицу, подключается по <strong>TCP</strong> к нужному серверу (или пересылает другому proxy), получает строку ответа и отправляет её <strong>UDP-датаграммой</strong> на адрес и порт клиента.</p>
+</div></details>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Проверь себя</span><span class="callout__title">Как не дать запросу бесконечно кружить в сети с циклом?</span></summary><div class="callout__body"><p class="content__paragraph">У каждого запроса уникальный идентификатор; proxy помнит идентификаторы уже обработанных запросов и при повторе отвечает <code class="content__code">NA</code> (не пересылая дальше). Плюс лимит переходов (TTL).</p>
+</div></details>
+
+
+
+</div>
+<nav class="pager" aria-label="Предыдущая тема / Следующая тема">
+<a class="pager__link pager__link--prev" href="exam.html"><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="pager__text"><span class="pager__label">Предыдущая тема</span><span class="pager__title">Практический коллоквиум — тренировка с сервером DrillServer</span></span></a>
+
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="На этой странице"><p class="toc__title">На этой странице</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#коротко">Коротко</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#что-дано-это-не-меняешь">Что дано (это не меняешь)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#запуск-выданных-программ">Запуск выданных программ</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#базовыи-протокол-клиент-сервер">Базовый протокол клиент–сервер</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#что-должен-делать-твои-proxy">Что должен делать твой proxy</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#баллы-набор-2025-26">Баллы (набор 2025/26)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#формальные-требования">Формальные требования</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#план-построения-proxy-по-шагам">План построения proxy по шагам  ✍️</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#кирпичик-1-слушать-tcp-и-udp-одновременно">Кирпичик 1: слушать TCP и UDP одновременно</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#кирпичик-2-спросить-узел-и-не-зависнуть">Кирпичик 2: спросить узел и не зависнуть</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#кирпичик-3-определить-протокол-и-вид-узла-псевдокод">Кирпичик 3: определить протокол и вид узла (псевдокод)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#кирпичик-4-пересылка-без-зацикливания-псевдокод-500-баллов">Кирпичик 4: пересылка без зацикливания (псевдокод, 500 баллов)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#ловушки-выданных-программ-проверено-на-их-коде">Ловушки выданных программ (проверено на их коде)  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#еще-советы">Ещё советы  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#тестовые-скрипты">Тестовые скрипты</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#документация-как-ее-написать">Документация — как её написать</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#проверь-себя">Проверь себя  ✍️</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Конспект: Проект — сеть proxy, соединяющая TCP- и UDP-серверы</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Печать"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Печать</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Закрыть"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Закрыть</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-project-базовые-команды">Базовые команды<a class="content__anchor" href="#cs-project-базовые-команды" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph"><code class="content__code">GET NAMES</code> → <code class="content__code">OK n k1 … kn</code> · <code class="content__code">GET VALUE k</code> → <code class="content__code">OK v</code>/<code class="content__code">NA</code> · <code class="content__code">SET k v</code> → <code class="content__code">OK</code>/<code class="content__code">NA</code> · <code class="content__code">QUIT</code> → (ничего) · другое → <code class="content__code">NA</code>.</p>
+<h3 class="content__heading content__heading--h3" id="cs-project-запуск">Запуск<a class="content__anchor" href="#cs-project-запуск" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph"><code class="content__code">java Proxy -port P -server host port [-server host port ...]</code> — неверный параметр → ошибка + exit.</p>
+<h3 class="content__heading content__heading--h3" id="cs-project-баллы">Баллы<a class="content__anchor" href="#cs-project-баллы" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">150 (1 протокол, без proxy) · 300 (2 протокола, без proxy) · 300 (1 протокол, дерево) · 400 (2 протокола, дерево) · 500 (2 протокола, циклы). Заявил → должно работать <strong>всё</strong>, иначе 0.</p>
+<h3 class="content__heading content__heading--h3" id="cs-project-архитектура">Архитектура<a class="content__anchor" href="#cs-project-архитектура" aria-hidden="true" tabindex="-1">#</a></h3>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item">параметры → 2. слушатели TCP+UDP (потоки) → 3. один обработчик команд → 4. определение + таблица ключей → 5. пересылка с таймаутами → 6. протокол proxy–proxy → 7. ID + seen + TTL (циклы) → 8. QUIT всем.</li>
+</ol>
+<h3 class="content__heading content__heading--h3" id="cs-project-ловушки">Ловушки<a class="content__anchor" href="#cs-project-ловушки" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">UDP к <code class="content__code">UDPServer</code>: <strong>пробел в конце</strong> команды.</li>
+<li class="content__list-item">ответы: одна строка; UDP ≤ 256 B.</li>
+<li class="content__list-item"><code class="content__code">QUIT</code>: не ждать ответа.</li>
+<li class="content__list-item">проверяй команды (неполные убивают сервер).</li>
+<li class="content__list-item"><code class="content__code">GET NAMES</code>: уникальные имена + верный счётчик.</li>
+<li class="content__list-item">таймауты везде; <code class="content__code">ConcurrentHashMap</code>.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-project-сдача">Сдача<a class="content__anchor" href="#cs-project-сдача" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph"><code class="content__code">javac *.java</code> без пакетов · только твои .java + скрипты + «Dokumentacja (номер индекса).pdf» · localhost · без хардкода IP/портов · GAKKO до срока.</p>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ Все конспекты</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Неофициальные учебные материалы. Задания переделаны (другой текст, та же логика), чтобы ничего не копировать из работ прошлых лет.</p>
+<p class="footer__text footer__text--small">Лекции по материалам: J. F. Kurose, K. W. Ross, «Computer Networking: A Top-Down Approach» (слайды © 1996–2020 J.F. Kurose &amp; K.W. Ross) и Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Исходный код сайта</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+</body>
+</html>

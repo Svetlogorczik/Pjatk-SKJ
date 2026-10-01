@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Talking to a text server — a line-by-line client — SKJ</title>
+<meta name="description" content="Who speaks first, when to stop reading and how to save the answer to a file. We practise on our own QuoteDesk server — the best training before the practical test.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/c4-text-protocol.html">
+<link rel="alternate" hreflang="en" href="../en/c4-text-protocol.html">
+<link rel="alternate" hreflang="ru" href="../ru/c4-text-protocol.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="c4-text-protocol">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Menu" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Networks + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Language"><a class="lang-switch__link" href="../pl/c4-text-protocol.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../en/c4-text-protocol.html" hreflang="en" lang="en" data-lang="en" aria-current="true" title="English">EN</a><a class="lang-switch__link" href="../ru/c4-text-protocol.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Toggle theme (light / dark)" title="Toggle theme (light / dark)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Menu">
+<div class="sidebar__head"><span class="sidebar__title">Menu</span><button type="button" class="sidebar__close" data-nav-close aria-label="Close menu">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Networks + Java</a>
+<div class="nav__progress progress" data-progress data-label="Your progress"><span class="progress__label">Your progress</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Start</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Start &amp; setup</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="course.html" data-page-link="course"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Course rules &amp; dates</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Glossary PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">All cheat sheets</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Lectures</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Internet &amp; protocols</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Network edge</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Network core</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Internet structure</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Delay &amp; throughput</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Security</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Layers &amp; encapsulation</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">Internet history</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Labs</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Process relay (first run)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP in Java: mini HTTP server</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link nav__link--active" href="c4-text-protocol.html" data-page-link="c4-text-protocol" aria-current="page"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Text-protocol client</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP together</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS by hand (UDP, bytes)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP in Wireshark</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Practical test</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Practical test: training</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Project</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Project: proxy network</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Labs · C4</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">💬</span>Talking to a text server — a line-by-line client</h1>
+<p class="article__lead">Who speaks first, when to stop reading and how to save the answer to a file. We practise on our own QuoteDesk server — the best training before the practical test.</p>
+<div class="article__meta"><span class="badge badge--lab">🔁 Lab (rewritten version)</span><span class="article__source">Based on: logic of lab 5 (clients connecting to a server in class, reading answers, saving to a file) — rewritten task</span><span class="article__time">⏱ 5 min read</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Short summary for labs and the project"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Cheat sheet</span></button><button type="button" class="button button--ghost" data-done-toggle="c4-text-protocol" aria-pressed="false" data-label-off="Mark as done" data-label-on="Done"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Mark as done</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">On this page</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#in-short">In short</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#four-questions-before-writing-a-client">Four questions before writing a client</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#how-to-recognise-the-end-of-an-answer">How to recognise the end of an answer?</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-quotedesk-protocol">The QuoteDesk protocol</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-practice-server">The practice server</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-client">The client</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#running-it">Running it</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#a-manual-conversation-without-writing-code">A &quot;manual&quot; conversation without writing code  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#tasks">Tasks</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="in-short">In short<a class="content__anchor" href="#in-short" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">A text protocol = a conversation in <strong>lines</strong>: every message ends with <code class="content__code">\r\n</code> (or <code class="content__code">\n</code>).</li>
+<li class="content__list-item">Before writing a client, find out: <strong>who speaks first</strong> (client or server) and <strong>how you will recognise the end of an answer</strong>.</li>
+<li class="content__list-item">There are 4 ways to detect &quot;end of answer&quot;: a known number of lines, a marker line (e.g. <code class="content__code">END</code>), the server closing the connection (<code class="content__code">readLine() == null</code>) or <strong>silence</strong> (timeout).</li>
+<li class="content__list-item">An answer often has to be <strong>saved to a file</strong> — without the first and the last line (header and footer).</li>
+</ul>
+
+<aside class="callout callout--origin"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🔁</span><span class="callout__label">Where this task comes from (original class task, summarised)</span></div><div class="callout__body"><p class="content__paragraph">In lab 5 you wrote a few clients that connected to the instructor&#39;s servers: one sent a line with an identifier and read everything until the connection closed, saving the middle of the answer to a file; another had to read the server&#39;s greeting first and only then send something. It was also training for the practical test. Here you get <strong>your own practice server</strong> (<code class="content__code">QuoteDesk</code>), so you can train at home.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="four-questions-before-writing-a-client">Four questions before writing a client<a class="content__anchor" href="#four-questions-before-writing-a-client" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><strong>Who speaks first?</strong> If the server sends a greeting and you immediately read &quot;your&quot; answer — everything shifts by one line. If both sides wait for the other — the program <strong>hangs</strong>.</li>
+<li class="content__list-item"><strong>What is the format of each line?</strong> Words, spaces, upper/lower case, line ending.</li>
+<li class="content__list-item"><strong>How do I know the answer has ended?</strong> (table below)</li>
+<li class="content__list-item"><strong>What to do with an error?</strong> E.g. the server answers <code class="content__code">ERR ...</code> or closes the connection.</li>
+</ol>
+</div>
+<h3 class="content__heading content__heading--h3" id="how-to-recognise-the-end-of-an-answer">How to recognise the end of an answer?<a class="content__anchor" href="#how-to-recognise-the-end-of-an-answer" aria-hidden="true" tabindex="-1">#</a></h3>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Method</th><th class="content__table-heading">In code</th><th class="content__table-heading">Example</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">a known <strong>number</strong> of lines</td><td class="content__table-cell"><code class="content__code">for (int i = 0; i &lt; n; i++) in.readLine();</code></td><td class="content__table-cell">&quot;the server will send 4 numbers&quot;</td></tr><tr class="content__table-row"><td class="content__table-cell">the count given <strong>in a header</strong></td><td class="content__table-cell">read <code class="content__code">BEGIN 3</code>, then 3 lines</td><td class="content__table-cell"><code class="content__code">BEGIN 3</code> + 3 quotes</td></tr><tr class="content__table-row"><td class="content__table-cell">an end <strong>marker</strong> line</td><td class="content__table-cell"><code class="content__code">while (!(line = in.readLine()).equals(&quot;END&quot;))</code></td><td class="content__table-cell"><code class="content__code">END</code></td></tr><tr class="content__table-row"><td class="content__table-cell">the server <strong>closes</strong> the connection</td><td class="content__table-cell"><code class="content__code">while ((line = in.readLine()) != null)</code></td><td class="content__table-cell"><code class="content__code">DUMP</code> in QuoteDesk</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>silence</strong> (nothing arrives)</td><td class="content__table-cell"><code class="content__code">socket.setSoTimeout(500)</code> + <code class="content__code">catch (SocketTimeoutException e)</code></td><td class="content__table-cell">task 5 of the <a class="content__link" href="exam.html">practical test</a></td></tr></tbody></table></div>
+
+<aside class="callout callout--danger"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🐞</span><span class="callout__label">Common mistake</span><span class="callout__title">Don&#39;t use <code>in.available()</code> to detect the end of a message <span class="badge badge--own" title="Written by the site author — not part of the course materials">✍️ author&#39;s note</span></span></div><div class="callout__body"><p class="content__paragraph"><code class="content__code">available()</code> only tells you how many bytes <strong>are already in the buffer</strong> right now — not whether the server will send more. Network data arrives in pieces, so <code class="content__code">available() == 0</code> can happen in the middle of an answer. The program works sometimes and fails sometimes — the worst kind of bug.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="the-quotedesk-protocol">The QuoteDesk protocol<a class="content__anchor" href="#the-quotedesk-protocol" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph"><code class="content__code">S:</code> = server, <code class="content__code">C:</code> = client. Every line ends with <code class="content__code">\r\n</code>.</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Who</th><th class="content__table-heading">Message</th><th class="content__table-heading">Meaning</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">S</td><td class="content__table-cell"><code class="content__code">HELLO QuoteDesk 1.0</code></td><td class="content__table-cell"><strong>greeting — the server speaks first</strong></td></tr><tr class="content__table-row"><td class="content__table-cell">C</td><td class="content__table-cell"><code class="content__code">NAME &lt;nick&gt;</code></td><td class="content__table-cell">introduce yourself (must come first)</td></tr><tr class="content__table-row"><td class="content__table-cell">S</td><td class="content__table-cell"><code class="content__code">OK &lt;nick&gt;</code></td><td class="content__table-cell">accepted</td></tr><tr class="content__table-row"><td class="content__table-cell">C</td><td class="content__table-cell"><code class="content__code">QUOTES &lt;n&gt;</code> (n = 1…9)</td><td class="content__table-cell">ask for n quotes</td></tr><tr class="content__table-row"><td class="content__table-cell">S</td><td class="content__table-cell"><code class="content__code">BEGIN &lt;n&gt;</code>, n lines, <code class="content__code">END</code></td><td class="content__table-cell">a multi-line answer with markers</td></tr><tr class="content__table-row"><td class="content__table-cell">C</td><td class="content__table-cell"><code class="content__code">DUMP</code></td><td class="content__table-cell">ask for everything</td></tr><tr class="content__table-row"><td class="content__table-cell">S</td><td class="content__table-cell"><code class="content__code">ALL &lt;k&gt;</code>, k lines, <code class="content__code">CLOSING</code> and <strong>closes the connection</strong></td><td class="content__table-cell">an answer &quot;until the end&quot;</td></tr><tr class="content__table-row"><td class="content__table-cell">C</td><td class="content__table-cell"><code class="content__code">BYE</code></td><td class="content__table-cell">finish</td></tr><tr class="content__table-row"><td class="content__table-cell">S</td><td class="content__table-cell"><code class="content__code">BYE &lt;nick&gt;</code> and closes</td><td class="content__table-cell">goodbye</td></tr><tr class="content__table-row"><td class="content__table-cell">S</td><td class="content__table-cell"><code class="content__code">ERR &lt;reason&gt;</code></td><td class="content__table-cell">error (e.g. no <code class="content__code">NAME</code>, unknown command)</td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="the-practice-server">The practice server<a class="content__anchor" href="#the-practice-server" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Multi-threaded — every client gets its own thread, so several people can connect at once.</p>
+
+<figure class="code-block code-block--collapsible" data-lines="102">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">QuoteDesk.java</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c4/QuoteDesk.java" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Download</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-keyword">import</span> java.io.BufferedReader;
+<span class="hljs-keyword">import</span> java.io.IOException;
+<span class="hljs-keyword">import</span> java.io.InputStreamReader;
+<span class="hljs-keyword">import</span> java.io.OutputStreamWriter;
+<span class="hljs-keyword">import</span> java.io.PrintWriter;
+<span class="hljs-keyword">import</span> java.net.ServerSocket;
+<span class="hljs-keyword">import</span> java.net.Socket;
+<span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+
+<span class="hljs-comment">/**
+ * Practice server with a line-based text protocol (one thread per client).
+ *
+ *   S: HELLO QuoteDesk 1.0             &lt;- the SERVER speaks first
+ *   C: NAME &lt;nick&gt;
+ *   S: OK &lt;nick&gt;
+ *   C: QUOTES &lt;n&gt;                      (n = 1..9)
+ *   S: BEGIN &lt;n&gt;
+ *   S: ...n lines...
+ *   S: END
+ *   C: DUMP                            &lt;- server sends everything and CLOSES the connection
+ *   C: BYE
+ *   S: BYE &lt;nick&gt;                      (connection closed)
+ *   anything else -&gt; ERR &lt;reason&gt;
+ *
+ * Run:  java QuoteDesk 5050
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">QuoteDesk</span> {
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span>[] <span class="hljs-variable">QUOTES</span> <span class="hljs-operator">=</span> {
+        <span class="hljs-string">&quot;A packet a day keeps the timeout away.&quot;</span>,
+        <span class="hljs-string">&quot;There is no place like 127.0.0.1.&quot;</span>,
+        <span class="hljs-string">&quot;TCP: I&#x27;ll tell you again until you get it.&quot;</span>,
+        <span class="hljs-string">&quot;UDP: I told you once. Did you get it? Not my problem.&quot;</span>,
+        <span class="hljs-string">&quot;DNS: it&#x27;s always DNS.&quot;</span>,
+        <span class="hljs-string">&quot;Port 80 is open, the door is ajar.&quot;</span>,
+        <span class="hljs-string">&quot;flush() or it did not happen.&quot;</span>,
+        <span class="hljs-string">&quot;readLine() waits for the end of the line - patiently.&quot;</span>,
+        <span class="hljs-string">&quot;Every protocol is just a polite conversation.&quot;</span>,
+    };
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-type">int</span> <span class="hljs-variable">port</span> <span class="hljs-operator">=</span> args.length &gt; <span class="hljs-number">0</span> ? Integer.parseInt(args[<span class="hljs-number">0</span>]) : <span class="hljs-number">5050</span>;
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">ServerSocket</span> <span class="hljs-variable">server</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServerSocket</span>(port)) {
+            System.out.println(<span class="hljs-string">&quot;[desk] listening on port &quot;</span> + port);
+            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+                <span class="hljs-type">Socket</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> server.accept();
+                <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(() -&gt; serve(client)).start();      <span class="hljs-comment">// many clients at the same time</span>
+            }
+        }
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">serve</span><span class="hljs-params">(Socket socket)</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">who</span> <span class="hljs-operator">=</span> socket.getInetAddress().getHostAddress() + <span class="hljs-string">&quot;:&quot;</span> + socket.getPort();
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">Socket</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> socket;
+             <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(s.getInputStream(), StandardCharsets.UTF_8));
+             <span class="hljs-type">PrintWriter</span> <span class="hljs-variable">out</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PrintWriter</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">OutputStreamWriter</span>(s.getOutputStream(), StandardCharsets.UTF_8), <span class="hljs-literal">true</span>)) {
+
+            out.print(<span class="hljs-string">&quot;HELLO QuoteDesk 1.0\r\n&quot;</span>);
+            out.flush();
+            <span class="hljs-type">String</span> <span class="hljs-variable">nick</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+            String line;
+            <span class="hljs-keyword">while</span> ((line = in.readLine()) != <span class="hljs-literal">null</span>) {
+                System.out.println(<span class="hljs-string">&quot;[desk] &quot;</span> + who + <span class="hljs-string">&quot; says: &quot;</span> + line);
+                <span class="hljs-type">String</span>[] <span class="hljs-variable">cmd</span> <span class="hljs-operator">=</span> line.trim().split(<span class="hljs-string">&quot;\\s+&quot;</span>);
+                <span class="hljs-keyword">if</span> (cmd[<span class="hljs-number">0</span>].equals(<span class="hljs-string">&quot;NAME&quot;</span>) &amp;&amp; cmd.length == <span class="hljs-number">2</span>) {
+                    nick = cmd[<span class="hljs-number">1</span>];
+                    reply(out, <span class="hljs-string">&quot;OK &quot;</span> + nick);
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (nick == <span class="hljs-literal">null</span>) {
+                    reply(out, <span class="hljs-string">&quot;ERR say NAME &lt;nick&gt; first&quot;</span>);
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (cmd[<span class="hljs-number">0</span>].equals(<span class="hljs-string">&quot;QUOTES&quot;</span>) &amp;&amp; cmd.length == <span class="hljs-number">2</span> &amp;&amp; cmd[<span class="hljs-number">1</span>].matches(<span class="hljs-string">&quot;[1-9]&quot;</span>)) {
+                    <span class="hljs-type">int</span> <span class="hljs-variable">n</span> <span class="hljs-operator">=</span> Integer.parseInt(cmd[<span class="hljs-number">1</span>]);
+                    reply(out, <span class="hljs-string">&quot;BEGIN &quot;</span> + n);
+                    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; n; i++) {
+                        reply(out, QUOTES[(i + nick.length()) % QUOTES.length]);
+                    }
+                    reply(out, <span class="hljs-string">&quot;END&quot;</span>);
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (cmd[<span class="hljs-number">0</span>].equals(<span class="hljs-string">&quot;DUMP&quot;</span>)) {
+                    reply(out, <span class="hljs-string">&quot;ALL &quot;</span> + QUOTES.length);
+                    <span class="hljs-keyword">for</span> (String q : QUOTES) {
+                        reply(out, q);
+                    }
+                    reply(out, <span class="hljs-string">&quot;CLOSING&quot;</span>);
+                    <span class="hljs-keyword">return</span>;                                    <span class="hljs-comment">// try-with-resources closes the socket</span>
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (cmd[<span class="hljs-number">0</span>].equals(<span class="hljs-string">&quot;BYE&quot;</span>)) {
+                    reply(out, <span class="hljs-string">&quot;BYE &quot;</span> + nick);
+                    <span class="hljs-keyword">return</span>;
+                } <span class="hljs-keyword">else</span> {
+                    reply(out, <span class="hljs-string">&quot;ERR unknown command: &quot;</span> + line);
+                }
+            }
+        } <span class="hljs-keyword">catch</span> (IOException e) {
+            System.out.println(<span class="hljs-string">&quot;[desk] &quot;</span> + who + <span class="hljs-string">&quot; error: &quot;</span> + e.getMessage());
+        } <span class="hljs-keyword">finally</span> {
+            System.out.println(<span class="hljs-string">&quot;[desk] &quot;</span> + who + <span class="hljs-string">&quot; disconnected&quot;</span>);
+        }
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">reply</span><span class="hljs-params">(PrintWriter out, String text)</span> {
+        out.print(text + <span class="hljs-string">&quot;\r\n&quot;</span>);                              <span class="hljs-comment">// protocol line ending: CRLF</span>
+        out.flush();
+    }
+}</code></pre>
+<button type="button" class="code-block__expand" aria-expanded="false" data-expand="Show full code" data-collapse="Collapse code">Show full code</button>
+</figure>
+<h2 class="content__heading content__heading--h2" id="the-client">The client<a class="content__anchor" href="#the-client" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<figure class="code-block code-block--collapsible" data-lines="107">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">DeskClient.java</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c4/DeskClient.java" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Download</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-keyword">import</span> java.io.BufferedReader;
+<span class="hljs-keyword">import</span> java.io.BufferedWriter;
+<span class="hljs-keyword">import</span> java.io.FileWriter;
+<span class="hljs-keyword">import</span> java.io.IOException;
+<span class="hljs-keyword">import</span> java.io.InputStreamReader;
+<span class="hljs-keyword">import</span> java.io.OutputStreamWriter;
+<span class="hljs-keyword">import</span> java.io.PrintWriter;
+<span class="hljs-keyword">import</span> java.net.Socket;
+<span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+<span class="hljs-keyword">import</span> java.util.ArrayList;
+<span class="hljs-keyword">import</span> java.util.List;
+
+<span class="hljs-comment">/**
+ * Client for QuoteDesk: reads the greeting, logs in, downloads quotes between BEGIN/END,
+ * saves them to quotes.txt, then uses DUMP (read until the server closes).
+ *
+ * Run:  java DeskClient localhost 5050 alice
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DeskClient</span> {
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> BufferedReader in;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> PrintWriter out;
+
+    DeskClient(Socket socket) <span class="hljs-keyword">throws</span> IOException {
+        in = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(socket.getInputStream(), StandardCharsets.UTF_8));
+        out = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PrintWriter</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">OutputStreamWriter</span>(socket.getOutputStream(), StandardCharsets.UTF_8), <span class="hljs-literal">true</span>);
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-type">String</span> <span class="hljs-variable">host</span> <span class="hljs-operator">=</span> args.length &gt; <span class="hljs-number">0</span> ? args[<span class="hljs-number">0</span>] : <span class="hljs-string">&quot;localhost&quot;</span>;
+        <span class="hljs-type">int</span> <span class="hljs-variable">port</span> <span class="hljs-operator">=</span> args.length &gt; <span class="hljs-number">1</span> ? Integer.parseInt(args[<span class="hljs-number">1</span>]) : <span class="hljs-number">5050</span>;
+        <span class="hljs-type">String</span> <span class="hljs-variable">nick</span> <span class="hljs-operator">=</span> args.length &gt; <span class="hljs-number">2</span> ? args[<span class="hljs-number">2</span>] : <span class="hljs-string">&quot;student&quot;</span>;
+
+        <span class="hljs-comment">// Part 1: conversation with a clear end marker (END)</span>
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">Socket</span> <span class="hljs-variable">socket</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Socket</span>(host, port)) {
+            <span class="hljs-type">DeskClient</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DeskClient</span>(socket);
+            c.expect(<span class="hljs-string">&quot;HELLO&quot;</span>);                       <span class="hljs-comment">// 1. the server talks first - read it!</span>
+            c.send(<span class="hljs-string">&quot;NAME &quot;</span> + nick);
+            c.expect(<span class="hljs-string">&quot;OK&quot;</span>);
+            c.send(<span class="hljs-string">&quot;QUOTES 3&quot;</span>);
+            c.expect(<span class="hljs-string">&quot;BEGIN&quot;</span>);
+
+            <span class="hljs-type">List</span>&lt;String&gt; <span class="hljs-variable">quotes</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();
+            String line;
+            <span class="hljs-keyword">while</span> (!(line = c.read()).equals(<span class="hljs-string">&quot;END&quot;</span>)) {  <span class="hljs-comment">// 2. read until the marker line</span>
+                quotes.add(line);
+            }
+            save(<span class="hljs-string">&quot;quotes.txt&quot;</span>, quotes);              <span class="hljs-comment">// 3. only the lines BETWEEN the markers</span>
+            c.send(<span class="hljs-string">&quot;BYE&quot;</span>);
+            c.read();
+        }
+
+        <span class="hljs-comment">// Part 2: the server sends everything and closes -&gt; read until readLine() returns null</span>
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">Socket</span> <span class="hljs-variable">socket</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Socket</span>(host, port)) {
+            <span class="hljs-type">DeskClient</span> <span class="hljs-variable">c</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DeskClient</span>(socket);
+            c.expect(<span class="hljs-string">&quot;HELLO&quot;</span>);
+            c.send(<span class="hljs-string">&quot;NAME &quot;</span> + nick);
+            c.expect(<span class="hljs-string">&quot;OK&quot;</span>);
+            c.send(<span class="hljs-string">&quot;DUMP&quot;</span>);
+            <span class="hljs-type">List</span>&lt;String&gt; <span class="hljs-variable">all</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();
+            String line;
+            <span class="hljs-keyword">while</span> ((line = c.in.readLine()) != <span class="hljs-literal">null</span>) {
+                log(<span class="hljs-string">&quot;&lt;- &quot;</span> + line);
+                all.add(line);
+            }
+            <span class="hljs-comment">// first line = &quot;ALL n&quot;, last line = &quot;CLOSING&quot; -&gt; skip both</span>
+            save(<span class="hljs-string">&quot;all-quotes.txt&quot;</span>, all.subList(<span class="hljs-number">1</span>, all.size() - <span class="hljs-number">1</span>));
+        }
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">void</span> <span class="hljs-title function_">send</span><span class="hljs-params">(String line)</span> {
+        out.print(line + <span class="hljs-string">&quot;\r\n&quot;</span>);
+        out.flush();                                 <span class="hljs-comment">// without flush the server may wait forever</span>
+        log(<span class="hljs-string">&quot;-&gt; &quot;</span> + line);
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> <span class="hljs-title function_">read</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-type">String</span> <span class="hljs-variable">line</span> <span class="hljs-operator">=</span> in.readLine();
+        <span class="hljs-keyword">if</span> (line == <span class="hljs-literal">null</span>) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IOException</span>(<span class="hljs-string">&quot;server closed the connection&quot;</span>);
+        }
+        log(<span class="hljs-string">&quot;&lt;- &quot;</span> + line);
+        <span class="hljs-keyword">return</span> line;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> <span class="hljs-title function_">expect</span><span class="hljs-params">(String prefix)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-type">String</span> <span class="hljs-variable">line</span> <span class="hljs-operator">=</span> read();
+        <span class="hljs-keyword">if</span> (!line.startsWith(prefix)) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IOException</span>(<span class="hljs-string">&quot;expected &quot;</span> + prefix + <span class="hljs-string">&quot; but got: &quot;</span> + line);
+        }
+        <span class="hljs-keyword">return</span> line;
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">save</span><span class="hljs-params">(String file, List&lt;String&gt; lines)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">BufferedWriter</span> <span class="hljs-variable">w</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedWriter</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FileWriter</span>(file))) {
+            <span class="hljs-keyword">for</span> (String l : lines) {
+                w.write(l);
+                w.newLine();
+            }
+        }
+        log(<span class="hljs-string">&quot;saved &quot;</span> + lines.size() + <span class="hljs-string">&quot; lines to &quot;</span> + file);
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">log</span><span class="hljs-params">(String text)</span> {
+        System.out.println(<span class="hljs-string">&quot;[client] &quot;</span> + text);
+    }
+}</code></pre>
+<button type="button" class="code-block__expand" aria-expanded="false" data-expand="Show full code" data-collapse="Collapse code">Show full code</button>
+</figure>
+<p class="content__paragraph">Things worth noticing in the client:</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">expect(&quot;HELLO&quot;)</code> — <strong>we read the greeting first</strong>, only then do we send <code class="content__code">NAME</code>.</li>
+<li class="content__list-item">The <code class="content__code">send</code> / <code class="content__code">read</code> / <code class="content__code">expect</code> methods — a small &quot;toolkit&quot; that makes the main code read like a protocol description. Every sent and received line is logged — gold when debugging.</li>
+<li class="content__list-item">Part 1 reads until the <code class="content__code">END</code> marker, part 2 until the connection is closed (<code class="content__code">null</code>).</li>
+<li class="content__list-item">Only the lines <strong>between</strong> the markers go to the file: <code class="content__code">all.subList(1, all.size() - 1)</code> skips the first (<code class="content__code">ALL 9</code>) and the last (<code class="content__code">CLOSING</code>).</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="running-it">Running it<a class="content__anchor" href="#running-it" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><code class="content__code">javac QuoteDesk.java DeskClient.java</code></li>
+<li class="content__list-item">Terminal 1: <code class="content__code">java QuoteDesk 5050</code></li>
+<li class="content__list-item">Terminal 2: <code class="content__code">java DeskClient localhost 5050 ola</code></li>
+<li class="content__list-item">Check the files <code class="content__code">quotes.txt</code> (3 lines) and <code class="content__code">all-quotes.txt</code> (9 lines).</li>
+</ol>
+</div>
+<p class="content__paragraph">A fragment of the client&#39;s output:</p>
+<figure class="code-block" data-lines="10">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">[client] &lt;- HELLO QuoteDesk 1.0
+[client] -&gt; NAME ola
+[client] &lt;- OK ola
+[client] -&gt; QUOTES 3
+[client] &lt;- BEGIN 3
+[client] &lt;- UDP: I told you once. Did you get it? Not my problem.
+[client] &lt;- DNS: it&#x27;s always DNS.
+[client] &lt;- Port 80 is open, the door is ajar.
+[client] &lt;- END
+[client] saved 3 lines to quotes.txt</code></pre>
+</figure><h2 class="content__heading content__heading--h2" id="a-manual-conversation-without-writing-code">A &quot;manual&quot; conversation without writing code <span class="badge badge--own" title="Written by the site author — not part of the course materials">✍️ author&#39;s note</span><a class="content__anchor" href="#a-manual-conversation-without-writing-code" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Before writing a client for an unknown server, <strong>talk to it by hand</strong> — you&#39;ll see at once who speaks first and what the answers look like:</p>
+<figure class="code-block" data-lines="4">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash"><span class="hljs-comment"># Linux / macOS (netcat); -C sends \r\n instead of \n</span>
+nc -C localhost 5050
+<span class="hljs-comment"># Windows: enable &quot;Telnet Client&quot; in Windows features, then:</span>
+telnet localhost 5050</code></pre>
+</figure><p class="content__paragraph">Type commands and press Enter. The same works with the server during the practical test (if the instructor allows it).</p>
+<h2 class="content__heading content__heading--h2" id="tasks">Tasks<a class="content__anchor" href="#tasks" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">1. Numbered output</span></div><div class="callout__body"><p class="content__paragraph">Ask for 5 quotes and save them to a file as <code class="content__code">1. text</code>, <code class="content__code">2. text</code>…</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><p class="content__paragraph">In the loop reading until <code class="content__code">END</code> keep a counter: <code class="content__code">quotes.add((quotes.size() + 1) + &quot;. &quot; + line);</code>, and change the command to <code class="content__code">QUOTES 5</code>.</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">2. Handle an error</span></div><div class="callout__body"><p class="content__paragraph">Send <code class="content__code">QUOTES 0</code>. What does the server answer? Change the client so that after receiving <code class="content__code">ERR</code> it prints a readable message and exits without an exception.</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><p class="content__paragraph">The server answers <code class="content__code">ERR unknown command: QUOTES 0</code> (only 1–9 are allowed). In the client: after <code class="content__code">read()</code> check <code class="content__code">if (line.startsWith(&quot;ERR&quot;)) { System.out.println(&quot;Server reported an error: &quot; + line); return; }</code>.</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">3. A new protocol command</span></div><div class="callout__body"><p class="content__paragraph">Add a <code class="content__code">COUNT</code> command to the server, answered with <code class="content__code">COUNT &lt;number of quotes&gt;</code>. Update the protocol table.</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><p class="content__paragraph">In <code class="content__code">serve</code>: <code class="content__code">else if (cmd[0].equals(&quot;COUNT&quot;)) { reply(out, &quot;COUNT &quot; + QUOTES.length); }</code> — put it before the <code class="content__code">ERR</code> branch. Remember the command only works after <code class="content__code">NAME</code> (that&#39;s how the <code class="content__code">nick == null</code> condition is built).</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">4. Robust against a &quot;silent&quot; server</span></div><div class="callout__body"><p class="content__paragraph">What happens if the server never sends <code class="content__code">END</code>? Protect the client from waiting forever.</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><p class="content__paragraph"><code class="content__code">readLine()</code> will wait forever. Set <code class="content__code">socket.setSoTimeout(5000);</code> — then after 5 s with no data <code class="content__code">readLine()</code> throws <code class="content__code">SocketTimeoutException</code>, which you can catch and handle.</p>
+</div></details></div></aside>
+
+
+
+</div>
+<nav class="pager" aria-label="Previous topic / Next topic">
+<a class="pager__link pager__link--prev" href="c3-tcp-server.html"><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="pager__text"><span class="pager__label">Previous topic</span><span class="pager__title">TCP sockets in Java — your own mini HTTP server and client</span></span></a>
+<a class="pager__link pager__link--next" href="c5-tcp-udp.html"><span class="pager__text"><span class="pager__label">Next topic</span><span class="pager__title">TCP and UDP together — a stream vs datagrams</span></span><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="On this page"><p class="toc__title">On this page</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#in-short">In short</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#four-questions-before-writing-a-client">Four questions before writing a client</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#how-to-recognise-the-end-of-an-answer">How to recognise the end of an answer?</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-quotedesk-protocol">The QuoteDesk protocol</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-practice-server">The practice server</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-client">The client</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#running-it">Running it</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#a-manual-conversation-without-writing-code">A &quot;manual&quot; conversation without writing code  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#tasks">Tasks</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Cheat sheet: Talking to a text server — a line-by-line client</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Print"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Print</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Close"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Close</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-c4-text-protocol-before-writing-a-client">Before writing a client<a class="content__anchor" href="#cs-c4-text-protocol-before-writing-a-client" aria-hidden="true" tabindex="-1">#</a></h3>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item">Who speaks first? (check with <code class="content__code">nc -C host port</code>)</li>
+<li class="content__list-item">Line format and line ending (<code class="content__code">\r\n</code>).</li>
+<li class="content__list-item">How to recognise the end of an answer?</li>
+<li class="content__list-item">What does an error look like?</li>
+</ol>
+<h3 class="content__heading content__heading--h3" id="cs-c4-text-protocol-5-ways-to-detect-the-end-of-an-answer">5 ways to detect the end of an answer<a class="content__anchor" href="#cs-c4-text-protocol-5-ways-to-detect-the-end-of-an-answer" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">known number of lines → <code class="content__code">for</code></li>
+<li class="content__list-item">count in a header (<code class="content__code">BEGIN n</code>) → read n</li>
+<li class="content__list-item">marker (<code class="content__code">END</code>) → <code class="content__code">while (!line.equals(&quot;END&quot;))</code></li>
+<li class="content__list-item">server closes → <code class="content__code">while ((line = in.readLine()) != null)</code></li>
+<li class="content__list-item">silence → <code class="content__code">setSoTimeout</code> + <code class="content__code">SocketTimeoutException</code></li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-c4-text-protocol-helper-methods-pattern">Helper methods (pattern)<a class="content__anchor" href="#cs-c4-text-protocol-helper-methods-pattern" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">send(line)</code>: <code class="content__code">out.print(line + &quot;\r\n&quot;); out.flush();</code> + log</li>
+<li class="content__list-item"><code class="content__code">read()</code>: <code class="content__code">readLine()</code>, <code class="content__code">null</code> → &quot;server closed&quot; exception; log</li>
+<li class="content__list-item"><code class="content__code">expect(prefix)</code>: <code class="content__code">read()</code> + check the beginning</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-c4-text-protocol-saving-to-a-file">Saving to a file<a class="content__anchor" href="#cs-c4-text-protocol-saving-to-a-file" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">BufferedWriter w = new BufferedWriter(new FileWriter(&quot;out.txt&quot;));</code></li>
+<li class="content__list-item">without the first and last line: <code class="content__code">list.subList(1, list.size() - 1)</code></li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-c4-text-protocol-don-t">Don&#39;t<a class="content__anchor" href="#cs-c4-text-protocol-don-t" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Use <code class="content__code">in.available()</code> as &quot;end of message&quot;.</li>
+<li class="content__list-item">Read the answer before reading the greeting.</li>
+<li class="content__list-item">Forget <code class="content__code">flush()</code>.</li>
+</ul>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ All cheat sheets</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Unofficial study notes. The tasks were rewritten (different wording, same logic) so that nothing from previous years is copied.</p>
+<p class="footer__text footer__text--small">Lectures based on: J. F. Kurose, K. W. Ross, “Computer Networking: A Top-Down Approach” (slides © 1996–2020 J.F. Kurose &amp; K.W. Ross) and Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Site source code</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+</body>
+</html>
