@@ -1,0 +1,39 @@
+@media print {
+  :root { --color-bg: #fff; --color-surface: #fff; }
+
+  .header,
+  .layout__sidebar,
+  .layout__toc,
+  .layout__overlay,
+  .toc--mobile,
+  .article__actions,
+  .pager,
+  .footer,
+  .code-block__actions,
+  .code-block__expand,
+  .calc__run,
+  .skip-link { display: none !important; }
+
+  body { font-size: 11pt; background: #fff; }
+  .layout { display: block; }
+  .layout__main { padding: 0; }
+  .article { max-width: none; }
+  .code-block--collapsible .code-block__pre { max-height: none !important; overflow: visible !important; }
+  .code-block--collapsible::after { display: none; }
+  .code-block__code { min-width: 0; white-space: pre-wrap; }
+
+
+  /* Printing the cheat sheet dialog: hide the page, show only the dialog. */
+  .page--print-sheet > *:not(.cheatsheet) { display: none !important; }
+  .page--print-sheet .cheatsheet {
+    position: static;
+    display: block;
+    width: auto;
+    max-height: none;
+    border: 0;
+    box-shadow: none;
+  }
+  .page--print-sheet .cheatsheet__tools,
+  .page--print-sheet .cheatsheet__footer { display: none; }
+  .page--print-sheet .cheatsheet__body { overflow: visible; }
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zacznij tutaj — jak korzystać ze strony i przygotować komputer — SKJ</title>
+<meta name="description" content="Jak zbudowana jest strona i jak się uczyć z niej najskuteczniej, a także instalacja JDK i Wiresharka, uruchamianie programów z terminala, kilka okien naraz i zgodność z Javą 8.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/start.html">
+<link rel="alternate" hreflang="en" href="../en/start.html">
+<link rel="alternate" hreflang="ru" href="../ru/start.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="start">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Menu" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Sieci + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../pl/start.html" hreflang="pl" lang="pl" data-lang="pl" aria-current="true" title="Polski">PL</a><a class="lang-switch__link" href="../en/start.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../ru/start.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Przełącz motyw (jasny / ciemny)" title="Przełącz motyw (jasny / ciemny)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Menu">
+<div class="sidebar__head"><span class="sidebar__title">Menu</span><button type="button" class="sidebar__close" data-nav-close aria-label="Zamknij menu">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Sieci + Java</a>
+<div class="nav__progress progress" data-progress data-label="Twój postęp"><span class="progress__label">Twój postęp</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Start</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link nav__link--active" href="start.html" data-page-link="start" aria-current="page"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Start i środowisko</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="course.html" data-page-link="course"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Zaliczenie i daty</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Słowniczek PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">Wszystkie konspekty</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Wykłady</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Internet i protokoły</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Brzeg sieci</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Rdzeń sieci</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Struktura Internetu</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Opóźnienia i przepustowość</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Bezpieczeństwo</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Warstwy i enkapsulacja</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">Historia Internetu</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Ćwiczenia</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Sztafeta procesów (pierwsze uruchomienie)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP w Javie: mini-serwer HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Klient protokołu tekstowego</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP razem</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS ręcznie (UDP, bajty)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP w Wiresharku</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Kolokwium</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Kolokwium: trening</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Projekt</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Projekt: sieć proxy</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Start</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">🧭</span>Zacznij tutaj — jak korzystać ze strony i przygotować komputer</h1>
+<p class="article__lead">Jak zbudowana jest strona i jak się uczyć z niej najskuteczniej, a także instalacja JDK i Wiresharka, uruchamianie programów z terminala, kilka okien naraz i zgodność z Javą 8.</p>
+<div class="article__meta"><span class="badge badge--own">✍️ Opracowanie własne</span><span class="article__source">Na podstawie: opracowanie własne</span><span class="article__time">⏱ 4 min czytania</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Krótka ściąga na ćwiczenia i projekt"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Konspekt</span></button><button type="button" class="button button--ghost" data-done-toggle="start" aria-pressed="false" data-label-off="Oznacz jako przerobione" data-label-on="Przerobione"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Oznacz jako przerobione</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">Na tej stronie</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#jak-czytac-te-strone">Jak czytać tę stronę</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#proponowana-kolejnosc-nauki">Proponowana kolejność nauki</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#instalacja-javy-jdk">Instalacja Javy (JDK)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#kompilacja-i-uruchamianie-z-terminala">Kompilacja i uruchamianie z terminala</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#kilka-programow-naraz">Kilka programów naraz</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#zgodnosc-z-java-8">Zgodność z Javą 8</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#wireshark">Wireshark</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#przydatne-narzedzia-w-konsoli">Przydatne narzędzia w konsoli</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="jak-czytac-te-strone">Jak czytać tę stronę<a class="content__anchor" href="#jak-czytac-te-strone" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<div class="legend"><p class="legend__title">Jak czytać oznaczenia</p><ul class="legend__list">
+<li class="legend__item"><span class="badge badge--lecture">📘</span> treść oparta na wykładzie / materiałach z zajęć</li>
+<li class="legend__item"><span class="badge badge--own">✍️ od autora</span> dodatek od autora strony (wyjaśnienie, przykład, rada) — nie ma tego w materiałach</li>
+<li class="legend__item"><span class="badge badge--lab">🔁</span> zadanie przerobione — ta sama logika co na zajęciach, ale inna treść i inny kod</li>
+</ul></div>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>Wykłady (W1–W8)</strong> — cały materiał z wykładów, opisany zwykłym językiem, z przykładami i wzorami.</li>
+<li class="content__list-item"><strong>Ćwiczenia (C1–C7)</strong> — zadania z zajęć <strong>przerobione</strong> tak, żeby logika była ta sama, ale treść i kod — inne (nie kopiujesz prac z poprzednich lat).</li>
+<li class="content__list-item"><strong>Kolokwium</strong> i <strong>Projekt</strong> — co trzeba umieć i jak się przygotować.</li>
+<li class="content__list-item">Przycisk <strong>📝 Konspekt</strong> w każdym temacie otwiera krótką ściągę „krok po kroku”. Wszystkie naraz (do druku) są na stronie <a class="content__link" href="cheatsheets.html">Wszystkie konspekty</a>.</li>
+<li class="content__list-item">Przycisk <strong>✓ Oznacz jako przerobione</strong> zapisuje postęp w Twojej przeglądarce (pasek w menu).</li>
+<li class="content__list-item">Przy każdym bloku kodu jest <strong>Kopiuj</strong>, a przy plikach — <strong>Pobierz</strong>.</li>
+<li class="content__list-item">W prawym górnym rogu: <strong>język</strong> (PL / EN / RU) i <strong>motyw</strong> (jasny / ciemny).</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="proponowana-kolejnosc-nauki">Proponowana kolejność nauki<a class="content__anchor" href="#proponowana-kolejnosc-nauki" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Przeczytaj <a class="content__link" href="course.html">Zaliczenie i daty</a> — żeby wiedzieć, o co toczy się gra.</li>
+<li class="content__list-item">Przygotuj komputer (niżej).</li>
+<li class="content__list-item">Wykłady <a class="content__link" href="w1-internet.html">W1</a> → <a class="content__link" href="w8-history.html">W8</a> — po każdym kliknij <strong>Konspekt</strong> i odpowiedz na „Sprawdź się”.</li>
+<li class="content__list-item">Ćwiczenia <a class="content__link" href="c1-relay.html">C1</a> → <a class="content__link" href="c7-tcp-wireshark.html">C7</a> — <strong>uruchamiaj</strong> każdy program, nie tylko czytaj.</li>
+<li class="content__list-item"><a class="content__link" href="exam.html">Kolokwium</a> — trening z serwerem DrillServer.</li>
+<li class="content__list-item"><a class="content__link" href="project.html">Projekt</a> — etapami, od 150 punktów w górę.</li>
+</ol>
+</div>
+<h2 class="content__heading content__heading--h2" id="instalacja-javy-jdk">Instalacja Javy (JDK)<a class="content__anchor" href="#instalacja-javy-jdk" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Potrzebujesz <strong>JDK</strong> (nie samego JRE) — w nim jest kompilator <code class="content__code">javac</code>.</p>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Zainstaluj JDK (np. Eclipse Temurin / OpenJDK). Wersja 8, 11, 17 lub 21 — każda wystarczy, ale kod pisz zgodny z <strong>Javą 8</strong> (niżej).</li>
+<li class="content__list-item">Sprawdź w terminalu: <code class="content__code">java -version</code> i <code class="content__code">javac -version</code>.</li>
+<li class="content__list-item">Jeśli <code class="content__code">javac</code> „nie jest rozpoznany” — dodaj folder <code class="content__code">bin</code> z JDK do zmiennej <code class="content__code">PATH</code> (Windows: <em>Zmienne środowiskowe</em>).</li>
+</ol>
+</div>
+<h3 class="content__heading content__heading--h3" id="kompilacja-i-uruchamianie-z-terminala">Kompilacja i uruchamianie z terminala<a class="content__anchor" href="#kompilacja-i-uruchamianie-z-terminala" aria-hidden="true" tabindex="-1">#</a></h3>
+<figure class="code-block" data-lines="5">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Skopiowano!" data-fail="Zaznacz i skopiuj ręcznie"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Kopiuj</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash"><span class="hljs-built_in">cd</span> folder-z-plikami
+javac MiniWebServer.java          <span class="hljs-comment"># powstaje MiniWebServer.class</span>
+java MiniWebServer 8080           <span class="hljs-comment"># uruchamiasz KLASĘ (bez .class), argumenty po spacji</span>
+javac *.java                      <span class="hljs-comment"># wszystkie pliki naraz (tak kompiluje prowadzący projekt!)</span>
+javac --release 8 *.java          <span class="hljs-comment"># sprawdzenie, czy kod jest zgodny z Javą 8</span></code></pre>
+</figure><h3 class="content__heading content__heading--h3" id="kilka-programow-naraz">Kilka programów naraz<a class="content__anchor" href="#kilka-programow-naraz" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">Programy sieciowe prawie zawsze uruchamiasz <strong>w kilku terminalach</strong> (serwer + klient, kilka węzłów).</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">System</th><th class="content__table-heading">Jak otworzyć kolejne okno</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">Windows</td><td class="content__table-cell">nowe okno <code class="content__code">cmd</code>/PowerShell albo w skrypcie <code class="content__code">.bat</code>: <code class="content__code">start &quot;nazwa&quot; cmd /k java Program</code></td></tr><tr class="content__table-row"><td class="content__table-cell">Linux / macOS</td><td class="content__table-cell">nowa karta terminala albo w skrypcie: <code class="content__code">java Program &amp;</code> (w tle)</td></tr><tr class="content__table-row"><td class="content__table-cell">IntelliJ</td><td class="content__table-cell">kilka konfiguracji uruchomieniowych; <strong>Run → Edit Configurations → Program arguments</strong> dla argumentów; opcja <em>Allow multiple instances</em></td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="zgodnosc-z-java-8">Zgodność z Javą 8<a class="content__anchor" href="#zgodnosc-z-java-8" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Projekt musi być w <strong>Javie 8</strong>. Te konstrukcje są <strong>nowsze</strong> — nie używaj ich:</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Nie używaj</th><th class="content__table-heading">Od wersji</th><th class="content__table-heading">Zamiast tego (Java 8)</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">var x = ...</code></td><td class="content__table-cell">10</td><td class="content__table-cell">jawny typ: <code class="content__code">String x = ...</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">List.of(...)</code>, <code class="content__code">Map.of(...)</code></td><td class="content__table-cell">9</td><td class="content__table-cell"><code class="content__code">Arrays.asList(...)</code>, <code class="content__code">new HashMap&lt;&gt;()</code> + <code class="content__code">put</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">&quot;ab&quot;.repeat(3)</code></td><td class="content__table-cell">11</td><td class="content__table-cell">pętla / <code class="content__code">StringBuilder</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">str.isBlank()</code>, <code class="content__code">strip()</code></td><td class="content__table-cell">11</td><td class="content__table-cell"><code class="content__code">trim().isEmpty()</code>, <code class="content__code">trim()</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">list.getFirst()</code>, <code class="content__code">getLast()</code></td><td class="content__table-cell">21</td><td class="content__table-cell"><code class="content__code">list.get(0)</code>, <code class="content__code">list.get(list.size() - 1)</code></td></tr><tr class="content__table-row"><td class="content__table-cell">bloki tekstowe <code class="content__code">&quot;&quot;&quot;...&quot;&quot;&quot;</code></td><td class="content__table-cell">15</td><td class="content__table-cell">zwykłe stringi z <code class="content__code">\n</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">record</code>, <code class="content__code">switch</code> ze strzałkami</td><td class="content__table-cell">14–16</td><td class="content__table-cell">klasa, klasyczny <code class="content__code">switch</code> z <code class="content__code">break</code></td></tr></tbody></table></div>
+<p class="content__paragraph"><code class="content__code">javac --release 8</code> od razu pokaże takie błędy, nawet jeśli masz nowszy JDK.</p>
+<h2 class="content__heading content__heading--h2" id="wireshark">Wireshark<a class="content__anchor" href="#wireshark" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Pobierz Wiresharka ze strony projektu i zainstaluj. Na <strong>Windows</strong> zaznacz instalację <strong>Npcap</strong> (z obsługą ruchu <strong>loopback</strong>, żeby widzieć <code class="content__code">localhost</code>).</li>
+<li class="content__list-item">Na <strong>Linuksie</strong> dodaj użytkownika do grupy <code class="content__code">wireshark</code> (albo uruchamiaj przez <code class="content__code">sudo</code>).</li>
+<li class="content__list-item">Po uruchomieniu wybierz interfejs: <strong>Wi-Fi / Ethernet</strong> dla Internetu, <strong>Loopback / lo</strong> dla programów na <code class="content__code">localhost</code>.</li>
+<li class="content__list-item">Start (niebieska płetwa) → zrób coś w sieci → Stop (czerwony kwadrat) → wpisz filtr, np. <code class="content__code">http</code>.</li>
+</ol>
+</div>
+<h2 class="content__heading content__heading--h2" id="przydatne-narzedzia-w-konsoli">Przydatne narzędzia w konsoli<a class="content__anchor" href="#przydatne-narzedzia-w-konsoli" aria-hidden="true" tabindex="-1">#</a></h2>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Narzędzie</th><th class="content__table-heading">Do czego</th><th class="content__table-heading">Przykład</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">ping</code></td><td class="content__table-cell">czy host odpowiada, RTT</td><td class="content__table-cell"><code class="content__code">ping pjwstk.edu.pl</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">tracert</code> / <code class="content__code">traceroute</code></td><td class="content__table-cell">trasa przez routery</td><td class="content__table-cell"><code class="content__code">tracert pjwstk.edu.pl</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">nslookup</code></td><td class="content__table-cell">zapytania DNS</td><td class="content__table-cell"><code class="content__code">nslookup -type=MX pjwstk.edu.pl</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">curl -v</code></td><td class="content__table-cell">żądanie HTTP z nagłówkami</td><td class="content__table-cell"><code class="content__code">curl -v http://localhost:8080/</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">nc</code> / <code class="content__code">telnet</code></td><td class="content__table-cell">„ręczna” rozmowa TCP</td><td class="content__table-cell"><code class="content__code">nc -C localhost 5050</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">netstat</code> / <code class="content__code">ss</code> / <code class="content__code">lsof</code></td><td class="content__table-cell">kto zajmuje port</td><td class="content__table-cell"><code class="content__code">netstat -ano | findstr 8080</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">ipconfig</code> / <code class="content__code">ip a</code></td><td class="content__table-cell">mój adres IP</td><td class="content__table-cell"><code class="content__code">ipconfig /all</code></td></tr></tbody></table></div>
+
+<aside class="callout callout--tip"><div class="callout__header"><span class="callout__icon" aria-hidden="true">💡</span><span class="callout__label">Wskazówka</span><span class="callout__title">Zapora sieciowa</span></div><div class="callout__body"><p class="content__paragraph">Przy pierwszym uruchomieniu serwera Windows może zapytać o dostęp do sieci dla Javy — zezwól dla <strong>sieci prywatnych</strong>. Jeśli testujesz tylko na <code class="content__code">localhost</code>, zapora zwykle nie przeszkadza.</p>
+</div></aside>
+
+
+
+</div>
+<nav class="pager" aria-label="Poprzedni temat / Następny temat">
+<span></span>
+<a class="pager__link pager__link--next" href="course.html"><span class="pager__text"><span class="pager__label">Następny temat</span><span class="pager__title">Jak zaliczyć SKJ — elementy, zasady i daty</span></span><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="Na tej stronie"><p class="toc__title">Na tej stronie</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#jak-czytac-te-strone">Jak czytać tę stronę</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#proponowana-kolejnosc-nauki">Proponowana kolejność nauki</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#instalacja-javy-jdk">Instalacja Javy (JDK)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#kompilacja-i-uruchamianie-z-terminala">Kompilacja i uruchamianie z terminala</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#kilka-programow-naraz">Kilka programów naraz</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#zgodnosc-z-java-8">Zgodność z Javą 8</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#wireshark">Wireshark</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#przydatne-narzedzia-w-konsoli">Przydatne narzędzia w konsoli</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Konspekt: Zacznij tutaj — jak korzystać ze strony i przygotować komputer</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Drukuj"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Drukuj</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Zamknij"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Zamknij</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-start-strona">Strona<a class="content__anchor" href="#cs-start-strona" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">📝 Konspekt = ściąga tematu · ✓ = postęp · Kopiuj / Pobierz przy kodzie · PL/EN/RU · jasny/ciemny.</li>
+<li class="content__list-item">✍️ = dodatek autora strony · 🔁 = zadanie przerobione · 📘 = z wykładu.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-start-java">Java<a class="content__anchor" href="#cs-start-java" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">javac Plik.java</code> → <code class="content__code">java Plik arg1 arg2</code></li>
+<li class="content__list-item"><code class="content__code">javac *.java</code> · <code class="content__code">javac --release 8 *.java</code></li>
+<li class="content__list-item">unikaj: <code class="content__code">var</code>, <code class="content__code">List.of</code>, <code class="content__code">repeat</code>, <code class="content__code">isBlank</code>, <code class="content__code">getFirst</code>, text blocks, records.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-start-wiele-okien">Wiele okien<a class="content__anchor" href="#cs-start-wiele-okien" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Windows <code class="content__code">.bat</code>: <code class="content__code">start &quot;nazwa&quot; cmd /k java Program</code></li>
+<li class="content__list-item">Linux/mac: <code class="content__code">java Program &amp;</code></li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-start-wireshark">Wireshark<a class="content__anchor" href="#cs-start-wireshark" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Windows: Npcap + loopback · interfejs Loopback dla <code class="content__code">localhost</code> · filtry: <code class="content__code">http</code>, <code class="content__code">dns</code>, <code class="content__code">tcp.port == 8080</code>.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-start-konsola">Konsola<a class="content__anchor" href="#cs-start-konsola" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">ping · tracert/traceroute · nslookup · curl -v · nc -C / telnet · netstat/ss/lsof · ipconfig / ip a.</p>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ Wszystkie konspekty</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Nieoficjalne materiały do nauki. Zadania zostały przerobione (inna treść, ta sama logika), aby nie kopiować prac z poprzednich lat.</p>
+<p class="footer__text footer__text--small">Wykłady oparte na: J. F. Kurose, K. W. Ross, „Computer Networking: A Top-Down Approach” (slajdy © 1996–2020 J.F. Kurose &amp; K.W. Ross) oraz Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Kod źródłowy strony</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+</body>
+</html>

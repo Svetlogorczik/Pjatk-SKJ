@@ -1,0 +1,35 @@
+<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{edge}} / {{core}}">
+  <rect class="diagram__box diagram__box--accent" x="255" y="55" width="250" height="230" rx="44"/>
+  <text class="diagram__text diagram__text--bold" x="380" y="85" text-anchor="middle">{{core}}</text>
+  <g class="diagram__line">
+    <line x1="315" y1="145" x2="445" y2="145"/><line x1="315" y1="235" x2="445" y2="235"/>
+    <line x1="315" y1="145" x2="315" y2="235"/><line x1="445" y1="145" x2="445" y2="235"/>
+    <line x1="315" y1="145" x2="445" y2="235"/><line x1="445" y1="145" x2="315" y2="235"/>
+  </g>
+  <g>
+    <circle class="diagram__box diagram__box--tip" cx="315" cy="145" r="19"/><text class="diagram__text diagram__text--bold" x="315" y="150" text-anchor="middle">R</text>
+    <circle class="diagram__box diagram__box--tip" cx="445" cy="145" r="19"/><text class="diagram__text diagram__text--bold" x="445" y="150" text-anchor="middle">R</text>
+    <circle class="diagram__box diagram__box--tip" cx="315" cy="235" r="19"/><text class="diagram__text diagram__text--bold" x="315" y="240" text-anchor="middle">R</text>
+    <circle class="diagram__box diagram__box--tip" cx="445" cy="235" r="19"/><text class="diagram__text diagram__text--bold" x="445" y="240" text-anchor="middle">R</text>
+  </g>
+  <g class="diagram__line diagram__line--dashed">
+    <line x1="190" y1="70" x2="296" y2="140"/><line x1="190" y1="170" x2="296" y2="150"/><line x1="190" y1="270" x2="296" y2="238"/>
+    <line x1="464" y1="148" x2="570" y2="165"/><line x1="464" y1="232" x2="570" y2="190"/>
+  </g>
+  <rect class="diagram__box" x="20" y="35" width="170" height="70" rx="12"/>
+  <text class="diagram__text diagram__text--bold" x="105" y="66" text-anchor="middle">{{home}}</text>
+  <text class="diagram__text diagram__text--muted" x="105" y="88" text-anchor="middle">{{access}}</text>
+  <rect class="diagram__box" x="20" y="135" width="170" height="70" rx="12"/>
+  <text class="diagram__text diagram__text--bold" x="105" y="166" text-anchor="middle">{{mobile}}</text>
+  <text class="diagram__text diagram__text--muted" x="105" y="188" text-anchor="middle">4G / 5G / WiFi</text>
+  <rect class="diagram__box" x="20" y="235" width="170" height="70" rx="12"/>
+  <text class="diagram__text diagram__text--bold" x="105" y="266" text-anchor="middle">{{company}}</text>
+  <text class="diagram__text diagram__text--muted" x="105" y="288" text-anchor="middle">Ethernet + WiFi</text>
+  <rect class="diagram__box" x="570" y="105" width="170" height="140" rx="12"/>
+  <text class="diagram__text diagram__text--bold" x="655" y="135" text-anchor="middle">{{datacenter}}</text>
+  <rect class="diagram__box diagram__box--accent" x="600" y="150" width="110" height="18" rx="4"/>
+  <rect class="diagram__box diagram__box--accent" x="600" y="176" width="110" height="18" rx="4"/>
+  <rect class="diagram__box diagram__box--accent" x="600" y="202" width="110" height="18" rx="4"/>
+  <text class="diagram__text diagram__text--muted" x="105" y="330" text-anchor="middle">← {{edge}}</text>
+  <text class="diagram__text diagram__text--muted" x="655" y="270" text-anchor="middle">{{edge}} →</text>
+</svg>

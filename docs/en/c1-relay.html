@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your first distributed program — a relay of processes in a ring — SKJ</title>
+<meta name="description" content="You run several processes that talk to each other over TCP. You learn ports, localhost, configuration files and the typical &quot;Connection refused&quot; and &quot;Address already in use&quot; errors.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/c1-relay.html">
+<link rel="alternate" hreflang="en" href="../en/c1-relay.html">
+<link rel="alternate" hreflang="ru" href="../ru/c1-relay.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="c1-relay">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Menu" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Networks + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Language"><a class="lang-switch__link" href="../pl/c1-relay.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../en/c1-relay.html" hreflang="en" lang="en" data-lang="en" aria-current="true" title="English">EN</a><a class="lang-switch__link" href="../ru/c1-relay.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Toggle theme (light / dark)" title="Toggle theme (light / dark)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Menu">
+<div class="sidebar__head"><span class="sidebar__title">Menu</span><button type="button" class="sidebar__close" data-nav-close aria-label="Close menu">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Networks + Java</a>
+<div class="nav__progress progress" data-progress data-label="Your progress"><span class="progress__label">Your progress</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Start</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Start &amp; setup</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="course.html" data-page-link="course"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Course rules &amp; dates</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Glossary PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">All cheat sheets</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Lectures</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Internet &amp; protocols</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Network edge</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Network core</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Internet structure</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Delay &amp; throughput</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Security</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Layers &amp; encapsulation</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">Internet history</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Labs</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link nav__link--active" href="c1-relay.html" data-page-link="c1-relay" aria-current="page"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Process relay (first run)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP in Java: mini HTTP server</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Text-protocol client</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP together</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS by hand (UDP, bytes)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP in Wireshark</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Practical test</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Practical test: training</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Project</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Project: proxy network</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Labs · C1</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">🏃</span>Your first distributed program — a relay of processes in a ring</h1>
+<p class="article__lead">You run several processes that talk to each other over TCP. You learn ports, localhost, configuration files and the typical &quot;Connection refused&quot; and &quot;Address already in use&quot; errors.</p>
+<div class="article__meta"><span class="badge badge--lab">🔁 Lab (rewritten version)</span><span class="article__source">Based on: logic of lab 1 (running a ready-made distributed program with .prop files) — rewritten task</span><span class="article__time">⏱ 7 min read</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Short summary for labs and the project"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Cheat sheet</span></button><button type="button" class="button button--ghost" data-done-toggle="c1-relay" aria-pressed="false" data-label-off="Mark as done" data-label-on="Done"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Mark as done</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">On this page</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#in-short">In short</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#starter-vocabulary">Starter vocabulary</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#how-our-relay-works">How our relay works</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#configuration-files">Configuration files</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-node-s-code">The node&#39;s code</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#running-it-step-by-step">Running it step by step</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#typical-errors-and-what-they-mean">Typical errors and what they mean  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#tasks-to-do-on-your-own">Tasks to do on your own</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="in-short">In short<a class="content__anchor" href="#in-short" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">The first lab is about <strong>running several processes at once</strong> and seeing them talk to each other over the network — even on one computer.</li>
+<li class="content__list-item">Every process has <strong>its own port</strong> (its own &quot;door&quot;) and knows <strong>which address and port</strong> to send data to. We store that in a <strong>configuration file</strong>.</li>
+<li class="content__list-item">First you have to <strong>open the door</strong> (<code class="content__code">ServerSocket</code>); only then can someone knock (<code class="content__code">Socket</code>).</li>
+<li class="content__list-item">Our version: three nodes A → B → C → A form a <strong>ring</strong> and pass a &quot;baton&quot; (<em>token</em>) like in a relay race.</li>
+</ul>
+
+<aside class="callout callout--origin"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🔁</span><span class="callout__label">Where this task comes from (original class task, summarised)</span></div><div class="callout__body"><p class="content__paragraph">In lab 1 you ran a ready-made program made of several windows, connected over TCP into a chain; each window read the addresses and ports of its neighbours from a <code class="content__code">.prop</code> file. Below is <strong>our own rewritten version</strong> of the same idea — a console one, with our own code, where every step is visible.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="starter-vocabulary">Starter vocabulary<a class="content__anchor" href="#starter-vocabulary" aria-hidden="true" tabindex="-1">#</a></h2>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Term</th><th class="content__table-heading">Meaning</th><th class="content__table-heading">Example</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><strong>process</strong></td><td class="content__table-cell">a running program</td><td class="content__table-cell"><code class="content__code">java RelayNode relay-a.properties</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>IP address</strong></td><td class="content__table-cell">the computer&#39;s &quot;house address&quot;</td><td class="content__table-cell"><code class="content__code">127.0.0.1</code>, <code class="content__code">192.168.1.15</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>localhost</strong></td><td class="content__table-cell">&quot;this very computer&quot; — always <code class="content__code">127.0.0.1</code></td><td class="content__table-cell"><code class="content__code">nextHost=localhost</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>port</strong></td><td class="content__table-cell">the number of a program&#39;s &quot;door&quot; on the computer (0–65535)</td><td class="content__table-cell"><code class="content__code">7001</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>socket</strong></td><td class="content__table-cell">one end of a connection: IP address + port</td><td class="content__table-cell"><code class="content__code">127.0.0.1:7001</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>server</strong></td><td class="content__table-cell">a process that <strong>waits</strong> for connections (<code class="content__code">ServerSocket</code>)</td><td class="content__table-cell">a node listening on 7002</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>client</strong></td><td class="content__table-cell">a process that <strong>connects</strong> to a server (<code class="content__code">Socket</code>)</td><td class="content__table-cell">node A connects to B</td></tr></tbody></table></div>
+
+<aside class="callout callout--own"><div class="callout__header"><span class="callout__icon" aria-hidden="true">✍️</span><span class="callout__label">Added by the site author — not in the lecture</span><span class="callout__title">Important: one process can be a server and a client at the same time</span></div><div class="callout__body"><p class="content__paragraph">In the ring <strong>every</strong> node is a server (it waits for the baton from its predecessor) <strong>and</strong> a client (it sends it to the next node). The project is the same: a proxy is a server for clients and a client for servers.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="how-our-relay-works">How our relay works<a class="content__anchor" href="#how-our-relay-works" aria-hidden="true" tabindex="-1">#</a></h2>
+<figure class="code-block" data-lines="4">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">        +-------------------+
+        v                   |
+   [A :7001] --&gt; [B :7002] --&gt; [C :7003]
+   starter</code></pre>
+</figure>
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Every node opens its port (<code class="content__code">ServerSocket</code>) and waits.</li>
+<li class="content__list-item">Node <strong>A</strong> (the starter) sends <code class="content__code">TOKEN 1 0 A</code> to B (round 1, 0 hops, path &quot;A&quot;).</li>
+<li class="content__list-item">Every node, after receiving the line: increments the hop counter, appends its name to the path and passes it on.</li>
+<li class="content__list-item">When the baton returns to A, A prints the round summary and starts the next round.</li>
+<li class="content__list-item">After the last round A sends <code class="content__code">STOP</code>, which travels around the ring — every node shuts down.</li>
+</ol>
+</div>
+<p class="content__paragraph"><strong>The protocol</strong> (format, order, actions — see <a class="content__link" href="w1-internet.html">W1</a>):</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Message</th><th class="content__table-heading">Format</th><th class="content__table-heading">Receiver&#39;s action</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">baton</td><td class="content__table-cell"><code class="content__code">TOKEN &lt;round&gt; &lt;hops&gt; &lt;path&gt;</code></td><td class="content__table-cell">+1 hop, append own name, pass on</td></tr><tr class="content__table-row"><td class="content__table-cell">end</td><td class="content__table-cell"><code class="content__code">STOP</code></td><td class="content__table-cell">pass <code class="content__code">STOP</code> on and exit (the starter just exits)</td></tr></tbody></table></div>
+<p class="content__paragraph">Every TCP connection carries <strong>exactly one line</strong> and is then closed.</p>
+<h2 class="content__heading content__heading--h2" id="configuration-files">Configuration files<a class="content__anchor" href="#configuration-files" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Instead of writing ports in the code, every node reads them from a <code class="content__code">.properties</code> file (format <code class="content__code">key=value</code>, <code class="content__code">#</code> is a comment):</p>
+
+<figure class="code-block" data-lines="8">
+<figcaption class="code-block__bar"><span class="code-block__lang">.properties</span><span class="code-block__title">relay-a.properties</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c1/relay-a.properties" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Download</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-ini"><span class="hljs-comment"># Node A - it starts the token</span>
+<span class="hljs-attr">name</span>=A
+<span class="hljs-attr">listenPort</span>=<span class="hljs-number">7001</span>
+<span class="hljs-attr">nextHost</span>=localhost
+<span class="hljs-attr">nextPort</span>=<span class="hljs-number">7002</span>
+<span class="hljs-attr">starter</span>=<span class="hljs-literal">true</span>
+<span class="hljs-attr">rounds</span>=<span class="hljs-number">3</span>
+<span class="hljs-attr">delayMs</span>=<span class="hljs-number">300</span></code></pre>
+</figure>
+
+<figure class="code-block" data-lines="7">
+<figcaption class="code-block__bar"><span class="code-block__lang">.properties</span><span class="code-block__title">relay-b.properties</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c1/relay-b.properties" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Download</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-ini"><span class="hljs-comment"># Node B</span>
+<span class="hljs-attr">name</span>=B
+<span class="hljs-attr">listenPort</span>=<span class="hljs-number">7002</span>
+<span class="hljs-attr">nextHost</span>=localhost
+<span class="hljs-attr">nextPort</span>=<span class="hljs-number">7003</span>
+<span class="hljs-attr">starter</span>=<span class="hljs-literal">false</span>
+<span class="hljs-attr">delayMs</span>=<span class="hljs-number">300</span></code></pre>
+</figure>
+
+<figure class="code-block" data-lines="7">
+<figcaption class="code-block__bar"><span class="code-block__lang">.properties</span><span class="code-block__title">relay-c.properties</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c1/relay-c.properties" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Download</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-ini"><span class="hljs-comment"># Node C - closes the ring back to A</span>
+<span class="hljs-attr">name</span>=C
+<span class="hljs-attr">listenPort</span>=<span class="hljs-number">7003</span>
+<span class="hljs-attr">nextHost</span>=localhost
+<span class="hljs-attr">nextPort</span>=<span class="hljs-number">7001</span>
+<span class="hljs-attr">starter</span>=<span class="hljs-literal">false</span>
+<span class="hljs-attr">delayMs</span>=<span class="hljs-number">300</span></code></pre>
+</figure>
+
+<aside class="callout callout--tip"><div class="callout__header"><span class="callout__icon" aria-hidden="true">💡</span><span class="callout__label">Tip</span><span class="callout__title">Why a file and not constants in the code?</span></div><div class="callout__body"><p class="content__paragraph">You run the same program 3 times with different files — and get 3 different nodes. And in the project the instructor explicitly forbids <strong>hard-coding addresses and ports</strong> (documentation template, note 12). <span class="badge badge--own" title="Written by the site author — not part of the course materials">✍️ author&#39;s note</span></p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="the-node-s-code">The node&#39;s code<a class="content__anchor" href="#the-node-s-code" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<figure class="code-block code-block--collapsible" data-lines="130">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">RelayNode.java</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c1/RelayNode.java" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Download</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-keyword">import</span> java.io.BufferedReader;
+<span class="hljs-keyword">import</span> java.io.FileInputStream;
+<span class="hljs-keyword">import</span> java.io.IOException;
+<span class="hljs-keyword">import</span> java.io.InputStream;
+<span class="hljs-keyword">import</span> java.io.InputStreamReader;
+<span class="hljs-keyword">import</span> java.io.OutputStreamWriter;
+<span class="hljs-keyword">import</span> java.io.PrintWriter;
+<span class="hljs-keyword">import</span> java.net.ConnectException;
+<span class="hljs-keyword">import</span> java.net.ServerSocket;
+<span class="hljs-keyword">import</span> java.net.Socket;
+<span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+<span class="hljs-keyword">import</span> java.util.Properties;
+
+<span class="hljs-comment">/**
+ * One node of a ring (A -&gt; B -&gt; C -&gt; A).
+ * The starter node creates a TOKEN, every node adds its name and passes it on.
+ * Message format (one text line):  TOKEN &lt;round&gt; &lt;hops&gt; &lt;path&gt;   or   STOP
+ *
+ * Run:  java RelayNode relay-a.properties
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RelayNode</span> {
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> String name;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> listenPort;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> String nextHost;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> nextPort;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">boolean</span> starter;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> rounds;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">long</span> delayMs;
+
+    RelayNode(Properties p) {
+        name = p.getProperty(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;?&quot;</span>).trim();
+        listenPort = Integer.parseInt(p.getProperty(<span class="hljs-string">&quot;listenPort&quot;</span>).trim());
+        nextHost = p.getProperty(<span class="hljs-string">&quot;nextHost&quot;</span>, <span class="hljs-string">&quot;localhost&quot;</span>).trim();
+        nextPort = Integer.parseInt(p.getProperty(<span class="hljs-string">&quot;nextPort&quot;</span>).trim());
+        starter = Boolean.parseBoolean(p.getProperty(<span class="hljs-string">&quot;starter&quot;</span>, <span class="hljs-string">&quot;false&quot;</span>).trim());
+        rounds = Integer.parseInt(p.getProperty(<span class="hljs-string">&quot;rounds&quot;</span>, <span class="hljs-string">&quot;3&quot;</span>).trim());
+        delayMs = Long.parseLong(p.getProperty(<span class="hljs-string">&quot;delayMs&quot;</span>, <span class="hljs-string">&quot;300&quot;</span>).trim());
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException, InterruptedException {
+        <span class="hljs-keyword">if</span> (args.length != <span class="hljs-number">1</span>) {
+            System.err.println(<span class="hljs-string">&quot;Usage: java RelayNode &lt;file.properties&gt;&quot;</span>);
+            System.exit(<span class="hljs-number">1</span>);
+        }
+        <span class="hljs-type">Properties</span> <span class="hljs-variable">config</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Properties</span>();
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">InputStream</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FileInputStream</span>(args[<span class="hljs-number">0</span>])) {
+            config.load(in);
+        }
+        <span class="hljs-keyword">new</span> <span class="hljs-title class_">RelayNode</span>(config).run();
+    }
+
+    <span class="hljs-type">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException, InterruptedException {
+        <span class="hljs-comment">// 1) Open our own &quot;door&quot; first, so the previous node can reach us.</span>
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">ServerSocket</span> <span class="hljs-variable">server</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServerSocket</span>(listenPort)) {
+            log(<span class="hljs-string">&quot;listening on port &quot;</span> + listenPort + <span class="hljs-string">&quot;, next node = &quot;</span> + nextHost + <span class="hljs-string">&quot;:&quot;</span> + nextPort);
+
+            <span class="hljs-comment">// 2) Only the starter puts the first token into the ring.</span>
+            <span class="hljs-keyword">if</span> (starter) {
+                send(<span class="hljs-string">&quot;TOKEN 1 0 &quot;</span> + name);
+            }
+
+            <span class="hljs-comment">// 3) Main loop: receive one line, react, pass it on.</span>
+            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+                <span class="hljs-type">String</span> <span class="hljs-variable">message</span> <span class="hljs-operator">=</span> receive(server);
+                <span class="hljs-keyword">if</span> (message == <span class="hljs-literal">null</span>) {
+                    <span class="hljs-keyword">continue</span>;
+                }
+                <span class="hljs-keyword">if</span> (message.equals(<span class="hljs-string">&quot;STOP&quot;</span>)) {
+                    log(<span class="hljs-string">&quot;STOP received - bye&quot;</span>);
+                    <span class="hljs-keyword">if</span> (!starter) {
+                        send(<span class="hljs-string">&quot;STOP&quot;</span>);          <span class="hljs-comment">// let the rest of the ring finish too</span>
+                    }
+                    <span class="hljs-keyword">break</span>;
+                }
+
+                <span class="hljs-type">String</span>[] <span class="hljs-variable">part</span> <span class="hljs-operator">=</span> message.split(<span class="hljs-string">&quot; &quot;</span>); <span class="hljs-comment">// TOKEN round hops path</span>
+                <span class="hljs-type">int</span> <span class="hljs-variable">round</span> <span class="hljs-operator">=</span> Integer.parseInt(part[<span class="hljs-number">1</span>]);
+                <span class="hljs-type">int</span> <span class="hljs-variable">hops</span> <span class="hljs-operator">=</span> Integer.parseInt(part[<span class="hljs-number">2</span>]) + <span class="hljs-number">1</span>;
+                <span class="hljs-type">String</span> <span class="hljs-variable">path</span> <span class="hljs-operator">=</span> part[<span class="hljs-number">3</span>] + <span class="hljs-string">&quot;&gt;&quot;</span> + name;
+
+                <span class="hljs-keyword">if</span> (starter) {
+                    log(<span class="hljs-string">&quot;round &quot;</span> + round + <span class="hljs-string">&quot; finished: &quot;</span> + hops + <span class="hljs-string">&quot; hops, path &quot;</span> + path);
+                    <span class="hljs-keyword">if</span> (round &lt; rounds) {
+                        send(<span class="hljs-string">&quot;TOKEN &quot;</span> + (round + <span class="hljs-number">1</span>) + <span class="hljs-string">&quot; 0 &quot;</span> + name);
+                    } <span class="hljs-keyword">else</span> {
+                        send(<span class="hljs-string">&quot;STOP&quot;</span>);          <span class="hljs-comment">// goes around the ring and comes back to us</span>
+                    }
+                } <span class="hljs-keyword">else</span> {
+                    Thread.sleep(delayMs);     <span class="hljs-comment">// so that you can watch it happen</span>
+                    send(<span class="hljs-string">&quot;TOKEN &quot;</span> + round + <span class="hljs-string">&quot; &quot;</span> + hops + <span class="hljs-string">&quot; &quot;</span> + path);
+                }
+            }
+        }
+    }
+
+    <span class="hljs-comment">/** Waits for ONE connection and reads ONE line from it. */</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-type">String</span> <span class="hljs-title function_">receive</span><span class="hljs-params">(ServerSocket server)</span> <span class="hljs-keyword">throws</span> IOException {
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">Socket</span> <span class="hljs-variable">socket</span> <span class="hljs-operator">=</span> server.accept();
+             <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(
+                     <span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(socket.getInputStream(), StandardCharsets.UTF_8))) {
+            <span class="hljs-type">String</span> <span class="hljs-variable">line</span> <span class="hljs-operator">=</span> in.readLine();
+            log(<span class="hljs-string">&quot;&lt;- &quot;</span> + line + <span class="hljs-string">&quot;   (from &quot;</span> + socket.getInetAddress().getHostAddress() + <span class="hljs-string">&quot;:&quot;</span> + socket.getPort() + <span class="hljs-string">&quot;)&quot;</span>);
+            <span class="hljs-keyword">return</span> line;
+        }
+    }
+
+    <span class="hljs-comment">/** Opens a connection to the next node, sends one line and closes. Retries while the node is not up yet. */</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-type">void</span> <span class="hljs-title function_">send</span><span class="hljs-params">(String line)</span> <span class="hljs-keyword">throws</span> IOException, InterruptedException {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">attempt</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; ; attempt++) {
+            <span class="hljs-keyword">try</span> (<span class="hljs-type">Socket</span> <span class="hljs-variable">socket</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Socket</span>(nextHost, nextPort);
+                 <span class="hljs-type">PrintWriter</span> <span class="hljs-variable">out</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PrintWriter</span>(
+                         <span class="hljs-keyword">new</span> <span class="hljs-title class_">OutputStreamWriter</span>(socket.getOutputStream(), StandardCharsets.UTF_8), <span class="hljs-literal">true</span>)) {
+                out.println(line);
+                log(<span class="hljs-string">&quot;-&gt; &quot;</span> + line);
+                <span class="hljs-keyword">return</span>;
+            } <span class="hljs-keyword">catch</span> (ConnectException e) {
+                <span class="hljs-keyword">if</span> (attempt == <span class="hljs-number">20</span>) {
+                    <span class="hljs-keyword">throw</span> e;
+                }
+                log(<span class="hljs-string">&quot;next node is not ready yet, retry &quot;</span> + attempt + <span class="hljs-string">&quot;/20&quot;</span>);
+                Thread.sleep(<span class="hljs-number">500</span>);
+            }
+        }
+    }
+
+    <span class="hljs-keyword">private</span> <span class="hljs-type">void</span> <span class="hljs-title function_">log</span><span class="hljs-params">(String text)</span> {
+        System.out.println(<span class="hljs-string">&quot;[&quot;</span> + name + <span class="hljs-string">&quot;] &quot;</span> + text);
+    }
+}</code></pre>
+<button type="button" class="code-block__expand" aria-expanded="false" data-expand="Show full code" data-collapse="Collapse code">Show full code</button>
+</figure>
+<p class="content__paragraph">The most important places:</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">new ServerSocket(listenPort)</code> — we open the door. If the port is taken you get <code class="content__code">BindException: Address already in use</code>.</li>
+<li class="content__list-item"><code class="content__code">server.accept()</code> — we <strong>wait</strong> (the program &quot;stands still&quot;) until somebody connects.</li>
+<li class="content__list-item"><code class="content__code">in.readLine()</code> — we read a <strong>whole line</strong> ending with <code class="content__code">\n</code>.</li>
+<li class="content__list-item"><code class="content__code">new Socket(nextHost, nextPort)</code> — we connect to the next node. If nobody listens there you get <code class="content__code">ConnectException: Connection refused</code> — that&#39;s why we <strong>retry</strong> every 0.5 s.</li>
+<li class="content__list-item"><code class="content__code">PrintWriter(..., true)</code> — <code class="content__code">true</code> means an automatic <code class="content__code">flush()</code> after <code class="content__code">println</code>. Without flush the data can get stuck in a buffer!</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="running-it-step-by-step">Running it step by step<a class="content__anchor" href="#running-it-step-by-step" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Download <code class="content__code">RelayNode.java</code> and the three <code class="content__code">.properties</code> files into <strong>one folder</strong> (the &quot;Download&quot; buttons above).</li>
+<li class="content__list-item">Open a terminal in that folder and compile: <code class="content__code">javac RelayNode.java</code>.</li>
+<li class="content__list-item">Open <strong>three terminals</strong> (or use the script below).</li>
+<li class="content__list-item">In the first: <code class="content__code">java RelayNode relay-b.properties</code>, in the second: <code class="content__code">java RelayNode relay-c.properties</code>.</li>
+<li class="content__list-item">Finally in the third: <code class="content__code">java RelayNode relay-a.properties</code> — A starts the relay.</li>
+<li class="content__list-item">Watch the logs: <code class="content__code">-&gt;</code> means a sent line, <code class="content__code">&lt;-</code> a received one.</li>
+</ol>
+</div>
+
+<figure class="code-block" data-lines="7">
+<figcaption class="code-block__bar"><span class="code-block__lang">Windows .bat</span><span class="code-block__title">run-relay.bat</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c1/run-relay.bat" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Download</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-dos">@<span class="hljs-built_in">echo</span> off
+<span class="hljs-comment">rem Compile once, then open every node in its own window.</span>
+javac RelayNode.java
+<span class="hljs-built_in">start</span> &quot;Node B&quot; <span class="hljs-built_in">cmd</span> /k java RelayNode relay-b.properties
+<span class="hljs-built_in">start</span> &quot;Node C&quot; <span class="hljs-built_in">cmd</span> /k java RelayNode relay-c.properties
+timeout /t <span class="hljs-number">1</span> &gt; <span class="hljs-built_in">nul</span>
+<span class="hljs-built_in">start</span> &quot;Node A&quot; <span class="hljs-built_in">cmd</span> /k java RelayNode relay-a.properties</code></pre>
+</figure>
+
+<figure class="code-block" data-lines="8">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__title">run-relay.sh</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c1/run-relay.sh" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Download</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash"><span class="hljs-meta">#!/bin/sh</span>
+<span class="hljs-comment"># Compile once, start B and C in the background, then A in the foreground.</span>
+javac RelayNode.java || <span class="hljs-built_in">exit</span> 1
+java RelayNode relay-b.properties &amp;
+java RelayNode relay-c.properties &amp;
+<span class="hljs-built_in">sleep</span> 1
+java RelayNode relay-a.properties
+<span class="hljs-built_in">wait</span></code></pre>
+</figure>
+<p class="content__paragraph">Expected output at node A (fragment):</p>
+<figure class="code-block" data-lines="8">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">[A] listening on port 7001, next node = localhost:7002
+[A] -&gt; TOKEN 1 0 A
+[A] &lt;- TOKEN 1 2 A&gt;B&gt;C   (from 127.0.0.1:53318)
+[A] round 1 finished: 3 hops, path A&gt;B&gt;C&gt;A
+...
+[A] -&gt; STOP
+[A] &lt;- STOP   (from 127.0.0.1:53340)
+[A] STOP received - bye</code></pre>
+</figure>
+<aside class="callout callout--own"><div class="callout__header"><span class="callout__icon" aria-hidden="true">✍️</span><span class="callout__label">Added by the site author — not in the lecture</span><span class="callout__title">Notice the client&#39;s port</span></div><div class="callout__body"><p class="content__paragraph">In the log <code class="content__code">from 127.0.0.1:53318</code> port <strong>53318</strong> is none of our ports. It&#39;s an <strong>ephemeral port</strong> — the system picks it at random for every new connection on the client side. Only the <strong>listening</strong> side has a &quot;fixed&quot; port.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="typical-errors-and-what-they-mean">Typical errors and what they mean <span class="badge badge--own" title="Written by the site author — not part of the course materials">✍️ author&#39;s note</span><a class="content__anchor" href="#typical-errors-and-what-they-mean" aria-hidden="true" tabindex="-1">#</a></h2>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Message</th><th class="content__table-heading">Cause</th><th class="content__table-heading">What to do</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">java.net.ConnectException: Connection refused</code></td><td class="content__table-cell"><strong>nobody is listening</strong> on that address:port (node not started or wrong port)</td><td class="content__table-cell">start the &quot;servers&quot; first; check the port in the file</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">java.net.BindException: Address already in use</code></td><td class="content__table-cell">the port is <strong>taken</strong> — e.g. a previous run is still alive</td><td class="content__table-cell">close the old process or change the port</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">java.net.UnknownHostException</code></td><td class="content__table-cell">the host name doesn&#39;t exist (typo)</td><td class="content__table-cell">fix <code class="content__code">nextHost</code></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">NumberFormatException</code></td><td class="content__table-cell">a wrong port number, space or letter in the file</td><td class="content__table-cell">fix the <code class="content__code">.properties</code> file</td></tr><tr class="content__table-row"><td class="content__table-cell">a &quot;Windows Firewall&quot; window</td><td class="content__table-cell">Windows asks for permission for Java to use the network</td><td class="content__table-cell">allow it (private network)</td></tr><tr class="content__table-row"><td class="content__table-cell">the program &quot;hangs&quot; without an error</td><td class="content__table-cell">it waits in <code class="content__code">accept()</code> or <code class="content__code">readLine()</code> — the other side sent nothing</td><td class="content__table-cell">check the start order and <code class="content__code">flush()</code></td></tr></tbody></table></div>
+<p class="content__paragraph">Useful commands — who uses a port?</p>
+<figure class="code-block" data-lines="6">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Copied!" data-fail="Select and copy manually"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Copy</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash"><span class="hljs-comment"># Windows</span>
+netstat -ano | findstr 7001
+<span class="hljs-comment"># Linux</span>
+ss -ltnp | grep 7001
+<span class="hljs-comment"># macOS</span>
+lsof -i :7001</code></pre>
+</figure><h2 class="content__heading content__heading--h2" id="tasks-to-do-on-your-own">Tasks to do on your own<a class="content__anchor" href="#tasks-to-do-on-your-own" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">1. Add a fourth node D</span></div><div class="callout__body"><p class="content__paragraph">Change <strong>only the configuration files</strong> (not the code!) so that the ring becomes A → B → C → D → A.</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><p class="content__paragraph">Create <code class="content__code">relay-d.properties</code> with <code class="content__code">name=D</code>, <code class="content__code">listenPort=7004</code>, <code class="content__code">nextPort=7001</code>. In <code class="content__code">relay-c.properties</code> set <code class="content__code">nextPort=7004</code>. Start B, C, D and finally A. A&#39;s log will show <code class="content__code">4 hops, path A&gt;B&gt;C&gt;D&gt;A</code>.</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">2. A ring across two computers</span></div><div class="callout__body"><p class="content__paragraph">With a friend: nodes A and B on your computer, C on theirs.</p>
+
+<details class="callout callout--hint"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">🔦</span><span class="callout__label">Show hint</span></summary><div class="callout__body"><p class="content__paragraph">Check your IP address: <code class="content__code">ipconfig</code> (Windows) or <code class="content__code">ip a</code> (Linux) / <code class="content__code">ifconfig</code> (macOS). In the file write the other computer&#39;s IP instead of <code class="content__code">localhost</code>. Both computers must be in the same network and the firewall must allow ports 7001–7003.</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">3. Break it and observe</span></div><div class="callout__body"><p class="content__paragraph">a) Remove the retry loop from <code class="content__code">send</code> and start A first. b) Start <code class="content__code">relay-b.properties</code> twice. Which exceptions do you see and why?</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><p class="content__paragraph">a) <code class="content__code">ConnectException: Connection refused</code> — B isn&#39;t listening yet. b) The second B gets <code class="content__code">BindException: Address already in use</code> — port 7002 is already taken by the first process.</p>
+</div></details></div></aside>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Task</span><span class="callout__title">4. A baton with a payload</span></div><div class="callout__body"><p class="content__paragraph">Let every node append a random number 1–9 to the message, and let the starter print their <strong>sum</strong> when the baton comes back. Design the message format so that it is unambiguous.</p>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Show solution</span></summary><div class="callout__body"><p class="content__paragraph">E.g. <code class="content__code">TOKEN &lt;round&gt; &lt;hops&gt; &lt;path&gt; &lt;sum&gt;</code>: every node does <code class="content__code">sum += random</code>, and the starter prints the last field. Important: fields are separated by a <strong>space</strong>, and the path must not contain spaces (that&#39;s why <code class="content__code">A&gt;B&gt;C</code>).</p>
+</div></details></div></aside>
+
+
+
+</div>
+<nav class="pager" aria-label="Previous topic / Next topic">
+<a class="pager__link pager__link--prev" href="w8-history.html"><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="pager__text"><span class="pager__label">Previous topic</span><span class="pager__title">Internet history — from ARPAnet to smartphones</span></span></a>
+<a class="pager__link pager__link--next" href="c2-http.html"><span class="pager__text"><span class="pager__label">Next topic</span><span class="pager__title">Wireshark and HTTP — reading a browser&#39;s conversation with a server</span></span><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="On this page"><p class="toc__title">On this page</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#in-short">In short</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#starter-vocabulary">Starter vocabulary</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#how-our-relay-works">How our relay works</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#configuration-files">Configuration files</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#the-node-s-code">The node&#39;s code</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#running-it-step-by-step">Running it step by step</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#typical-errors-and-what-they-mean">Typical errors and what they mean  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#tasks-to-do-on-your-own">Tasks to do on your own</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Cheat sheet: Your first distributed program — a relay of processes in a ring</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Print"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Print</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Close"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Close</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-c1-relay-concepts">Concepts<a class="content__anchor" href="#cs-c1-relay-concepts" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Port = a process&#39;s &quot;door&quot; (0–65535). Socket = IP + port.</li>
+<li class="content__list-item"><code class="content__code">localhost</code> = <code class="content__code">127.0.0.1</code> = this computer.</li>
+<li class="content__list-item">Server: <code class="content__code">new ServerSocket(port)</code> → <code class="content__code">accept()</code> (waits).</li>
+<li class="content__list-item">Client: <code class="content__code">new Socket(host, port)</code> → connects.</li>
+<li class="content__list-item">The client&#39;s port is random (ephemeral).</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-c1-relay-start-order">Start order<a class="content__anchor" href="#cs-c1-relay-start-order" aria-hidden="true" tabindex="-1">#</a></h3>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item">First the processes that <strong>listen</strong>.</li>
+<li class="content__list-item">Then the one that <strong>starts</strong> sending.</li>
+<li class="content__list-item">Or: retry the connection every few hundred ms.</li>
+</ol>
+<h3 class="content__heading content__heading--h3" id="cs-c1-relay-configuration">Configuration<a class="content__anchor" href="#cs-c1-relay-configuration" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">Properties p = new Properties(); p.load(new FileInputStream(file));</code></li>
+<li class="content__list-item"><code class="content__code">p.getProperty(&quot;listenPort&quot;)</code> → <code class="content__code">Integer.parseInt(...)</code>.</li>
+<li class="content__list-item">Never hard-code IPs and ports.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-c1-relay-errors">Errors<a class="content__anchor" href="#cs-c1-relay-errors" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">Connection refused</code> → nobody listens.</li>
+<li class="content__list-item"><code class="content__code">Address already in use</code> → port taken.</li>
+<li class="content__list-item">&quot;Hangs&quot; → waiting in <code class="content__code">accept()</code>/<code class="content__code">readLine()</code>; check <code class="content__code">flush()</code>.</li>
+<li class="content__list-item">Who uses a port: <code class="content__code">netstat -ano | findstr PORT</code> / <code class="content__code">ss -ltnp</code> / <code class="content__code">lsof -i :PORT</code>.</li>
+</ul>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ All cheat sheets</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Unofficial study notes. The tasks were rewritten (different wording, same logic) so that nothing from previous years is copied.</p>
+<p class="footer__text footer__text--small">Lectures based on: J. F. Kurose, K. W. Ross, “Computer Networking: A Top-Down Approach” (slides © 1996–2020 J.F. Kurose &amp; K.W. Ross) and Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Site source code</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+</body>
+</html>

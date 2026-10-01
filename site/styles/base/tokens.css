@@ -1,0 +1,110 @@
+/* Design tokens. Light theme is the default; dark theme overrides on [data-theme="dark"]. */
+:root {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "JetBrains Mono", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --fs-base: 1.0625rem;
+  --lh-base: 1.72;
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 16px;
+  --header-h: 60px;
+  --sidebar-w: 288px;
+  --toc-w: 230px;
+  --content-w: 780px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --shadow-s: 0 1px 2px rgb(16 24 40 / 6%), 0 1px 3px rgb(16 24 40 / 10%);
+  --shadow-l: 0 20px 50px rgb(16 24 40 / 18%);
+  --transition: 160ms ease;
+
+  --color-bg: #f6f7fb;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef1f7;
+  --color-surface-3: #e4e8f1;
+  --color-text: #182030;
+  --color-text-muted: #556078;
+  --color-border: #dde2ec;
+  --color-accent: #2563eb;
+  --color-accent-strong: #1d4ed8;
+  --color-accent-soft: #e6eeff;
+  --color-on-accent: #ffffff;
+  --color-focus: #f59e0b;
+  --color-mark: #fff1b8;
+
+  /* callout hues: [bg, border, title] */
+  --c-note-bg: #eef4ff;   --c-note-bd: #3b82f6;   --c-note-tx: #1e4fbf;
+  --c-tip-bg: #ecfbf3;    --c-tip-bd: #16a34a;    --c-tip-tx: #0f7a36;
+  --c-warn-bg: #fff7e6;   --c-warn-bd: #f59e0b;   --c-warn-tx: #a15c00;
+  --c-own-bg: #f6f0ff;    --c-own-bd: #8b5cf6;    --c-own-tx: #6b35d6;
+  --c-lect-bg: #ebf8fb;   --c-lect-bd: #0891b2;   --c-lect-tx: #0e6f87;
+  --c-ex-bg: #f1f5f9;     --c-ex-bd: #64748b;     --c-ex-tx: #334155;
+  --c-task-bg: #fff3ec;   --c-task-bd: #ea580c;   --c-task-tx: #b4410a;
+  --c-ans-bg: #effaf3;    --c-ans-bd: #22c55e;    --c-ans-tx: #15803d;
+  --c-dng-bg: #fff0f0;    --c-dng-bd: #ef4444;    --c-dng-tx: #b91c1c;
+  --c-ana-bg: #fff0f7;    --c-ana-bd: #ec4899;    --c-ana-tx: #be185d;
+  --c-frm-bg: #f0f1ff;    --c-frm-bd: #6366f1;    --c-frm-tx: #4338ca;
+
+  /* code */
+  --code-bg: #f6f8fc;
+  --code-bar: #e9edf5;
+  --code-border: #d9dfeb;
+  --code-text: #1f2937;
+  --inline-code-bg: #eceff6;
+  --inline-code-text: #b4235a;
+  --hl-keyword: #c2185b;
+  --hl-string: #0b7a3e;
+  --hl-number: #b45309;
+  --hl-comment: #6b7280;
+  --hl-title: #6d28d9;
+  --hl-type: #0369a1;
+  --hl-attr: #a21caf;
+  --hl-meta: #0f766e;
+  --hl-literal: #1d4ed8;
+}
+
+[data-theme="dark"] {
+  --shadow-s: 0 1px 2px rgb(0 0 0 / 40%);
+  --shadow-l: 0 24px 60px rgb(0 0 0 / 55%);
+
+  --color-bg: #0e1320;
+  --color-surface: #151b2b;
+  --color-surface-2: #1b2235;
+  --color-surface-3: #242c42;
+  --color-text: #e5e9f2;
+  --color-text-muted: #a1abc0;
+  --color-border: #2a3349;
+  --color-accent: #7aa2ff;
+  --color-accent-strong: #9bb8ff;
+  --color-accent-soft: #1c2a4d;
+  --color-on-accent: #0b1222;
+  --color-focus: #fbbf24;
+  --color-mark: #4a3d12;
+
+  --c-note-bg: #14213d;   --c-note-bd: #5b8def;   --c-note-tx: #a9c4ff;
+  --c-tip-bg: #10291c;    --c-tip-bd: #34c26b;    --c-tip-tx: #8ee3ad;
+  --c-warn-bg: #2d2210;   --c-warn-bd: #f2b33d;   --c-warn-tx: #ffd58a;
+  --c-own-bg: #221a3a;    --c-own-bd: #a78bfa;    --c-own-tx: #cdb8ff;
+  --c-lect-bg: #0f2730;   --c-lect-bd: #22b3d6;   --c-lect-tx: #8fdcf0;
+  --c-ex-bg: #1a2130;     --c-ex-bd: #7c8aa3;     --c-ex-tx: #c7d0df;
+  --c-task-bg: #2e1d12;   --c-task-bd: #f9844a;   --c-task-tx: #ffbe95;
+  --c-ans-bg: #0f2a1a;    --c-ans-bd: #3ad07a;    --c-ans-tx: #9be8b9;
+  --c-dng-bg: #311518;    --c-dng-bd: #f87171;    --c-dng-tx: #ffb1b1;
+  --c-ana-bg: #2f1426;    --c-ana-bd: #f472b6;    --c-ana-tx: #ffb3d9;
+  --c-frm-bg: #1b1d3d;    --c-frm-bd: #818cf8;    --c-frm-tx: #c3c8ff;
+
+  --code-bg: #0b1020;
+  --code-bar: #161d31;
+  --code-border: #273049;
+  --code-text: #dbe2ef;
+  --inline-code-bg: #232b40;
+  --inline-code-text: #ff9ec4;
+  --hl-keyword: #ff7ab2;
+  --hl-string: #8be28b;
+  --hl-number: #ffb86b;
+  --hl-comment: #8590a6;
+  --hl-title: #c4a7ff;
+  --hl-type: #7dd3fc;
+  --hl-attr: #f0abfc;
+  --hl-meta: #5eead4;
+  --hl-literal: #93b4ff;
+}

@@ -1,0 +1,19 @@
+Every request that travels between proxies carries:
+    id    - unique, e.g. "<my port>-<counter>" or a random long
+    ttl   - how many more hops it may make (e.g. starts at 16)
+
+on request(id, ttl, command) from a neighbour:
+    if id in seenIds:        answer "NA"      // already handled -> this was a CYCLE
+                             return
+    add id to seenIds        // (ConcurrentHashMap.newKeySet(), clean it from time to time)
+    if ttl == 0:             answer "NA"; return
+
+    if key is on one of MY servers:
+        return askServer(...)                // TCP or UDP, translated to the base protocol
+    for every neighbour proxy except the one the request came from:
+        answer = forward(id, ttl - 1, command)
+        if answer is not "NA": return answer
+    return "NA"
+
+QUIT: the same idea - every proxy forwards QUIT (with an id) to its neighbours ONCE,
+      sends "QUIT" to its own servers, and only then exits.

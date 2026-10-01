@@ -1,0 +1,26 @@
+<svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SYN, SYN-ACK, ACK">
+  <defs><marker id="hs-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="diagram__arrow diagram__arrow--accent" d="M0 0 10 5 0 10z"/></marker></defs>
+  <rect class="diagram__box diagram__box--accent" x="90" y="10" width="140" height="36" rx="8"/>
+  <text class="diagram__text diagram__text--bold" x="160" y="34" text-anchor="middle">{{client}}</text>
+  <rect class="diagram__box diagram__box--accent" x="530" y="10" width="140" height="36" rx="8"/>
+  <text class="diagram__text diagram__text--bold" x="600" y="34" text-anchor="middle">{{server}}</text>
+  <line class="diagram__line" x1="160" y1="46" x2="160" y2="410"/>
+  <line class="diagram__line" x1="600" y1="46" x2="600" y2="410"/>
+  <text class="diagram__text diagram__text--muted" x="40" y="400">{{time}} ↓</text>
+  <rect class="diagram__box diagram__box--tip" x="168" y="62" width="424" height="140" rx="10" opacity="0.45"/>
+  <text class="diagram__text diagram__text--muted" x="380" y="196" text-anchor="middle">{{handshake}}</text>
+  <line class="diagram__line diagram__line--accent" x1="160" y1="75" x2="600" y2="105" marker-end="url(#hs-arrow)"/>
+  <text class="diagram__text diagram__text--mono" x="380" y="80" text-anchor="middle">SYN  seq=x</text>
+  <line class="diagram__line diagram__line--accent" x1="600" y1="115" x2="160" y2="145" marker-end="url(#hs-arrow)"/>
+  <text class="diagram__text diagram__text--mono" x="380" y="120" text-anchor="middle">SYN+ACK  seq=y  ack=x+1</text>
+  <line class="diagram__line diagram__line--accent" x1="160" y1="155" x2="600" y2="182" marker-end="url(#hs-arrow)"/>
+  <text class="diagram__text diagram__text--mono" x="380" y="160" text-anchor="middle">ACK  ack=y+1</text>
+  <line class="diagram__line" x1="160" y1="218" x2="600" y2="246" marker-end="url(#hs-arrow)"/>
+  <text class="diagram__text diagram__text--mono" x="380" y="222" text-anchor="middle">{{data}}: seq=x+1, 1460 B</text>
+  <line class="diagram__line" x1="160" y1="258" x2="600" y2="286" marker-end="url(#hs-arrow)"/>
+  <text class="diagram__text diagram__text--mono" x="380" y="262" text-anchor="middle">{{data}}: seq=x+1461, 1460 B</text>
+  <line class="diagram__line" x1="600" y1="300" x2="160" y2="328" marker-end="url(#hs-arrow)"/>
+  <text class="diagram__text diagram__text--mono" x="380" y="306" text-anchor="middle">ACK  ack=x+2921</text>
+  <line class="diagram__line diagram__line--dashed" x1="160" y1="352" x2="600" y2="378" marker-end="url(#hs-arrow)"/>
+  <text class="diagram__text diagram__text--mono" x="380" y="356" text-anchor="middle">FIN … ({{close}})</text>
+</svg>

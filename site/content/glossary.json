@@ -1,0 +1,602 @@
+[
+ {
+  "pl": "host / system końcowy",
+  "en": "host / end system",
+  "ru": "хост / конечная система",
+  "desc": {
+   "pl": "urządzenie na brzegu sieci, na którym działają aplikacje",
+   "en": "a device at the network edge that runs applications",
+   "ru": "устройство на краю сети, на котором работают приложения"
+  }
+ },
+ {
+  "pl": "router",
+  "en": "router",
+  "ru": "роутер, маршрутизатор",
+  "desc": {
+   "pl": "przekazuje pakiety między sieciami według adresu IP",
+   "en": "forwards packets between networks based on the IP address",
+   "ru": "пересылает пакеты между сетями по IP-адресу"
+  }
+ },
+ {
+  "pl": "przełącznik (switch)",
+  "en": "switch",
+  "ru": "коммутатор (switch)",
+  "desc": {
+   "pl": "przekazuje ramki w sieci lokalnej (warstwa łącza)",
+   "en": "forwards frames inside a local network (link layer)",
+   "ru": "пересылает кадры внутри локальной сети (канальный уровень)"
+  }
+ },
+ {
+  "pl": "łącze",
+  "en": "link",
+  "ru": "канал связи",
+  "desc": {
+   "pl": "„droga” dla bitów: miedź, światłowód, radio",
+   "en": "the 'road' for bits: copper, fiber, radio",
+   "ru": "«дорога» для битов: медь, оптоволокно, радио"
+  }
+ },
+ {
+  "pl": "przepustowość łącza",
+  "en": "bandwidth / transmission rate",
+  "ru": "пропускная способность канала",
+  "desc": {
+   "pl": "ile bitów na sekundę łącze może przesłać (R)",
+   "en": "how many bits per second a link can carry (R)",
+   "ru": "сколько бит в секунду может передать канал (R)"
+  }
+ },
+ {
+  "pl": "przepustowość (end-to-end)",
+  "en": "throughput",
+  "ru": "пропускная способность (end-to-end)",
+  "desc": {
+   "pl": "ile bitów na sekundę faktycznie dociera do odbiorcy",
+   "en": "how many bits per second actually reach the receiver",
+   "ru": "сколько бит в секунду реально доходит до получателя"
+  }
+ },
+ {
+  "pl": "wąskie gardło",
+  "en": "bottleneck link",
+  "ru": "узкое место",
+  "desc": {
+   "pl": "najwolniejsze łącze, które ogranicza przepustowość",
+   "en": "the slowest link that limits the throughput",
+   "ru": "самый медленный канал, ограничивающий пропускную способность"
+  }
+ },
+ {
+  "pl": "pakiet",
+  "en": "packet",
+  "ru": "пакет",
+  "desc": {
+   "pl": "porcja danych przesyłana przez sieć",
+   "en": "a chunk of data sent through the network",
+   "ru": "порция данных, передаваемая по сети"
+  }
+ },
+ {
+  "pl": "ramka",
+  "en": "frame",
+  "ru": "кадр",
+  "desc": {
+   "pl": "jednostka danych warstwy łącza",
+   "en": "the data unit of the link layer",
+   "ru": "единица данных канального уровня"
+  }
+ },
+ {
+  "pl": "segment",
+  "en": "segment",
+  "ru": "сегмент",
+  "desc": {
+   "pl": "jednostka danych warstwy transportowej (TCP)",
+   "en": "the data unit of the transport layer (TCP)",
+   "ru": "единица данных транспортного уровня (TCP)"
+  }
+ },
+ {
+  "pl": "datagram",
+  "en": "datagram",
+  "ru": "датаграмма",
+  "desc": {
+   "pl": "jednostka danych IP albo UDP — osobna „paczka”",
+   "en": "the data unit of IP or UDP — a separate 'parcel'",
+   "ru": "единица данных IP или UDP — отдельная «посылка»"
+  }
+ },
+ {
+  "pl": "protokół",
+  "en": "protocol",
+  "ru": "протокол",
+  "desc": {
+   "pl": "format + kolejność komunikatów + akcje",
+   "en": "message format + order + actions",
+   "ru": "формат + порядок сообщений + действия"
+  }
+ },
+ {
+  "pl": "przełączanie pakietów",
+  "en": "packet switching",
+  "ru": "коммутация пакетов",
+  "desc": {
+   "pl": "dane dzielone na pakiety, bez rezerwacji zasobów",
+   "en": "data split into packets, no resource reservation",
+   "ru": "данные делятся на пакеты, без бронирования ресурсов"
+  }
+ },
+ {
+  "pl": "przełączanie obwodów",
+  "en": "circuit switching",
+  "ru": "коммутация каналов",
+  "desc": {
+   "pl": "rezerwacja zasobów na całe połączenie (telefon)",
+   "en": "resources reserved for the whole call (telephone)",
+   "ru": "бронирование ресурсов на весь звонок (телефон)"
+  }
+ },
+ {
+  "pl": "zapamiętaj i przekaż",
+  "en": "store-and-forward",
+  "ru": "«запомни и передай»",
+  "desc": {
+   "pl": "router odbiera cały pakiet, zanim wyśle go dalej",
+   "en": "a router receives the whole packet before sending it on",
+   "ru": "роутер получает весь пакет, прежде чем отправить дальше"
+  }
+ },
+ {
+  "pl": "opóźnienie transmisji",
+  "en": "transmission delay",
+  "ru": "задержка передачи",
+  "desc": {
+   "pl": "L/R — czas wypchnięcia bitów do łącza",
+   "en": "L/R — time to push the bits into the link",
+   "ru": "L/R — время выталкивания битов в канал"
+  }
+ },
+ {
+  "pl": "opóźnienie propagacji",
+  "en": "propagation delay",
+  "ru": "задержка распространения",
+  "desc": {
+   "pl": "d/s — czas podróży sygnału przez łącze",
+   "en": "d/s — time the signal travels along the link",
+   "ru": "d/s — время пути сигнала по каналу"
+  }
+ },
+ {
+  "pl": "opóźnienie kolejkowania",
+  "en": "queueing delay",
+  "ru": "задержка в очереди",
+  "desc": {
+   "pl": "czas czekania w buforze routera",
+   "en": "time spent waiting in the router's buffer",
+   "ru": "время ожидания в буфере роутера"
+  }
+ },
+ {
+  "pl": "natężenie ruchu",
+  "en": "traffic intensity",
+  "ru": "интенсивность трафика",
+  "desc": {
+   "pl": "La/R; >1 oznacza rosnącą bez końca kolejkę",
+   "en": "La/R; >1 means an endlessly growing queue",
+   "ru": "La/R; >1 означает бесконечно растущую очередь"
+  }
+ },
+ {
+  "pl": "utrata pakietów",
+  "en": "packet loss",
+  "ru": "потеря пакетов",
+  "desc": {
+   "pl": "pakiet odrzucony, bo bufor był pełny",
+   "en": "a packet dropped because the buffer was full",
+   "ru": "пакет отброшен, потому что буфер был полон"
+  }
+ },
+ {
+  "pl": "dostawca Internetu",
+  "en": "ISP (Internet Service Provider)",
+  "ru": "интернет-провайдер",
+  "desc": {
+   "pl": "firma dająca dostęp do Internetu",
+   "en": "a company providing Internet access",
+   "ru": "компания, дающая доступ в Интернет"
+  }
+ },
+ {
+  "pl": "punkt wymiany ruchu",
+  "en": "IXP (Internet exchange point)",
+  "ru": "точка обмена трафиком",
+  "desc": {
+   "pl": "miejsce, gdzie wiele sieci łączy się ze sobą",
+   "en": "a place where many networks interconnect",
+   "ru": "место, где соединяется много сетей"
+  }
+ },
+ {
+  "pl": "sieć dostępowa",
+  "en": "access network",
+  "ru": "сеть доступа",
+  "desc": {
+   "pl": "łączy host z pierwszym routerem",
+   "en": "connects a host to its first router",
+   "ru": "соединяет хост с первым роутером"
+  }
+ },
+ {
+  "pl": "rdzeń sieci",
+  "en": "network core",
+  "ru": "ядро сети",
+  "desc": {
+   "pl": "siatka połączonych routerów",
+   "en": "a mesh of interconnected routers",
+   "ru": "сетка соединённых роутеров"
+  }
+ },
+ {
+  "pl": "warstwa aplikacji",
+  "en": "application layer",
+  "ru": "прикладной уровень",
+  "desc": {
+   "pl": "HTTP, DNS, SMTP — to piszesz Ty",
+   "en": "HTTP, DNS, SMTP — this is what you write",
+   "ru": "HTTP, DNS, SMTP — это пишешь ты"
+  }
+ },
+ {
+  "pl": "warstwa transportowa",
+  "en": "transport layer",
+  "ru": "транспортный уровень",
+  "desc": {
+   "pl": "TCP, UDP — przesyłanie między procesami",
+   "en": "TCP, UDP — process-to-process transfer",
+   "ru": "TCP, UDP — передача между процессами"
+  }
+ },
+ {
+  "pl": "warstwa sieciowa",
+  "en": "network layer",
+  "ru": "сетевой уровень",
+  "desc": {
+   "pl": "IP — routing od źródła do celu",
+   "en": "IP — routing from source to destination",
+   "ru": "IP — маршрутизация от источника к цели"
+  }
+ },
+ {
+  "pl": "enkapsulacja",
+  "en": "encapsulation",
+  "ru": "инкапсуляция",
+  "desc": {
+   "pl": "każda warstwa dokleja swój nagłówek",
+   "en": "every layer adds its own header",
+   "ru": "каждый уровень добавляет свой заголовок"
+  }
+ },
+ {
+  "pl": "gniazdo",
+  "en": "socket",
+  "ru": "сокет",
+  "desc": {
+   "pl": "końcówka połączenia: adres IP + port",
+   "en": "one end of a connection: IP address + port",
+   "ru": "конец соединения: IP-адрес + порт"
+  }
+ },
+ {
+  "pl": "port",
+  "en": "port",
+  "ru": "порт",
+  "desc": {
+   "pl": "numer „drzwi” procesu na komputerze (0–65535)",
+   "en": "the number of a process's 'door' on a computer (0–65535)",
+   "ru": "номер «двери» процесса на компьютере (0–65535)"
+  }
+ },
+ {
+  "pl": "port efemeryczny",
+  "en": "ephemeral port",
+  "ru": "эфемерный порт",
+  "desc": {
+   "pl": "losowy port klienta nadany przez system",
+   "en": "a random client port picked by the system",
+   "ru": "случайный порт клиента, выбранный системой"
+  }
+ },
+ {
+  "pl": "nasłuchiwać",
+  "en": "to listen",
+  "ru": "слушать (порт)",
+  "desc": {
+   "pl": "czekać na połączenia na porcie (ServerSocket)",
+   "en": "wait for connections on a port (ServerSocket)",
+   "ru": "ждать подключений на порту (ServerSocket)"
+  }
+ },
+ {
+  "pl": "strumień",
+  "en": "stream",
+  "ru": "поток (stream)",
+  "desc": {
+   "pl": "ciąg bajtów bez granic wiadomości (TCP)",
+   "en": "a sequence of bytes without message boundaries (TCP)",
+   "ru": "последовательность байт без границ сообщений (TCP)"
+  }
+ },
+ {
+  "pl": "bufor",
+  "en": "buffer",
+  "ru": "буфер",
+  "desc": {
+   "pl": "pamięć na dane czekające na wysłanie/odczyt",
+   "en": "memory for data waiting to be sent/read",
+   "ru": "память для данных, ждущих отправки/чтения"
+  }
+ },
+ {
+  "pl": "opróżnić bufor",
+  "en": "flush",
+  "ru": "сбросить буфер (flush)",
+  "desc": {
+   "pl": "wymusić wysłanie danych z bufora",
+   "en": "force the buffered data to be sent",
+   "ru": "принудительно отправить данные из буфера"
+  }
+ },
+ {
+  "pl": "limit czasu",
+  "en": "timeout",
+  "ru": "таймаут",
+  "desc": {
+   "pl": "maksymalny czas czekania (setSoTimeout)",
+   "en": "the maximum waiting time (setSoTimeout)",
+   "ru": "максимальное время ожидания (setSoTimeout)"
+  }
+ },
+ {
+  "pl": "3-etapowe nawiązanie połączenia",
+  "en": "three-way handshake",
+  "ru": "трёхэтапное рукопожатие",
+  "desc": {
+   "pl": "SYN → SYN+ACK → ACK",
+   "en": "SYN → SYN+ACK → ACK",
+   "ru": "SYN → SYN+ACK → ACK"
+  }
+ },
+ {
+  "pl": "numer sekwencyjny",
+  "en": "sequence number",
+  "ru": "номер последовательности",
+  "desc": {
+   "pl": "numer pierwszego bajtu w segmencie TCP",
+   "en": "the number of the first byte in a TCP segment",
+   "ru": "номер первого байта в сегменте TCP"
+  }
+ },
+ {
+  "pl": "potwierdzenie",
+  "en": "acknowledgement (ACK)",
+  "ru": "подтверждение (ACK)",
+  "desc": {
+   "pl": "numer następnego oczekiwanego bajtu",
+   "en": "the number of the next expected byte",
+   "ru": "номер следующего ожидаемого байта"
+  }
+ },
+ {
+  "pl": "retransmisja",
+  "en": "retransmission",
+  "ru": "повторная передача",
+  "desc": {
+   "pl": "ponowne wysłanie zgubionego segmentu",
+   "en": "resending a lost segment",
+   "ru": "повторная отправка потерянного сегмента"
+  }
+ },
+ {
+  "pl": "okno odbiorcy",
+  "en": "receive window (rwnd)",
+  "ru": "окно получателя",
+  "desc": {
+   "pl": "ile bajtów zmieści jeszcze bufor odbiorcy",
+   "en": "how many more bytes fit into the receiver's buffer",
+   "ru": "сколько байт ещё поместится в буфер получателя"
+  }
+ },
+ {
+  "pl": "kontrola przeciążenia",
+  "en": "congestion control",
+  "ru": "контроль перегрузки",
+  "desc": {
+   "pl": "TCP zwalnia, gdy sieć jest zatkana (slow start…)",
+   "en": "TCP slows down when the network is congested (slow start…)",
+   "ru": "TCP замедляется, когда сеть перегружена (slow start…)"
+  }
+ },
+ {
+  "pl": "czas obiegu",
+  "en": "RTT (round-trip time)",
+  "ru": "время кругового обхода (RTT)",
+  "desc": {
+   "pl": "czas „tam i z powrotem”",
+   "en": "the 'there and back' time",
+   "ru": "время «туда и обратно»"
+  }
+ },
+ {
+  "pl": "nagłówek",
+  "en": "header",
+  "ru": "заголовок",
+  "desc": {
+   "pl": "informacje sterujące przed danymi",
+   "en": "control information in front of the data",
+   "ru": "служебная информация перед данными"
+  }
+ },
+ {
+  "pl": "żądanie / odpowiedź",
+  "en": "request / response",
+  "ru": "запрос / ответ",
+  "desc": {
+   "pl": "para komunikatów klient → serwer → klient",
+   "en": "a client → server → client message pair",
+   "ru": "пара сообщений клиент → сервер → клиент"
+  }
+ },
+ {
+  "pl": "kod statusu",
+  "en": "status code",
+  "ru": "код статуса",
+  "desc": {
+   "pl": "200, 304, 404… w pierwszej linii odpowiedzi HTTP",
+   "en": "200, 304, 404… in the first line of an HTTP response",
+   "ru": "200, 304, 404… в первой строке HTTP-ответа"
+  }
+ },
+ {
+  "pl": "warunkowy GET",
+  "en": "conditional GET",
+  "ru": "условный GET",
+  "desc": {
+   "pl": "If-Modified-Since → 304 Not Modified",
+   "en": "If-Modified-Since → 304 Not Modified",
+   "ru": "If-Modified-Since → 304 Not Modified"
+  }
+ },
+ {
+  "pl": "pamięć podręczna",
+  "en": "cache",
+  "ru": "кэш",
+  "desc": {
+   "pl": "zapamiętane kopie (strony, odpowiedzi DNS)",
+   "en": "stored copies (pages, DNS answers)",
+   "ru": "сохранённые копии (страницы, ответы DNS)"
+  }
+ },
+ {
+  "pl": "rekord DNS",
+  "en": "resource record (RR)",
+  "ru": "запись DNS",
+  "desc": {
+   "pl": "A, AAAA, NS, CNAME, MX… z czasem życia TTL",
+   "en": "A, AAAA, NS, CNAME, MX… with a TTL",
+   "ru": "A, AAAA, NS, CNAME, MX… с временем жизни TTL"
+  }
+ },
+ {
+  "pl": "serwer autorytatywny",
+  "en": "authoritative server",
+  "ru": "авторитетный сервер",
+  "desc": {
+   "pl": "serwer DNS, który „zna prawdę” o domenie",
+   "en": "the DNS server that 'knows the truth' about a domain",
+   "ru": "DNS-сервер, который «знает правду» о домене"
+  }
+ },
+ {
+  "pl": "odwrotne zapytanie DNS",
+  "en": "reverse DNS lookup",
+  "ru": "обратный DNS-запрос",
+  "desc": {
+   "pl": "adres IP → nazwa hosta",
+   "en": "IP address → host name",
+   "ru": "IP-адрес → имя хоста"
+  }
+ },
+ {
+  "pl": "podsłuchiwanie pakietów",
+  "en": "packet sniffing",
+  "ru": "перехват пакетов",
+  "desc": {
+   "pl": "przechwytywanie cudzego ruchu (Wireshark)",
+   "en": "capturing traffic (Wireshark)",
+   "ru": "перехват трафика (Wireshark)"
+  }
+ },
+ {
+  "pl": "podszywanie się pod IP",
+  "en": "IP spoofing",
+  "ru": "подмена IP",
+  "desc": {
+   "pl": "fałszywy adres nadawcy w pakiecie",
+   "en": "a false source address in a packet",
+   "ru": "поддельный адрес отправителя в пакете"
+  }
+ },
+ {
+  "pl": "odmowa usługi",
+  "en": "DoS / DDoS",
+  "ru": "отказ в обслуживании",
+  "desc": {
+   "pl": "zalanie zasobu fałszywym ruchem",
+   "en": "flooding a resource with bogus traffic",
+   "ru": "завал ресурса фальшивым трафиком"
+  }
+ },
+ {
+  "pl": "robak / wirus",
+  "en": "worm / virus",
+  "ru": "червь / вирус",
+  "desc": {
+   "pl": "robak uruchamia się sam, wirus wymaga akcji użytkownika",
+   "en": "a worm runs by itself, a virus needs a user action",
+   "ru": "червь запускается сам, вирусу нужно действие пользователя"
+  }
+ },
+ {
+  "pl": "pośrednik",
+  "en": "proxy",
+  "ru": "прокси (посредник)",
+  "desc": {
+   "pl": "węzeł przekazujący żądania między klientami a serwerami",
+   "en": "a node passing requests between clients and servers",
+   "ru": "узел, передающий запросы между клиентами и серверами"
+  }
+ },
+ {
+  "pl": "tablica routingu",
+  "en": "routing table",
+  "ru": "таблица маршрутизации",
+  "desc": {
+   "pl": "gdzie wysłać dane do danego celu (w projekcie: klucz → węzeł)",
+   "en": "where to send data for a destination (in the project: key → node)",
+   "ru": "куда отправлять данные для цели (в проекте: ключ → узел)"
+  }
+ },
+ {
+  "pl": "cykl (w grafie sieci)",
+  "en": "cycle (loop)",
+  "ru": "цикл (в графе сети)",
+  "desc": {
+   "pl": "droga, która wraca do węzła startowego",
+   "en": "a path that returns to the starting node",
+   "ru": "путь, возвращающийся к исходному узлу"
+  }
+ },
+ {
+  "pl": "najlepsze starania",
+  "en": "best effort",
+  "ru": "«по мере сил» (best effort)",
+  "desc": {
+   "pl": "sieć próbuje dostarczyć, ale nic nie gwarantuje",
+   "en": "the network tries to deliver but guarantees nothing",
+   "ru": "сеть старается доставить, но ничего не гарантирует"
+  }
+ },
+ {
+  "pl": "plagiat",
+  "en": "plagiarism",
+  "ru": "плагиат",
+  "desc": {
+   "pl": "cudza praca podana jako własna — ujemne punkty!",
+   "en": "someone else's work presented as yours — negative points!",
+   "ru": "чужая работа под своим именем — отрицательные баллы!"
+  }
+ }
+]

@@ -1,0 +1,31 @@
+<svg viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="M, Ht M, Hn Ht M, Hl Hn Ht M">
+  <text class="diagram__text diagram__text--muted" x="20" y="24">{{layer}}</text>
+  <text class="diagram__text diagram__text--muted" x="230" y="24">{{unit}}</text>
+  <g>
+    <rect class="diagram__box diagram__box--accent" x="20" y="38" width="190" height="44" rx="8"/><text class="diagram__text diagram__text--bold" x="115" y="65" text-anchor="middle">5 · {{app}}</text>
+    <rect class="diagram__box diagram__box--accent" x="20" y="92" width="190" height="44" rx="8"/><text class="diagram__text diagram__text--bold" x="115" y="119" text-anchor="middle">4 · {{transport}}</text>
+    <rect class="diagram__box diagram__box--accent" x="20" y="146" width="190" height="44" rx="8"/><text class="diagram__text diagram__text--bold" x="115" y="173" text-anchor="middle">3 · {{network}}</text>
+    <rect class="diagram__box diagram__box--accent" x="20" y="200" width="190" height="44" rx="8"/><text class="diagram__text diagram__text--bold" x="115" y="227" text-anchor="middle">2 · {{link}}</text>
+    <rect class="diagram__box diagram__box--accent" x="20" y="254" width="190" height="44" rx="8"/><text class="diagram__text diagram__text--bold" x="115" y="281" text-anchor="middle">1 · {{physical}}</text>
+  </g>
+  <g>
+    <text class="diagram__text" x="230" y="65">{{message}}</text>
+    <text class="diagram__text" x="230" y="119">{{segment}}</text>
+    <text class="diagram__text" x="230" y="173">{{datagram}}</text>
+    <text class="diagram__text" x="230" y="227">{{frame}}</text>
+    <text class="diagram__text" x="230" y="281">{{bits}}</text>
+  </g>
+  <g>
+    <rect class="diagram__box diagram__box--tip" x="610" y="44" width="130" height="32" rx="4"/><text class="diagram__text diagram__text--bold" x="675" y="65" text-anchor="middle">M</text>
+    <rect class="diagram__box diagram__box--own" x="545" y="98" width="62" height="32" rx="4"/><text class="diagram__text diagram__text--bold" x="576" y="119" text-anchor="middle">Ht</text>
+    <rect class="diagram__box diagram__box--tip" x="610" y="98" width="130" height="32" rx="4"/><text class="diagram__text diagram__text--bold" x="675" y="119" text-anchor="middle">M</text>
+    <rect class="diagram__box diagram__box--warn" x="480" y="152" width="62" height="32" rx="4"/><text class="diagram__text diagram__text--bold" x="511" y="173" text-anchor="middle">Hn</text>
+    <rect class="diagram__box diagram__box--own" x="545" y="152" width="62" height="32" rx="4"/><text class="diagram__text diagram__text--bold" x="576" y="173" text-anchor="middle">Ht</text>
+    <rect class="diagram__box diagram__box--tip" x="610" y="152" width="130" height="32" rx="4"/><text class="diagram__text diagram__text--bold" x="675" y="173" text-anchor="middle">M</text>
+    <rect class="diagram__box diagram__box--task" x="415" y="206" width="62" height="32" rx="4"/><text class="diagram__text diagram__text--bold" x="446" y="227" text-anchor="middle">Hl</text>
+    <rect class="diagram__box diagram__box--warn" x="480" y="206" width="62" height="32" rx="4"/><text class="diagram__text diagram__text--bold" x="511" y="227" text-anchor="middle">Hn</text>
+    <rect class="diagram__box diagram__box--own" x="545" y="206" width="62" height="32" rx="4"/><text class="diagram__text diagram__text--bold" x="576" y="227" text-anchor="middle">Ht</text>
+    <rect class="diagram__box diagram__box--tip" x="610" y="206" width="130" height="32" rx="4"/><text class="diagram__text diagram__text--bold" x="675" y="227" text-anchor="middle">M</text>
+    <text class="diagram__text diagram__text--mono" x="740" y="281" text-anchor="end">0110 1001 0010 1101 …</text>
+  </g>
+</svg>

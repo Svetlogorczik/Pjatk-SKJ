@@ -1,0 +1,41 @@
+.diagram {
+  margin: 1.6em 0 !important;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  overflow-x: auto;
+}
+
+.diagram svg {
+  width: 100%;
+  min-width: 600px;
+  height: auto;
+  margin: 0 auto;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+.diagram__caption {
+  margin-top: 10px;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+/* SVG element classes (diagram__*) */
+.diagram__line { stroke: var(--color-text-muted); stroke-width: 2; fill: none; }
+.diagram__line--accent { stroke: var(--color-accent); }
+.diagram__line--dashed { stroke-dasharray: 6 5; }
+.diagram__box { fill: var(--color-surface-2); stroke: var(--color-border); stroke-width: 1.5; }
+.diagram__box--accent { fill: var(--color-accent-soft); stroke: var(--color-accent); }
+.diagram__box--own { fill: var(--c-own-bg); stroke: var(--c-own-bd); }
+.diagram__box--tip { fill: var(--c-tip-bg); stroke: var(--c-tip-bd); }
+.diagram__box--warn { fill: var(--c-warn-bg); stroke: var(--c-warn-bd); }
+.diagram__box--task { fill: var(--c-task-bg); stroke: var(--c-task-bd); }
+.diagram__text { fill: var(--color-text); font-size: 14px; }
+.diagram__text--muted { fill: var(--color-text-muted); font-size: 12px; }
+.diagram__text--bold { font-weight: 700; }
+.diagram__text--mono { font-family: var(--font-mono); font-size: 12.5px; }
+.diagram__arrow { fill: var(--color-text-muted); }
+.diagram__arrow--accent { fill: var(--color-accent); }

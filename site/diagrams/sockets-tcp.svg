@@ -1,0 +1,20 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TCP sockets">
+  <defs><marker id="st-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="diagram__arrow diagram__arrow--accent" d="M0 0 10 5 0 10z"/></marker></defs>
+  <text class="diagram__text diagram__text--bold" x="170" y="22" text-anchor="middle">{{server}} (TCP)</text>
+  <text class="diagram__text diagram__text--bold" x="590" y="22" text-anchor="middle">{{client}} (TCP)</text>
+  <rect class="diagram__box" x="20" y="36" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="60" text-anchor="middle">new ServerSocket(port)</text>
+  <rect class="diagram__box diagram__box--warn" x="20" y="92" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="116" text-anchor="middle">Socket s = ss.accept()  ⏳</text>
+  <rect class="diagram__box" x="20" y="160" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="184" text-anchor="middle">in.readLine()  ⏳</text>
+  <rect class="diagram__box" x="20" y="230" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="254" text-anchor="middle">out.println(answer); flush()</text>
+  <rect class="diagram__box" x="20" y="300" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="170" y="324" text-anchor="middle">s.close()</text>
+  <rect class="diagram__box diagram__box--warn" x="440" y="92" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="116" text-anchor="middle">new Socket(host, port)</text>
+  <rect class="diagram__box" x="440" y="160" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="184" text-anchor="middle">out.println(request); flush()</text>
+  <rect class="diagram__box" x="440" y="230" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="254" text-anchor="middle">in.readLine()  ⏳</text>
+  <rect class="diagram__box" x="440" y="300" width="300" height="38" rx="8"/><text class="diagram__text diagram__text--mono" x="590" y="324" text-anchor="middle">socket.close()</text>
+  <line class="diagram__line diagram__line--accent" x1="440" y1="111" x2="322" y2="111" marker-end="url(#st-arrow)"/>
+  <text class="diagram__text diagram__text--muted" x="381" y="102" text-anchor="middle">SYN…</text>
+  <line class="diagram__line diagram__line--accent" x1="440" y1="179" x2="322" y2="179" marker-end="url(#st-arrow)"/>
+  <line class="diagram__line diagram__line--accent" x1="320" y1="249" x2="438" y2="249" marker-end="url(#st-arrow)"/>
+  <line class="diagram__line diagram__line--dashed" x1="170" y1="338" x2="170" y2="350"/>
+  <path class="diagram__line diagram__line--dashed" d="M20 319 H8 V111 H18" marker-end="url(#st-arrow)"/>
+</svg>

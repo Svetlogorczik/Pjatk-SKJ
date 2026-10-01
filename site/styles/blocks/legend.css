@@ -1,0 +1,19 @@
+.legend {
+  margin: 1.4em 0 !important;
+  padding: 14px 18px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-m);
+  background: var(--color-surface);
+}
+
+.legend__title { margin-bottom: 8px; font-weight: 700; }
+
+.legend__list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  font-size: 0.94rem;
+}
+
+.legend__item { line-height: 1.5; }

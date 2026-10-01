@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Czym jest Internet i czym jest protokół? — SKJ</title>
+<meta name="description" content="Dwa spojrzenia na Internet — „z czego jest zbudowany” i „co daje aplikacjom” — oraz najważniejsze słowo całego przedmiotu: protokół.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/w1-internet.html">
+<link rel="alternate" hreflang="en" href="../en/w1-internet.html">
+<link rel="alternate" hreflang="ru" href="../ru/w1-internet.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="w1-internet">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Menu" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Sieci + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../pl/w1-internet.html" hreflang="pl" lang="pl" data-lang="pl" aria-current="true" title="Polski">PL</a><a class="lang-switch__link" href="../en/w1-internet.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../ru/w1-internet.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Przełącz motyw (jasny / ciemny)" title="Przełącz motyw (jasny / ciemny)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Menu">
+<div class="sidebar__head"><span class="sidebar__title">Menu</span><button type="button" class="sidebar__close" data-nav-close aria-label="Zamknij menu">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Sieci + Java</a>
+<div class="nav__progress progress" data-progress data-label="Twój postęp"><span class="progress__label">Twój postęp</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Start</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Start i środowisko</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="course.html" data-page-link="course"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Zaliczenie i daty</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Słowniczek PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">Wszystkie konspekty</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Wykłady</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link nav__link--active" href="w1-internet.html" data-page-link="w1-internet" aria-current="page"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Internet i protokoły</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Brzeg sieci</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Rdzeń sieci</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Struktura Internetu</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Opóźnienia i przepustowość</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Bezpieczeństwo</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Warstwy i enkapsulacja</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">Historia Internetu</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Ćwiczenia</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Sztafeta procesów (pierwsze uruchomienie)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP w Javie: mini-serwer HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Klient protokołu tekstowego</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP razem</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS ręcznie (UDP, bajty)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP w Wiresharku</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Kolokwium</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Kolokwium: trening</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Projekt</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Projekt: sieć proxy</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Wykłady · W1</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">🌐</span>Czym jest Internet i czym jest protokół?</h1>
+<p class="article__lead">Dwa spojrzenia na Internet — „z czego jest zbudowany” i „co daje aplikacjom” — oraz najważniejsze słowo całego przedmiotu: protokół.</p>
+<div class="article__meta"><span class="badge badge--lecture">📘 Wykład + dodatki</span><span class="article__source">Na podstawie: Wykład 1 — Chapter 1, slajdy 1-1…1-9 (Kurose &amp; Ross)</span><span class="article__time">⏱ 7 min czytania</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Krótka ściąga na ćwiczenia i projekt"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Konspekt</span></button><button type="button" class="button button--ghost" data-done-toggle="w1-internet" aria-pressed="false" data-label-off="Oznacz jako przerobione" data-label-on="Przerobione"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Oznacz jako przerobione</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">Na tej stronie</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#w-skrocie">W skrócie</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#mapa-rozdzialu-1">Mapa rozdziału 1</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#spojrzenie-nr-1-z-czego-zbudowany-jest-internet-srubki-i-nakretk">Spojrzenie nr 1: z czego zbudowany jest Internet („śrubki i nakrętki”)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#internet-siec-sieci">Internet = „sieć sieci”</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#spojrzenie-nr-2-internet-jako-usluga">Spojrzenie nr 2: Internet jako usługa</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czym-jest-protokol">Czym jest protokół?</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#trzy-skladniki-kazdego-protokolu">Trzy składniki każdego protokołu</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#po-co-to-na-cwiczeniach-i-w-projekcie">Po co to na ćwiczeniach i w projekcie?  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#sprawdz-sie">Sprawdź się  ✍️</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="w-skrocie">W skrócie<a class="content__anchor" href="#w-skrocie" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Internet to <strong>sieć sieci</strong>: miliardy urządzeń połączonych przez tysiące dostawców (ISP).</li>
+<li class="content__list-item">Można na niego patrzeć na dwa sposoby: <strong>z czego jest zbudowany</strong> (urządzenia, łącza, routery) i <strong>jaką usługę daje aplikacjom</strong>.</li>
+<li class="content__list-item"><strong>Protokół</strong> = umowa, która określa <strong>format</strong> komunikatów, ich <strong>kolejność</strong> i <strong>akcje</strong> po wysłaniu/odebraniu.</li>
+<li class="content__list-item">Standardy Internetu to dokumenty <strong>RFC</strong> (Request for Comments), które przygotowuje <strong>IETF</strong>.</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="mapa-rozdzialu-1">Mapa rozdziału 1<a class="content__anchor" href="#mapa-rozdzialu-1" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Wykład otwiera rozdział 1 podręcznika Kurose &amp; Ross. Jego cel: złapać „ogólny obraz” i słownictwo — szczegóły przyjdą później. Na tej stronie każdy punkt planu z wykładu ma osobny temat:</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Punkt planu z wykładu</th><th class="content__table-heading">Temat na stronie</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">Czym jest Internet? Czym jest protokół?</td><td class="content__table-cell">W1 (ta strona)</td></tr><tr class="content__table-row"><td class="content__table-cell">Brzeg sieci: hosty, sieci dostępowe, media fizyczne</td><td class="content__table-cell"><a class="content__link" href="w2-edge.html">W2</a></td></tr><tr class="content__table-row"><td class="content__table-cell">Rdzeń sieci: przełączanie pakietów/obwodów</td><td class="content__table-cell"><a class="content__link" href="w3-core.html">W3</a>, <a class="content__link" href="w4-structure.html">W4</a></td></tr><tr class="content__table-row"><td class="content__table-cell">Wydajność: straty, opóźnienia, przepustowość</td><td class="content__table-cell"><a class="content__link" href="w5-performance.html">W5</a></td></tr><tr class="content__table-row"><td class="content__table-cell">Bezpieczeństwo</td><td class="content__table-cell"><a class="content__link" href="w6-security.html">W6</a></td></tr><tr class="content__table-row"><td class="content__table-cell">Warstwy protokołów, modele usług</td><td class="content__table-cell"><a class="content__link" href="w7-layers.html">W7</a></td></tr><tr class="content__table-row"><td class="content__table-cell">Historia</td><td class="content__table-cell"><a class="content__link" href="w8-history.html">W8</a></td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="spojrzenie-nr-1-z-czego-zbudowany-jest-internet-srubki-i-nakretk">Spojrzenie nr 1: z czego zbudowany jest Internet („śrubki i nakrętki”)<a class="content__anchor" href="#spojrzenie-nr-1-z-czego-zbudowany-jest-internet-srubki-i-nakretk" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Wyobraź sobie, że rozkręcasz Internet na części. Znajdziesz trzy rodzaje „klocków”:</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Klocek</th><th class="content__table-heading">Co to jest</th><th class="content__table-heading">Przykłady</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><strong>Host</strong> (<em>end system</em>, system końcowy)</td><td class="content__table-cell">urządzenie na <strong>brzegu</strong> sieci, na którym działają aplikacje sieciowe</td><td class="content__table-cell">laptop, telefon, serwer WWW, konsola, „inteligentna” lodówka</td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>Przełącznik pakietów</strong> (<em>packet switch</em>)</td><td class="content__table-cell">urządzenie, które <strong>przekazuje dalej</strong> pakiety (porcje danych)</td><td class="content__table-cell"><strong>router</strong>, <strong>switch</strong></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>Łącze komunikacyjne</strong> (<em>link</em>)</td><td class="content__table-cell">„droga”, po której płyną bity</td><td class="content__table-cell">światłowód, miedź, radio, satelita</td></tr></tbody></table></div>
+<p class="content__paragraph">Każde łącze ma <strong>szybkość transmisji</strong> (<em>transmission rate</em>), nazywaną też <strong>przepustowością</strong> (<em>bandwidth</em>), mierzoną w <strong>bitach na sekundę</strong> (bit/s, Mb/s, Gb/s).</p>
+<p class="content__paragraph"><strong>Sieć</strong> (<em>network</em>) to zbiór urządzeń, routerów i łączy, którym <strong>zarządza jedna organizacja</strong> — np. sieć domowa, sieć firmy, sieć uczelni, sieć operatora komórkowego.</p>
+
+<figure class="diagram"><svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="brzeg sieci / rdzeń sieci">
+  <rect class="diagram__box diagram__box--accent" x="255" y="55" width="250" height="230" rx="44"/>
+  <text class="diagram__text diagram__text--bold" x="380" y="85" text-anchor="middle">rdzeń sieci</text>
+  <g class="diagram__line">
+    <line x1="315" y1="145" x2="445" y2="145"/><line x1="315" y1="235" x2="445" y2="235"/>
+    <line x1="315" y1="145" x2="315" y2="235"/><line x1="445" y1="145" x2="445" y2="235"/>
+    <line x1="315" y1="145" x2="445" y2="235"/><line x1="445" y1="145" x2="315" y2="235"/>
+  </g>
+  <g>
+    <circle class="diagram__box diagram__box--tip" cx="315" cy="145" r="19"/><text class="diagram__text diagram__text--bold" x="315" y="150" text-anchor="middle">R</text>
+    <circle class="diagram__box diagram__box--tip" cx="445" cy="145" r="19"/><text class="diagram__text diagram__text--bold" x="445" y="150" text-anchor="middle">R</text>
+    <circle class="diagram__box diagram__box--tip" cx="315" cy="235" r="19"/><text class="diagram__text diagram__text--bold" x="315" y="240" text-anchor="middle">R</text>
+    <circle class="diagram__box diagram__box--tip" cx="445" cy="235" r="19"/><text class="diagram__text diagram__text--bold" x="445" y="240" text-anchor="middle">R</text>
+  </g>
+  <g class="diagram__line diagram__line--dashed">
+    <line x1="190" y1="70" x2="296" y2="140"/><line x1="190" y1="170" x2="296" y2="150"/><line x1="190" y1="270" x2="296" y2="238"/>
+    <line x1="464" y1="148" x2="570" y2="165"/><line x1="464" y1="232" x2="570" y2="190"/>
+  </g>
+  <rect class="diagram__box" x="20" y="35" width="170" height="70" rx="12"/>
+  <text class="diagram__text diagram__text--bold" x="105" y="66" text-anchor="middle">dom</text>
+  <text class="diagram__text diagram__text--muted" x="105" y="88" text-anchor="middle">sieć dostępowa</text>
+  <rect class="diagram__box" x="20" y="135" width="170" height="70" rx="12"/>
+  <text class="diagram__text diagram__text--bold" x="105" y="166" text-anchor="middle">sieć komórkowa</text>
+  <text class="diagram__text diagram__text--muted" x="105" y="188" text-anchor="middle">4G / 5G / WiFi</text>
+  <rect class="diagram__box" x="20" y="235" width="170" height="70" rx="12"/>
+  <text class="diagram__text diagram__text--bold" x="105" y="266" text-anchor="middle">firma / uczelnia</text>
+  <text class="diagram__text diagram__text--muted" x="105" y="288" text-anchor="middle">Ethernet + WiFi</text>
+  <rect class="diagram__box" x="570" y="105" width="170" height="140" rx="12"/>
+  <text class="diagram__text diagram__text--bold" x="655" y="135" text-anchor="middle">centrum danych</text>
+  <rect class="diagram__box diagram__box--accent" x="600" y="150" width="110" height="18" rx="4"/>
+  <rect class="diagram__box diagram__box--accent" x="600" y="176" width="110" height="18" rx="4"/>
+  <rect class="diagram__box diagram__box--accent" x="600" y="202" width="110" height="18" rx="4"/>
+  <text class="diagram__text diagram__text--muted" x="105" y="330" text-anchor="middle">← brzeg sieci</text>
+  <text class="diagram__text diagram__text--muted" x="655" y="270" text-anchor="middle">brzeg sieci →</text>
+</svg>
+<figcaption class="diagram__caption">Brzeg sieci (hosty w domach</figcaption></figure>
+
+<aside class="callout callout--own"><div class="callout__header"><span class="callout__icon" aria-hidden="true">✍️</span><span class="callout__label">Dodatek od autora strony — tego nie ma w wykładzie</span><span class="callout__title">Analogia: Internet jak poczta i drogi</span></div><div class="callout__body"><ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>Host</strong> to dom — tam ktoś pisze i czyta listy (aplikacje).</li>
+<li class="content__list-item"><strong>Pakiet</strong> to list w kopercie — duży tekst dzieli się na wiele kopert.</li>
+<li class="content__list-item"><strong>Router</strong> to skrzyżowanie z drogowskazami — patrzy na adres na kopercie i decyduje, którą drogą wysłać ją dalej.</li>
+<li class="content__list-item"><strong>Łącze</strong> to droga — jedna jest autostradą (światłowód), inna wąską ścieżką (stary kabel).</li>
+</ul>
+</div></aside>
+<p class="content__paragraph">Na wykładzie pokazano też „zabawne” urządzenia podłączone do Internetu: rozrusznik serca z monitorem, Amazon Echo, ramka na zdjęcia, toster z prognozą pogody, lodówka, kamera, łóżko z czujnikami, Fitbit, urządzenia AR… Wniosek: <strong>hostem może być prawie wszystko</strong>, nie tylko komputer.</p>
+<h3 class="content__heading content__heading--h3" id="internet-siec-sieci">Internet = „sieć sieci”<a class="content__anchor" href="#internet-siec-sieci" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">Internet nie jest jedną siecią. To <strong>wiele połączonych ze sobą dostawców</strong> (<em>ISP — Internet Service Provider</em>): lokalnych, regionalnych, krajowych i globalnych. Szczegóły tej struktury są w temacie <a class="content__link" href="w4-structure.html">W4</a>.</p>
+<p class="content__paragraph">Wszędzie działają <strong>protokoły</strong>, które sterują wysyłaniem i odbieraniem komunikatów, np. HTTP (WWW), strumieniowanie wideo, Skype, TCP, IP, WiFi, 4G, Ethernet.</p>
+<p class="content__paragraph"><strong>Standardy Internetu</strong>:</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>RFC</strong> — <em>Request for Comments</em>, dokumenty opisujące protokoły,</li>
+<li class="content__list-item"><strong>IETF</strong> — <em>Internet Engineering Task Force</em>, organizacja, która je przygotowuje.</li>
+</ul>
+
+<aside class="callout callout--own"><div class="callout__header"><span class="callout__icon" aria-hidden="true">✍️</span><span class="callout__label">Dodatek od autora strony — tego nie ma w wykładzie</span><span class="callout__title">Przykładowe RFC, które przydadzą się na tym przedmiocie</span></div><div class="callout__body"><ul class="content__list content__list--bullet">
+<li class="content__list-item">RFC 768 — UDP (krótkie, warto przejrzeć!),</li>
+<li class="content__list-item">RFC 9293 — TCP (następca RFC 793),</li>
+<li class="content__list-item">RFC 1035 — DNS (format wiadomości, którego użyjesz w <a class="content__link" href="c6-dns.html">C6</a>),</li>
+<li class="content__list-item">RFC 9110 i 9112 — HTTP (semantyka i HTTP/1.1, przydatne w <a class="content__link" href="c2-http.html">C2</a> i <a class="content__link" href="c3-tcp-server.html">C3</a>).</li>
+</ul>
+<p class="content__paragraph">W szablonie dokumentacji projektu prowadzący podaje RFC jako wzór tego, jak opisać protokół — więc warto zobaczyć, jak wygląda prawdziwe RFC.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="spojrzenie-nr-2-internet-jako-usluga">Spojrzenie nr 2: Internet jako usługa<a class="content__anchor" href="#spojrzenie-nr-2-internet-jako-usluga" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Z punktu widzenia programisty Internet to <strong>infrastruktura, która daje usługi aplikacjom</strong>: WWW, wideo, telekonferencje, e-mail, gry, sklepy internetowe, media społecznościowe, urządzenia domowe…</p>
+<p class="content__paragraph">Internet daje też <strong>interfejs programistyczny</strong> dla aplikacji rozproszonych — „haczyki” (<em>hooks</em>), dzięki którym program może wysłać i odebrać dane, czyli „podłączyć się” do usługi transportowej. Wykład porównuje to do <strong>poczty</strong>: jest kilka opcji usługi (list zwykły, polecony…), a Ty wybierasz, której potrzebujesz.</p>
+
+<aside class="callout callout--own"><div class="callout__header"><span class="callout__icon" aria-hidden="true">✍️</span><span class="callout__label">Dodatek od autora strony — tego nie ma w wykładzie</span><span class="callout__title">Te „haczyki” w Javie to gniazda (sockets)</span></div><div class="callout__body"><p class="content__paragraph">Na ćwiczeniach użyjesz dokładnie tych „haczyków”:</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><code class="content__code">Socket</code> i <code class="content__code">ServerSocket</code> — usługa <strong>TCP</strong> (niezawodna, jak list polecony z potwierdzeniem),</li>
+<li class="content__list-item"><code class="content__code">DatagramSocket</code> i <code class="content__code">DatagramPacket</code> — usługa <strong>UDP</strong> (szybka, bez gwarancji, jak pocztówka).</li>
+</ul>
+<figure class="code-block" data-lines="2">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Skopiowano!" data-fail="Zaznacz i skopiuj ręcznie"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Kopiuj</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-comment">// Połączenie TCP z serwerem WWW na porcie 80 - jedna linijka &quot;podłącza&quot; program do Internetu</span>
+<span class="hljs-type">Socket</span> <span class="hljs-variable">socket</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Socket</span>(<span class="hljs-string">&quot;example.com&quot;</span>, <span class="hljs-number">80</span>);</code></pre>
+</figure></div></aside>
+<h2 class="content__heading content__heading--h2" id="czym-jest-protokol">Czym jest protokół?<a class="content__anchor" href="#czym-jest-protokol" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Najpierw ludzie. Kiedy pytasz kogoś na ulicy o godzinę, też działa „protokół”:</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">wysyłasz <strong>konkretne komunikaty</strong> („Przepraszam…”, „Która godzina?”),</li>
+<li class="content__list-item">po odebraniu odpowiedzi wykonujesz <strong>konkretne akcje</strong> (dziękujesz, odchodzisz),</li>
+<li class="content__list-item">jeśli ktoś nie odpowie na „Przepraszam…”, <strong>nie zadajesz</strong> od razu pytania o godzinę.</li>
+</ul>
+<p class="content__paragraph">W sieciach komunikaty wymieniają <strong>urządzenia</strong>, a nie ludzie — ale zasada jest ta sama. <strong>Cała komunikacja w Internecie odbywa się według protokołów.</strong></p>
+
+<aside class="callout callout--note"><div class="callout__header"><span class="callout__icon" aria-hidden="true">📌</span><span class="callout__label">Zapamiętaj</span><span class="callout__title">Definicja z wykładu</span></div><div class="callout__body"><p class="content__paragraph"><strong>Protokół</strong> definiuje <strong>format</strong> i <strong>kolejność</strong> komunikatów wysyłanych i odbieranych przez urządzenia sieciowe oraz <strong>akcje</strong> podejmowane przy wysyłaniu i odbieraniu komunikatu.</p>
+</div></aside>
+<p class="content__paragraph">Wykład zestawia rozmowę ludzi z rozmową komputerów:</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Ludzie</th><th class="content__table-heading">Komputery</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">„Cześć”</td><td class="content__table-cell">żądanie połączenia TCP</td></tr><tr class="content__table-row"><td class="content__table-cell">„Cześć”</td><td class="content__table-cell">odpowiedź: połączenie TCP przyjęte</td></tr><tr class="content__table-row"><td class="content__table-cell">„Która godzina?”</td><td class="content__table-cell"><code class="content__code">GET http://gaia.cs.umass.edu/kurose_ross</code></td></tr><tr class="content__table-row"><td class="content__table-cell">„14:00”</td><td class="content__table-cell"><code class="content__code">&lt;plik&gt;</code> — treść strony</td></tr></tbody></table></div>
+<p class="content__paragraph">Na slajdzie pada też ważne zdanie: protokół to <strong>algorytm rozproszony</strong>, który działa dzięki komunikacji — każda strona wykonuje swoją część i reaguje na komunikaty drugiej.</p>
+<h3 class="content__heading content__heading--h3" id="trzy-skladniki-kazdego-protokolu">Trzy składniki każdego protokołu<a class="content__anchor" href="#trzy-skladniki-kazdego-protokolu" aria-hidden="true" tabindex="-1">#</a></h3>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><strong>Format</strong> — jak wygląda pojedynczy komunikat? (słowa, separatory, koniec linii, kolejność pól, bajty)</li>
+<li class="content__list-item"><strong>Kolejność</strong> — kto mówi pierwszy? Na jaki komunikat jaka jest odpowiedź?</li>
+<li class="content__list-item"><strong>Akcje</strong> — co robimy po odebraniu komunikatu? A co, gdy przyjdzie coś niezrozumiałego albo nic nie przyjdzie?</li>
+</ol>
+</div>
+
+<aside class="callout callout--own"><div class="callout__header"><span class="callout__icon" aria-hidden="true">✍️</span><span class="callout__label">Dodatek od autora strony — tego nie ma w wykładzie</span><span class="callout__title">Przykład: nasz własny protokół z ćwiczeń C4</span></div><div class="callout__body"><p class="content__paragraph">Tak wygląda rozmowa klienta z serwerem <code class="content__code">QuoteDesk</code> (zobacz <a class="content__link" href="c4-text-protocol.html">C4</a>). <code class="content__code">S:</code> to serwer, <code class="content__code">C:</code> to klient:</p>
+<figure class="code-block" data-lines="10">
+<figcaption class="code-block__bar"><span class="code-block__lang">Text</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Skopiowano!" data-fail="Zaznacz i skopiuj ręcznie"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Kopiuj</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-plaintext">S: HELLO QuoteDesk 1.0      &lt;- kolejność: serwer mówi pierwszy
+C: NAME ola                 &lt;- format: słowo + spacja + nick, koniec linii \r\n
+S: OK ola
+C: QUOTES 2
+S: BEGIN 2                  &lt;- akcja: serwer wysyła dokładnie 2 linie i znacznik END
+S: UDP: I told you once. Did you get it? Not my problem.
+S: DNS: it&#x27;s always DNS.
+S: END
+C: XYZ
+S: ERR unknown command: XYZ &lt;- akcja na błąd</code></pre>
+</figure><p class="content__paragraph">Widać wszystkie trzy składniki: <strong>format</strong> linii, <strong>kolejność</strong> (najpierw <code class="content__code">HELLO</code>, potem <code class="content__code">NAME</code>) i <strong>akcje</strong> (co serwer robi po <code class="content__code">QUOTES</code>, a co po nieznanej komendzie).</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="po-co-to-na-cwiczeniach-i-w-projekcie">Po co to na ćwiczeniach i w projekcie? <span class="badge badge--own" title="Ten fragment dopisał autor strony — nie ma go w materiałach z zajęć">✍️ od autora</span><a class="content__anchor" href="#po-co-to-na-cwiczeniach-i-w-projekcie" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Na <strong>kolokwium</strong> dostajesz opis protokołu słowami — musisz dokładnie trzymać się formatu (np. jedna linia zakończona <code class="content__code">\r\n</code>) i kolejności.</li>
+<li class="content__list-item">W <strong>projekcie</strong> musisz <strong>zaprojektować i opisać własny protokół</strong> między węzłami proxy. Szablon dokumentacji mówi wprost: opis ma pozwolić komuś <strong>napisać własną implementację w innym języku</strong> — czyli musi zawierać właśnie format, kolejność i akcje.</li>
+<li class="content__list-item">Gdy program „wisi”, to prawie zawsze problem z protokołem: jedna strona czeka na komunikat, którego druga nigdy nie wyśle.</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="sprawdz-sie">Sprawdź się <span class="badge badge--own" title="Ten fragment dopisał autor strony — nie ma go w materiałach z zajęć">✍️ od autora</span><a class="content__anchor" href="#sprawdz-sie" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Sprawdź się</span><span class="callout__title">Czym różni się host od routera?</span></summary><div class="callout__body"><p class="content__paragraph">Host to <strong>system końcowy</strong> — na nim działają aplikacje (np. przeglądarka, serwer WWW). Router to <strong>przełącznik pakietów</strong> w środku sieci — nie uruchamia aplikacji użytkownika, tylko przekazuje pakiety dalej w stronę celu.</p>
+</div></details>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Sprawdź się</span><span class="callout__title">Jakie trzy rzeczy definiuje protokół?</span></summary><div class="callout__body"><p class="content__paragraph"><strong>Format</strong> komunikatów, ich <strong>kolejność</strong> oraz <strong>akcje</strong> po wysłaniu/odebraniu komunikatu.</p>
+</div></details>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Sprawdź się</span><span class="callout__title">Co to jest RFC i kto je przygotowuje?</span></summary><div class="callout__body"><p class="content__paragraph">RFC (<em>Request for Comments</em>) to dokumenty ze standardami Internetu, np. opisy protokołów. Przygotowuje je IETF (<em>Internet Engineering Task Force</em>).</p>
+</div></details>
+
+<details class="callout callout--check"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">❓</span><span class="callout__label">Sprawdź się</span><span class="callout__title">Dlaczego mówi się, że Internet to „sieć sieci”?</span></summary><div class="callout__body"><p class="content__paragraph">Bo składa się z wielu niezależnych sieci (dostawców ISP, sieci firm, uczelni, operatorów), które są ze sobą połączone. Nie ma jednej „głównej” sieci, która by wszystkim zarządzała.</p>
+</div></details>
+
+
+
+</div>
+<nav class="pager" aria-label="Poprzedni temat / Następny temat">
+<a class="pager__link pager__link--prev" href="course.html"><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="pager__text"><span class="pager__label">Poprzedni temat</span><span class="pager__title">Jak zaliczyć SKJ — elementy, zasady i daty</span></span></a>
+<a class="pager__link pager__link--next" href="w2-edge.html"><span class="pager__text"><span class="pager__label">Następny temat</span><span class="pager__title">Brzeg sieci — hosty, sieci dostępowe i media fizyczne</span></span><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="Na tej stronie"><p class="toc__title">Na tej stronie</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#w-skrocie">W skrócie</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#mapa-rozdzialu-1">Mapa rozdziału 1</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#spojrzenie-nr-1-z-czego-zbudowany-jest-internet-srubki-i-nakretk">Spojrzenie nr 1: z czego zbudowany jest Internet („śrubki i nakrętki”)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#internet-siec-sieci">Internet = „sieć sieci”</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#spojrzenie-nr-2-internet-jako-usluga">Spojrzenie nr 2: Internet jako usługa</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czym-jest-protokol">Czym jest protokół?</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#trzy-skladniki-kazdego-protokolu">Trzy składniki każdego protokołu</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#po-co-to-na-cwiczeniach-i-w-projekcie">Po co to na ćwiczeniach i w projekcie?  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#sprawdz-sie">Sprawdź się  ✍️</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Konspekt: Czym jest Internet i czym jest protokół?</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Drukuj"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Drukuj</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Zamknij"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Zamknij</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-w1-internet-definicje-na-pamiec">Definicje (na pamięć)<a class="content__anchor" href="#cs-w1-internet-definicje-na-pamiec" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>Host / system końcowy</strong> — urządzenie na brzegu sieci, uruchamia aplikacje.</li>
+<li class="content__list-item"><strong>Przełącznik pakietów</strong> — router lub switch, przekazuje pakiety dalej.</li>
+<li class="content__list-item"><strong>Łącze</strong> — światłowód, miedź, radio, satelita; ma <strong>przepustowość</strong> w bit/s.</li>
+<li class="content__list-item"><strong>Sieć</strong> — urządzenia + routery + łącza zarządzane przez jedną organizację.</li>
+<li class="content__list-item"><strong>Internet</strong> — sieć sieci, połączeni dostawcy ISP.</li>
+<li class="content__list-item"><strong>Protokół</strong> — <strong>format + kolejność + akcje</strong> dla komunikatów.</li>
+<li class="content__list-item"><strong>RFC</strong> — dokument ze standardem; <strong>IETF</strong> — kto je pisze.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-w1-internet-dwa-spojrzenia-na-internet">Dwa spojrzenia na Internet<a class="content__anchor" href="#cs-w1-internet-dwa-spojrzenia-na-internet" aria-hidden="true" tabindex="-1">#</a></h3>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item">„Śrubki i nakrętki”: hosty, routery/switche, łącza, sieci.</li>
+<li class="content__list-item">„Usługa”: infrastruktura dla aplikacji + interfejs programistyczny (w Javie: gniazda <code class="content__code">Socket</code>, <code class="content__code">DatagramSocket</code>).</li>
+</ol>
+<h3 class="content__heading content__heading--h3" id="cs-w1-internet-jak-opisac-protokol-krok-po-kroku-projekt-kolokwium">Jak opisać protokół krok po kroku (projekt, kolokwium)<a class="content__anchor" href="#cs-w1-internet-jak-opisac-protokol-krok-po-kroku-projekt-kolokwium" aria-hidden="true" tabindex="-1">#</a></h3>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item">Wypisz uczestników (klient, serwer, proxy).</li>
+<li class="content__list-item">Dla każdego komunikatu podaj <strong>dokładny format</strong> (słowa, spacje, <code class="content__code">\r\n</code>).</li>
+<li class="content__list-item">Opisz <strong>kolejność</strong>: kto zaczyna, co jest odpowiedzią na co.</li>
+<li class="content__list-item">Opisz <strong>akcje i błędy</strong>: co zrobić z nieznaną komendą, brakiem odpowiedzi.</li>
+<li class="content__list-item">Dodaj <strong>przykładową rozmowę</strong> (jak w RFC).</li>
+</ol>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ Wszystkie konspekty</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Nieoficjalne materiały do nauki. Zadania zostały przerobione (inna treść, ta sama logika), aby nie kopiować prac z poprzednich lat.</p>
+<p class="footer__text footer__text--small">Wykłady oparte na: J. F. Kurose, K. W. Ross, „Computer Networking: A Top-Down Approach” (slajdy © 1996–2020 J.F. Kurose &amp; K.W. Ross) oraz Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Kod źródłowy strony</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+</body>
+</html>

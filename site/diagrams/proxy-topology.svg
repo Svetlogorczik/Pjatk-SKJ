@@ -1,0 +1,31 @@
+<svg viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{{tree}} / {{cycle}}">
+  <text class="diagram__text diagram__text--bold" x="180" y="22" text-anchor="middle">{{tree}}</text>
+  <text class="diagram__text diagram__text--bold" x="570" y="22" text-anchor="middle">{{cycle}}</text>
+  <line class="diagram__line" x1="380" y1="35" x2="380" y2="320" stroke-dasharray="4 6"/>
+  <g class="diagram__line">
+    <line x1="180" y1="60" x2="180" y2="95"/><line x1="180" y1="125" x2="95" y2="185"/><line x1="180" y1="125" x2="265" y2="185"/>
+    <line x1="215" y1="110" x2="300" y2="110"/><line x1="95" y1="215" x2="95" y2="265"/><line x1="265" y1="215" x2="230" y2="265"/><line x1="265" y1="215" x2="310" y2="265"/>
+  </g>
+  <rect class="diagram__box diagram__box--own" x="140" y="34" width="80" height="26" rx="13"/><text class="diagram__text diagram__text--muted" x="180" y="52" text-anchor="middle">{{client2}}</text>
+  <rect class="diagram__box diagram__box--accent" x="145" y="95" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="180" y="116" text-anchor="middle">P1</text>
+  <rect class="diagram__box diagram__box--accent" x="60" y="185" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="95" y="206" text-anchor="middle">P2</text>
+  <rect class="diagram__box diagram__box--accent" x="230" y="185" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="265" y="206" text-anchor="middle">P3</text>
+  <circle class="diagram__box diagram__box--tip" cx="318" cy="110" r="18"/><text class="diagram__text" x="318" y="115" text-anchor="middle">a</text>
+  <circle class="diagram__box diagram__box--tip" cx="95" cy="283" r="18"/><text class="diagram__text" x="95" y="288" text-anchor="middle">b</text>
+  <circle class="diagram__box diagram__box--tip" cx="230" cy="283" r="18"/><text class="diagram__text" x="230" y="288" text-anchor="middle">c</text>
+  <circle class="diagram__box diagram__box--tip" cx="310" cy="283" r="18"/><text class="diagram__text" x="310" y="288" text-anchor="middle">d</text>
+  <g class="diagram__line diagram__line--accent">
+    <line x1="570" y1="110" x2="480" y2="230"/><line x1="570" y1="110" x2="660" y2="230"/><line x1="480" y1="230" x2="660" y2="230"/>
+  </g>
+  <g class="diagram__line">
+    <line x1="570" y1="60" x2="570" y2="95"/><line x1="605" y1="110" x2="690" y2="110"/><line x1="445" y1="230" x2="420" y2="285"/><line x1="695" y1="230" x2="715" y2="285"/>
+  </g>
+  <rect class="diagram__box diagram__box--own" x="530" y="34" width="80" height="26" rx="13"/><text class="diagram__text diagram__text--muted" x="570" y="52" text-anchor="middle">{{client2}}</text>
+  <rect class="diagram__box diagram__box--accent" x="535" y="95" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="570" y="116" text-anchor="middle">P1</text>
+  <rect class="diagram__box diagram__box--accent" x="445" y="214" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="480" y="235" text-anchor="middle">P2</text>
+  <rect class="diagram__box diagram__box--accent" x="625" y="214" width="70" height="32" rx="8"/><text class="diagram__text diagram__text--bold" x="660" y="235" text-anchor="middle">P3</text>
+  <circle class="diagram__box diagram__box--tip" cx="708" cy="110" r="18"/><text class="diagram__text" x="708" y="115" text-anchor="middle">a</text>
+  <circle class="diagram__box diagram__box--tip" cx="420" cy="300" r="18"/><text class="diagram__text" x="420" y="305" text-anchor="middle">b</text>
+  <circle class="diagram__box diagram__box--tip" cx="715" cy="300" r="18"/><text class="diagram__text" x="715" y="305" text-anchor="middle">c</text>
+  <text class="diagram__text diagram__text--muted" x="570" y="200" text-anchor="middle">⟳ P1→P2→P3→P1</text>
+</svg>

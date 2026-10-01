@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wireshark i HTTP — czytamy rozmowę przeglądarki z serwerem — SKJ</title>
+<meta name="description" content="Jak przechwycić ruch HTTP w Wiresharku i odczytać z niego wersję protokołu, nagłówki, kody statusu, warunkowy GET (304), dzielenie odpowiedzi na segmenty TCP, osadzone obiekty i uwierzytelnianie Basic.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/c2-http.html">
+<link rel="alternate" hreflang="en" href="../en/c2-http.html">
+<link rel="alternate" hreflang="ru" href="../ru/c2-http.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="c2-http">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Menu" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Sieci + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../pl/c2-http.html" hreflang="pl" lang="pl" data-lang="pl" aria-current="true" title="Polski">PL</a><a class="lang-switch__link" href="../en/c2-http.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../ru/c2-http.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Przełącz motyw (jasny / ciemny)" title="Przełącz motyw (jasny / ciemny)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Menu">
+<div class="sidebar__head"><span class="sidebar__title">Menu</span><button type="button" class="sidebar__close" data-nav-close aria-label="Zamknij menu">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Sieci + Java</a>
+<div class="nav__progress progress" data-progress data-label="Twój postęp"><span class="progress__label">Twój postęp</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Start</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Start i środowisko</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="course.html" data-page-link="course"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Zaliczenie i daty</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Słowniczek PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">Wszystkie konspekty</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Wykłady</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Internet i protokoły</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Brzeg sieci</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Rdzeń sieci</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Struktura Internetu</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Opóźnienia i przepustowość</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Bezpieczeństwo</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Warstwy i enkapsulacja</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">Historia Internetu</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Ćwiczenia</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Sztafeta procesów (pierwsze uruchomienie)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link nav__link--active" href="c2-http.html" data-page-link="c2-http" aria-current="page"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP w Javie: mini-serwer HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Klient protokołu tekstowego</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP razem</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS ręcznie (UDP, bajty)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP w Wiresharku</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Kolokwium</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Kolokwium: trening</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Projekt</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Projekt: sieć proxy</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Ćwiczenia · C2</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">🔎</span>Wireshark i HTTP — czytamy rozmowę przeglądarki z serwerem</h1>
+<p class="article__lead">Jak przechwycić ruch HTTP w Wiresharku i odczytać z niego wersję protokołu, nagłówki, kody statusu, warunkowy GET (304), dzielenie odpowiedzi na segmenty TCP, osadzone obiekty i uwierzytelnianie Basic.</p>
+<div class="article__meta"><span class="badge badge--lab">🔁 Ćwiczenia (wersja przerobiona)</span><span class="article__source">Na podstawie: logika laboratorium „Wireshark Lab: HTTP” (Kurose &amp; Ross) z zajęć — pytania przerobione</span><span class="article__time">⏱ 8 min czytania</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Krótka ściąga na ćwiczenia i projekt"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Konspekt</span></button><button type="button" class="button button--ghost" data-done-toggle="c2-http" aria-pressed="false" data-label-off="Oznacz jako przerobione" data-label-on="Przerobione"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Oznacz jako przerobione</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">Na tej stronie</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#w-skrocie">W skrócie</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#zanim-zaczniesz-z-instrukcji-laboratorium">Zanim zaczniesz (z instrukcji laboratorium)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#wireshark-w-2-minuty">Wireshark w 2 minuty  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#anatomia-wiadomosci-http">Anatomia wiadomości HTTP  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czesc-a-prosty-get-i-odpowiedz">Część A — prosty GET i odpowiedź</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czesc-b-warunkowy-get-304">Część B — warunkowy GET (304)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czesc-c-dlugi-dokument">Część C — długi dokument</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czesc-d-strona-z-osadzonymi-obiektami">Część D — strona z osadzonymi obiektami</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czesc-e-strona-chroniona-haslem-http-basic">Część E — strona chroniona hasłem (HTTP Basic)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#cwiczenie-bez-internetu-twoj-wlasny-serwer">Ćwiczenie bez Internetu: Twój własny serwer  ✍️</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="w-skrocie">W skrócie<a class="content__anchor" href="#w-skrocie" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>Wireshark</strong> kopiuje każdą ramkę, która przechodzi przez kartę sieciową, i pokazuje ją warstwa po warstwie.</li>
+<li class="content__list-item"><strong>HTTP</strong> to tekstowy protokół: żądanie (<code class="content__code">GET /strona HTTP/1.1</code> + nagłówki + pusta linia) i odpowiedź (<code class="content__code">HTTP/1.1 200 OK</code> + nagłówki + pusta linia + treść).</li>
+<li class="content__list-item"><strong>Warunkowy GET</strong>: przeglądarka wysyła <code class="content__code">If-Modified-Since</code>, a serwer odpowiada <code class="content__code">304 Not Modified</code> <strong>bez treści</strong>, jeśli plik się nie zmienił.</li>
+<li class="content__list-item">Długa odpowiedź HTTP jest dzielona przez TCP na <strong>wiele segmentów</strong>.</li>
+<li class="content__list-item"><code class="content__code">Authorization: Basic ...</code> to tylko <strong>Base64</strong> — hasło da się odczytać.</li>
+</ul>
+
+<aside class="callout callout--origin"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🔁</span><span class="callout__label">Skąd to zadanie (oryginał z zajęć w skrócie)</span></div><div class="callout__body"><p class="content__paragraph">Na zajęciach robi się laboratorium Wireshark HTTP z podręcznika Kurose &amp; Ross: przechwytuje się ruch przeglądarki do kilku prostych stron na serwerze <code class="content__code">gaia.cs.umass.edu</code> i odpowiada na pytania o nagłówki, kody statusu, warunkowy GET, długie dokumenty, obrazki osadzone w stronie i stronę chronioną hasłem. Poniżej masz <strong>własny zestaw pytań</strong> o te same rzeczy oraz instrukcję, <strong>gdzie szukać odpowiedzi</strong> — konkretne wartości zależą od Twojego przechwycenia.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="zanim-zaczniesz-z-instrukcji-laboratorium">Zanim zaczniesz (z instrukcji laboratorium)<a class="content__anchor" href="#zanim-zaczniesz-z-instrukcji-laboratorium" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><strong>Wyłącz VPN</strong> — przy VPN dane wyższych warstw są zaszyfrowane i nic nie zobaczysz.</li>
+<li class="content__list-item"><strong>Wyłącz HTTP/3 i QUIC</strong> w przeglądarce — one też szyfrują ruch (od 2025 r. większość przeglądarek ma je domyślnie włączone).</li>
+<li class="content__list-item">Wpisuj adresy zaczynające się od <strong><code class="content__code">http://</code></strong>, nie <code class="content__code">https://</code>.</li>
+<li class="content__list-item"><strong>Wyczyść pamięć podręczną</strong> (cache) i historię przeglądarki; wyłącz ustawienia „prywatności”, które mogą zmieniać zapytania.</li>
+<li class="content__list-item">W polu filtra Wiresharka wpisz <strong><code class="content__code">http</code></strong> (małymi literami) — zobaczysz tylko pakiety HTTP.</li>
+<li class="content__list-item">Pomiń zapytania o <strong><code class="content__code">favicon.ico</code></strong> — to przeglądarka sama pyta o ikonkę strony.</li>
+</ol>
+</div>
+
+<aside class="callout callout--tip"><div class="callout__header"><span class="callout__icon" aria-hidden="true">💡</span><span class="callout__label">Wskazówka</span><span class="callout__title">Nie możesz przechwycić ruchu na żywo?</span></div><div class="callout__body"><p class="content__paragraph">Laboratorium udostępnia gotowe pliki przechwyceń (<em>trace files</em>, archiwum <code class="content__code">wireshark-traces-9e.zip</code> na stronie autorów). Otwierasz je przez <strong>File → Open</strong> i odpowiadasz na pytania tak samo.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="wireshark-w-2-minuty">Wireshark w 2 minuty <span class="badge badge--own" title="Ten fragment dopisał autor strony — nie ma go w materiałach z zajęć">✍️ od autora</span><a class="content__anchor" href="#wireshark-w-2-minuty" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Okno Wiresharka ma trzy panele:</p>
+<ol class="content__list content__list--ordered">
+<li class="content__list-item"><strong>Lista pakietów</strong> — jeden wiersz na ramkę: numer (nadany przez Wiresharka, nie istnieje w pakiecie!), czas, źródło, cel, protokół, opis.</li>
+<li class="content__list-item"><strong>Szczegóły pakietu</strong> — drzewko warstw: Frame → Ethernet → IP → TCP → HTTP (to enkapsulacja z <a class="content__link" href="w7-layers.html">W7</a>).</li>
+<li class="content__list-item"><strong>Bajty</strong> — surowa zawartość w hex i ASCII.</li>
+</ol>
+<p class="content__paragraph">Najprzydatniejsze filtry:</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Filtr</th><th class="content__table-heading">Co pokazuje</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">http</code></td><td class="content__table-cell">tylko HTTP</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">http.request.method == &quot;GET&quot;</code></td><td class="content__table-cell">tylko żądania GET</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">http.response.code == 304</code></td><td class="content__table-cell">tylko odpowiedzi 304</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">ip.addr == 128.119.245.12</code></td><td class="content__table-cell">ruch do/z danego adresu</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">tcp.port == 8080</code></td><td class="content__table-cell">ruch na porcie 8080 (np. Twój serwer z <a class="content__link" href="c3-tcp-server.html">C3</a>)</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">tcp</code> / <code class="content__code">udp</code> / <code class="content__code">dns</code></td><td class="content__table-cell">dany protokół</td></tr></tbody></table></div>
+<p class="content__paragraph">Kliknij prawym na pakiet → <strong>Follow → TCP Stream</strong> — zobaczysz całą rozmowę jako zwykły tekst (żądanie na czerwono, odpowiedź na niebiesko).</p>
+<h2 class="content__heading content__heading--h2" id="anatomia-wiadomosci-http">Anatomia wiadomości HTTP <span class="badge badge--own" title="Ten fragment dopisał autor strony — nie ma go w materiałach z zajęć">✍️ od autora</span><a class="content__anchor" href="#anatomia-wiadomosci-http" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Przykład (wymyślony, ale w dokładnie takim formacie jak prawdziwy):</p>
+<figure class="code-block" data-lines="7">
+<figcaption class="code-block__bar"><span class="code-block__lang">HTTP</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Skopiowano!" data-fail="Zaznacz i skopiuj ręcznie"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Kopiuj</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/lab/hello.html</span> <span class="hljs-meta">HTTP/1.1</span>
+<span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>www.example.org
+<span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0 (Windows NT 10.0)
+<span class="hljs-attribute">Accept</span><span class="hljs-punctuation">: </span>text/html
+<span class="hljs-attribute">Accept-Language</span><span class="hljs-punctuation">: </span>pl,en-US;q=0.7
+<span class="hljs-attribute">If-Modified-Since</span><span class="hljs-punctuation">: </span>Tue, 14 Oct 2025 08:15:00 GMT
+<span class="hljs-attribute">Connection</span><span class="hljs-punctuation">: </span>keep-alive</code></pre>
+</figure><figure class="code-block" data-lines="8">
+<figcaption class="code-block__bar"><span class="code-block__lang">HTTP</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Skopiowano!" data-fail="Zaznacz i skopiuj ręcznie"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Kopiuj</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-http"><span class="hljs-meta">HTTP/1.1</span> <span class="hljs-number">200</span> OK
+<span class="hljs-attribute">Date</span><span class="hljs-punctuation">: </span>Wed, 15 Oct 2025 10:02:11 GMT
+<span class="hljs-attribute">Server</span><span class="hljs-punctuation">: </span>Apache
+<span class="hljs-attribute">Last-Modified</span><span class="hljs-punctuation">: </span>Wed, 15 Oct 2025 09:59:00 GMT
+<span class="hljs-attribute">Content-Length</span><span class="hljs-punctuation">: </span>128
+<span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>text/html; charset=UTF-8
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>...128 bajtów treści...<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span></code></pre>
+</figure><div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Element</th><th class="content__table-heading">Gdzie</th><th class="content__table-heading">Co znaczy</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">GET /lab/hello.html HTTP/1.1</code></td><td class="content__table-cell"><strong>linia żądania</strong></td><td class="content__table-cell">metoda, ścieżka, <strong>wersja HTTP klienta</strong></td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">Host</code></td><td class="content__table-cell">nagłówek</td><td class="content__table-cell">nazwa serwera (w HTTP/1.1 obowiązkowa)</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">Accept-Language</code></td><td class="content__table-cell">nagłówek</td><td class="content__table-cell"><strong>języki</strong>, które przeglądarka akceptuje (<code class="content__code">q</code> = preferencja)</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">If-Modified-Since</code></td><td class="content__table-cell">nagłówek</td><td class="content__table-cell">„przyślij tylko, jeśli zmieniło się po tej dacie”</td></tr><tr class="content__table-row"><td class="content__table-cell">pusta linia</td><td class="content__table-cell">po nagłówkach</td><td class="content__table-cell"><strong>koniec nagłówków</strong> — bez niej serwer czeka w nieskończoność</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">HTTP/1.1 200 OK</code></td><td class="content__table-cell"><strong>linia statusu</strong></td><td class="content__table-cell"><strong>wersja HTTP serwera</strong>, kod, opis</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">Last-Modified</code></td><td class="content__table-cell">nagłówek</td><td class="content__table-cell">kiedy plik zmieniono na serwerze</td></tr><tr class="content__table-row"><td class="content__table-cell"><code class="content__code">Content-Length</code></td><td class="content__table-cell">nagłówek</td><td class="content__table-cell">ile <strong>bajtów treści</strong> (bez nagłówków)</td></tr></tbody></table></div>
+<p class="content__paragraph">Najważniejsze kody statusu:</p>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Kod</th><th class="content__table-heading">Znaczenie</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">200 OK</td><td class="content__table-cell">wszystko dobrze, treść w odpowiedzi</td></tr><tr class="content__table-row"><td class="content__table-cell">301 Moved Permanently</td><td class="content__table-cell">zasób przeniesiony (nagłówek <code class="content__code">Location</code>)</td></tr><tr class="content__table-row"><td class="content__table-cell">304 Not Modified</td><td class="content__table-cell">nie zmieniło się — <strong>użyj swojej kopii z cache</strong>, brak treści</td></tr><tr class="content__table-row"><td class="content__table-cell">400 Bad Request</td><td class="content__table-cell">serwer nie zrozumiał żądania (np. zły format)</td></tr><tr class="content__table-row"><td class="content__table-cell">401 Unauthorized</td><td class="content__table-cell">potrzebne logowanie (nagłówek <code class="content__code">WWW-Authenticate</code>)</td></tr><tr class="content__table-row"><td class="content__table-cell">404 Not Found</td><td class="content__table-cell">nie ma takiego zasobu</td></tr><tr class="content__table-row"><td class="content__table-cell">405 Method Not Allowed</td><td class="content__table-cell">metoda (np. POST) niedozwolona</td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="czesc-a-prosty-get-i-odpowiedz">Część A — prosty GET i odpowiedź<a class="content__anchor" href="#czesc-a-prosty-get-i-odpowiedz" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Otwórz prostą, krótką stronę (np. pierwszy plik z laboratorium) i znajdź dwa pakiety: <strong>GET</strong> i odpowiedź.</p>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Zadanie</span><span class="callout__title">Pytania A1–A7</span></div><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Jaką wersję HTTP deklaruje przeglądarka, a jaką serwer?</li>
+<li class="content__list-item">Jak nazywa się nagłówek z listą preferowanych języków i jakie języki w nim są?</li>
+<li class="content__list-item">Jaki jest adres IP Twojego komputera, a jaki serwera?</li>
+<li class="content__list-item">Jaki kod i opis statusu zwrócił serwer?</li>
+<li class="content__list-item">Kiedy plik był ostatnio zmieniony na serwerze?</li>
+<li class="content__list-item">Ile bajtów treści przysłał serwer?</li>
+<li class="content__list-item">Czy w surowych bajtach widać jakiś nagłówek, którego nie ma w liście pakietów?</li>
+</ol>
+
+<details class="callout callout--hint"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">🔦</span><span class="callout__label">Pokaż podpowiedź</span><span class="callout__title">Gdzie szukać</span></summary><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Linia żądania w pakiecie GET (ostatni wyraz) i linia statusu w odpowiedzi (pierwszy wyraz).</li>
+<li class="content__list-item">W GET: <code class="content__code">Accept-Language</code>.</li>
+<li class="content__list-item">Warstwa IP pakietu GET: <strong>Source</strong> = Twój komputer, <strong>Destination</strong> = serwer. W odpowiedzi odwrotnie.</li>
+<li class="content__list-item">Linia statusu odpowiedzi, np. <code class="content__code">200 OK</code>.</li>
+<li class="content__list-item">Nagłówek <code class="content__code">Last-Modified</code> w odpowiedzi. Uwaga: serwer laboratorium <strong>co minutę</strong> ustawia datę modyfikacji na „teraz” — dlatego instrukcja każe odczekać ponad minutę przed przechwyceniem.</li>
+<li class="content__list-item">Nagłówek <code class="content__code">Content-Length</code> (to długość samej treści). Nie myl z długością segmentu TCP (treść + nagłówki HTTP).</li>
+<li class="content__list-item">Porównaj drzewko HTTP z panelem bajtów — Wireshark zwykle pokazuje wszystkie nagłówki; odpowiedź „nie widzę dodatkowych” też jest poprawna, jeśli tak jest.</li>
+</ol>
+</div></details></div></aside>
+<h2 class="content__heading content__heading--h2" id="czesc-b-warunkowy-get-304">Część B — warunkowy GET (304)<a class="content__anchor" href="#czesc-b-warunkowy-get-304" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Przeglądarki trzymają kopie stron w <strong>cache</strong>. Gdy otwierasz tę samą stronę drugi raz, przeglądarka pyta serwer: „czy zmieniło się od…?”.</p>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Wyczyść cache, uruchom przechwytywanie.</li>
+<li class="content__list-item">Otwórz stronę, a zaraz potem <strong>odśwież</strong> ją (albo wpisz adres jeszcze raz).</li>
+<li class="content__list-item">Zatrzymaj przechwytywanie, filtr <code class="content__code">http</code>.</li>
+</ol>
+</div>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Zadanie</span><span class="callout__title">Pytania B1–B4</span></div><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Czy w <strong>pierwszym</strong> GET jest nagłówek <code class="content__code">If-Modified-Since</code>?</li>
+<li class="content__list-item">Czy pierwsza odpowiedź zawiera treść pliku? Po czym to poznać?</li>
+<li class="content__list-item">Czy w <strong>drugim</strong> GET jest <code class="content__code">If-Modified-Since</code>? Jaka data w nim jest i skąd przeglądarka ją wzięła?</li>
+<li class="content__list-item">Jaki kod statusu ma druga odpowiedź i czy zawiera treść?</li>
+</ol>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Pokaż rozwiązanie</span><span class="callout__title">Odpowiedzi „wzorcowe” (wartości dat zależą od przechwycenia)</span></summary><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Nie — przeglądarka nie ma jeszcze kopii (cache był pusty).</li>
+<li class="content__list-item">Tak — kod 200, nagłówek <code class="content__code">Content-Length</code> &gt; 0 i w Wiresharku widać sekcję <em>Line-based text data</em> z HTML-em.</li>
+<li class="content__list-item">Tak — data jest <strong>taka sama jak <code class="content__code">Last-Modified</code> z pierwszej odpowiedzi</strong>: przeglądarka zapamiętała ją razem z kopią.</li>
+<li class="content__list-item"><code class="content__code">304 Not Modified</code> — <strong>bez treści</strong>; przeglądarka pokazuje kopię z cache. (Uwaga z instrukcji: Chrome chętnie wysyła <code class="content__code">If-Modified-Since</code>, Firefox i Safari bywają kapryśne.)</li>
+</ol>
+</div></details></div></aside>
+<h2 class="content__heading content__heading--h2" id="czesc-c-dlugi-dokument">Część C — długi dokument<a class="content__anchor" href="#czesc-c-dlugi-dokument" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Gdy plik HTML jest długi (w laboratorium ok. 4500 bajtów), <strong>jedna</strong> odpowiedź HTTP nie zmieści się w <strong>jednym</strong> segmencie TCP. TCP dzieli ją na kilka segmentów, a Wireshark oznacza je jako <em>„TCP segment of a reassembled PDU”</em>.</p>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Zadanie</span><span class="callout__title">Pytania C1–C4</span></div><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Ile żądań GET wysłała przeglądarka? W którym pakiecie (numer z listy) jest GET po długi plik?</li>
+<li class="content__list-item">W którym pakiecie jest linia statusu odpowiedzi?</li>
+<li class="content__list-item">Jaki to kod i opis?</li>
+<li class="content__list-item">Ile segmentów TCP z danymi było potrzebnych na całą odpowiedź?</li>
+</ol>
+
+<details class="callout callout--hint"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">🔦</span><span class="callout__label">Pokaż podpowiedź</span><span class="callout__title">Gdzie szukać</span></summary><div class="callout__body"><p class="content__paragraph">Wyczyść filtr (żeby widzieć też segmenty TCP). W pakiecie z odpowiedzią HTTP rozwiń sekcję <strong>„[N Reassembled TCP Segments]”</strong> — Wireshark wypisze, ile segmentów złożył i których pakietów użył. Linia statusu jest w <strong>pierwszym</strong> z nich, ale Wireshark wyświetla odpowiedź HTTP przy <strong>ostatnim</strong>.</p>
+</div></details></div></aside>
+<h2 class="content__heading content__heading--h2" id="czesc-d-strona-z-osadzonymi-obiektami">Część D — strona z osadzonymi obiektami<a class="content__anchor" href="#czesc-d-strona-z-osadzonymi-obiektami" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Strona może zawierać obrazki leżące na <strong>innych serwerach</strong>. HTML zawiera tylko <strong>adresy (URL)</strong> obrazków, więc przeglądarka musi wysłać po nie osobne żądania.</p>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Zadanie</span><span class="callout__title">Pytania D1–D2</span></div><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Ile żądań GET wysłała przeglądarka i na jakie adresy IP?</li>
+<li class="content__list-item">Czy obrazki pobierano <strong>po kolei</strong> (szeregowo), czy <strong>równolegle</strong>? Jak to sprawdzić?</li>
+</ol>
+
+<details class="callout callout--hint"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">🔦</span><span class="callout__label">Pokaż podpowiedź</span><span class="callout__title">Jak to sprawdzić</span></summary><div class="callout__body"><p class="content__paragraph">Spójrz na kolumnę <strong>Time</strong> i na <strong>porty źródłowe TCP</strong>: jeśli drugi GET wyszedł, zanim przyszła odpowiedź na pierwszy, i to innym połączeniem TCP (inny port źródłowy) — pobieranie było równoległe. Jeśli każdy GET czeka na zakończenie poprzedniego — szeregowe.</p>
+</div></details></div></aside>
+<h2 class="content__heading content__heading--h2" id="czesc-e-strona-chroniona-haslem-http-basic">Część E — strona chroniona hasłem (HTTP Basic)<a class="content__anchor" href="#czesc-e-strona-chroniona-haslem-http-basic" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">W laboratorium jest strona, do której trzeba się zalogować (login i hasło podaje instrukcja laboratorium).</p>
+
+<aside class="callout callout--task"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🎯</span><span class="callout__label">Zadanie</span><span class="callout__title">Pytania E1–E3</span></div><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item">Co serwer odpowiada na <strong>pierwszy</strong> GET (kod i opis)?</li>
+<li class="content__list-item">Jakie <strong>nowe pole</strong> pojawia się w <strong>drugim</strong> GET (po wpisaniu hasła)?</li>
+<li class="content__list-item">Odkoduj wartość tego pola. Co widzisz?</li>
+</ol>
+
+<details class="callout callout--answer"><summary class="callout__header callout__header--toggle"><span class="callout__icon" aria-hidden="true">✅</span><span class="callout__label">Pokaż rozwiązanie</span><span class="callout__title">Odpowiedzi „wzorcowe”</span></summary><div class="callout__body"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><code class="content__code">401 Unauthorized</code> (z nagłówkiem <code class="content__code">WWW-Authenticate</code>, który prosi o logowanie).</li>
+<li class="content__list-item"><code class="content__code">Authorization: Basic &lt;ciąg znaków&gt;</code>.</li>
+<li class="content__list-item">Ciąg to <strong>Base64</strong> z tekstu <code class="content__code">login:hasło</code>. To <strong>nie jest szyfrowanie</strong> — każdy, kto przechwyci pakiet, może go odkodować (zobacz <a class="content__link" href="w6-security.html">W6</a>).</li>
+</ol>
+</div></details></div></aside>
+<p class="content__paragraph">Odkodować możesz programem w Javie — bez żadnych stron internetowych:</p>
+
+<figure class="code-block code-block--collapsible" data-lines="34">
+<figcaption class="code-block__bar"><span class="code-block__lang">Java</span><span class="code-block__title">Base64Peek.java</span><span class="code-block__actions"><a class="code-block__btn code-block__btn--download" href="../files/c2/Base64Peek.java" download><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span class="code-block__btn-text">Pobierz</span></a><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Skopiowano!" data-fail="Zaznacz i skopiuj ręcznie"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Kopiuj</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-java"><span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+<span class="hljs-keyword">import</span> java.util.Base64;
+
+<span class="hljs-comment">/**
+ * Shows that &quot;Authorization: Basic ...&quot; is NOT encryption - anyone can decode it.
+ *
+ * Run:  java Base64Peek                      (uses a sample header)
+ *       java Base64Peek &quot;Basic dGVzdDoxMjM=&quot;  (decode your own header)
+ *       java Base64Peek encode login:password
+ */</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Base64Peek</span> {
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> {
+        <span class="hljs-keyword">if</span> (args.length == <span class="hljs-number">2</span> &amp;&amp; args[<span class="hljs-number">0</span>].equals(<span class="hljs-string">&quot;encode&quot;</span>)) {
+            <span class="hljs-type">String</span> <span class="hljs-variable">encoded</span> <span class="hljs-operator">=</span> Base64.getEncoder().encodeToString(args[<span class="hljs-number">1</span>].getBytes(StandardCharsets.UTF_8));
+            System.out.println(<span class="hljs-string">&quot;Authorization: Basic &quot;</span> + encoded);
+            <span class="hljs-keyword">return</span>;
+        }
+
+        <span class="hljs-type">String</span> <span class="hljs-variable">header</span> <span class="hljs-operator">=</span> args.length &gt; <span class="hljs-number">0</span> ? args[<span class="hljs-number">0</span>] : <span class="hljs-string">&quot;Basic c3R1ZGVudDpzaWVjMTIz&quot;</span>;
+        <span class="hljs-type">String</span> <span class="hljs-variable">base64</span> <span class="hljs-operator">=</span> header.startsWith(<span class="hljs-string">&quot;Basic &quot;</span>) ? header.substring(<span class="hljs-string">&quot;Basic &quot;</span>.length()) : header;
+
+        <span class="hljs-type">byte</span>[] <span class="hljs-variable">raw</span> <span class="hljs-operator">=</span> Base64.getDecoder().decode(base64.trim());
+        <span class="hljs-type">String</span> <span class="hljs-variable">text</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(raw, StandardCharsets.UTF_8);   <span class="hljs-comment">// &quot;login:password&quot;</span>
+
+        <span class="hljs-type">int</span> <span class="hljs-variable">colon</span> <span class="hljs-operator">=</span> text.indexOf(<span class="hljs-string">&#x27;:&#x27;</span>);
+        System.out.println(<span class="hljs-string">&quot;Base64   : &quot;</span> + base64);
+        System.out.println(<span class="hljs-string">&quot;Decoded  : &quot;</span> + text);
+        <span class="hljs-keyword">if</span> (colon &gt;= <span class="hljs-number">0</span>) {
+            System.out.println(<span class="hljs-string">&quot;Login    : &quot;</span> + text.substring(<span class="hljs-number">0</span>, colon));
+            System.out.println(<span class="hljs-string">&quot;Password : &quot;</span> + text.substring(colon + <span class="hljs-number">1</span>));
+        }
+    }
+}</code></pre>
+<button type="button" class="code-block__expand" aria-expanded="false" data-expand="Pokaż cały kod" data-collapse="Zwiń kod">Pokaż cały kod</button>
+</figure>
+<figure class="code-block" data-lines="3">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Skopiowano!" data-fail="Zaznacz i skopiuj ręcznie"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Kopiuj</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash">javac Base64Peek.java
+java Base64Peek <span class="hljs-string">&quot;Basic c3R1ZGVudDpzaWVjMTIz&quot;</span>
+<span class="hljs-comment"># Decoded  : student:siec123</span></code></pre>
+</figure><h2 class="content__heading content__heading--h2" id="cwiczenie-bez-internetu-twoj-wlasny-serwer">Ćwiczenie bez Internetu: Twój własny serwer <span class="badge badge--own" title="Ten fragment dopisał autor strony — nie ma go w materiałach z zajęć">✍️ od autora</span><a class="content__anchor" href="#cwiczenie-bez-internetu-twoj-wlasny-serwer" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Możesz zrobić całe laboratorium lokalnie: uruchom <code class="content__code">MiniWebServer</code> z <a class="content__link" href="c3-tcp-server.html">C3</a> i podglądaj ruch w Wiresharku na interfejsie <strong>Loopback</strong> (Windows: „Adapter for loopback traffic capture” z Npcap; Linux: <code class="content__code">lo</code>), z filtrem <code class="content__code">tcp.port == 8080</code>.</p>
+<figure class="code-block" data-lines="4">
+<figcaption class="code-block__bar"><span class="code-block__lang">Terminal</span><span class="code-block__actions"><button type="button" class="code-block__btn code-block__btn--copy" data-copied="Skopiowano!" data-fail="Zaznacz i skopiuj ręcznie"><svg class="code-block__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span class="code-block__btn-text">Kopiuj</span></button></span></figcaption>
+<pre class="code-block__pre"><code class="code-block__code hljs language-bash"><span class="hljs-comment"># odpowiedź 200 i wszystkie nagłówki</span>
+curl -v http://localhost:8080/index.html
+<span class="hljs-comment"># warunkowy GET -&gt; 304</span>
+curl -v -H <span class="hljs-string">&quot;If-Modified-Since: Mon, 06 Oct 2025 09:00:00 GMT&quot;</span> http://localhost:8080/index.html</code></pre>
+</figure>
+
+
+</div>
+<nav class="pager" aria-label="Poprzedni temat / Następny temat">
+<a class="pager__link pager__link--prev" href="c1-relay.html"><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="pager__text"><span class="pager__label">Poprzedni temat</span><span class="pager__title">Pierwszy program rozproszony — sztafeta procesów w pierścieniu</span></span></a>
+<a class="pager__link pager__link--next" href="c3-tcp-server.html"><span class="pager__text"><span class="pager__label">Następny temat</span><span class="pager__title">Gniazda TCP w Javie — własny mini-serwer HTTP i klient</span></span><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="Na tej stronie"><p class="toc__title">Na tej stronie</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#w-skrocie">W skrócie</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#zanim-zaczniesz-z-instrukcji-laboratorium">Zanim zaczniesz (z instrukcji laboratorium)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#wireshark-w-2-minuty">Wireshark w 2 minuty  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#anatomia-wiadomosci-http">Anatomia wiadomości HTTP  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czesc-a-prosty-get-i-odpowiedz">Część A — prosty GET i odpowiedź</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czesc-b-warunkowy-get-304">Część B — warunkowy GET (304)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czesc-c-dlugi-dokument">Część C — długi dokument</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czesc-d-strona-z-osadzonymi-obiektami">Część D — strona z osadzonymi obiektami</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czesc-e-strona-chroniona-haslem-http-basic">Część E — strona chroniona hasłem (HTTP Basic)</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#cwiczenie-bez-internetu-twoj-wlasny-serwer">Ćwiczenie bez Internetu: Twój własny serwer  ✍️</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Konspekt: Wireshark i HTTP — czytamy rozmowę przeglądarki z serwerem</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Drukuj"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Drukuj</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Zamknij"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Zamknij</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-c2-http-przed-przechwyceniem">Przed przechwyceniem<a class="content__anchor" href="#cs-c2-http-przed-przechwyceniem" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Bez VPN, bez HTTP/3/QUIC, adres <code class="content__code">http://</code>, pusty cache.</li>
+<li class="content__list-item">Filtr <code class="content__code">http</code>; ignoruj <code class="content__code">favicon.ico</code>.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-c2-http-gdzie-co-jest">Gdzie co jest<a class="content__anchor" href="#cs-c2-http-gdzie-co-jest" aria-hidden="true" tabindex="-1">#</a></h3>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Pytanie</th><th class="content__table-heading">Gdzie szukać</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell">wersja HTTP</td><td class="content__table-cell">linia żądania / linia statusu</td></tr><tr class="content__table-row"><td class="content__table-cell">języki</td><td class="content__table-cell"><code class="content__code">Accept-Language</code></td></tr><tr class="content__table-row"><td class="content__table-cell">IP klienta/serwera</td><td class="content__table-cell">warstwa IP: Source / Destination</td></tr><tr class="content__table-row"><td class="content__table-cell">kod statusu</td><td class="content__table-cell">linia statusu odpowiedzi</td></tr><tr class="content__table-row"><td class="content__table-cell">data modyfikacji</td><td class="content__table-cell"><code class="content__code">Last-Modified</code></td></tr><tr class="content__table-row"><td class="content__table-cell">rozmiar treści</td><td class="content__table-cell"><code class="content__code">Content-Length</code></td></tr><tr class="content__table-row"><td class="content__table-cell">warunkowy GET</td><td class="content__table-cell"><code class="content__code">If-Modified-Since</code> → <code class="content__code">304 Not Modified</code> (bez treści)</td></tr><tr class="content__table-row"><td class="content__table-cell">wiele segmentów</td><td class="content__table-cell">„[N Reassembled TCP Segments]”</td></tr><tr class="content__table-row"><td class="content__table-cell">równolegle czy po kolei</td><td class="content__table-cell">kolumna Time + porty źródłowe TCP</td></tr><tr class="content__table-row"><td class="content__table-cell">logowanie</td><td class="content__table-cell"><code class="content__code">401</code> → <code class="content__code">Authorization: Basic</code> (Base64!)</td></tr></tbody></table></div>
+<h3 class="content__heading content__heading--h3" id="cs-c2-http-filtry">Filtry<a class="content__anchor" href="#cs-c2-http-filtry" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph"><code class="content__code">http</code>, <code class="content__code">http.request.method == &quot;GET&quot;</code>, <code class="content__code">http.response.code == 304</code>, <code class="content__code">ip.addr == X</code>, <code class="content__code">tcp.port == 8080</code>; Follow → TCP Stream.</p>
+<h3 class="content__heading content__heading--h3" id="cs-c2-http-kody">Kody<a class="content__anchor" href="#cs-c2-http-kody" aria-hidden="true" tabindex="-1">#</a></h3>
+<p class="content__paragraph">200 OK · 301 przeniesiono · 304 bez zmian · 400 zły format · 401 logowanie · 404 brak · 405 zła metoda.</p>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ Wszystkie konspekty</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Nieoficjalne materiały do nauki. Zadania zostały przerobione (inna treść, ta sama logika), aby nie kopiować prac z poprzednich lat.</p>
+<p class="footer__text footer__text--small">Wykłady oparte na: J. F. Kurose, K. W. Ross, „Computer Networking: A Top-Down Approach” (slajdy © 1996–2020 J.F. Kurose &amp; K.W. Ross) oraz Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Kod źródłowy strony</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+</body>
+</html>

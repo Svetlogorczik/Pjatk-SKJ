@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How to pass SKJ — components, rules and dates — SKJ</title>
+<meta name="description" content="What the course consists of, what is known for sure from the materials (500-point project, server-based test, documentation, anti-plagiarism), what the materials don&#39;t say, and the study plan I suggest.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/course.html">
+<link rel="alternate" hreflang="en" href="../en/course.html">
+<link rel="alternate" hreflang="ru" href="../ru/course.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="course">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Menu" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Networks + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Language"><a class="lang-switch__link" href="../pl/course.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../en/course.html" hreflang="en" lang="en" data-lang="en" aria-current="true" title="English">EN</a><a class="lang-switch__link" href="../ru/course.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Toggle theme (light / dark)" title="Toggle theme (light / dark)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Menu">
+<div class="sidebar__head"><span class="sidebar__title">Menu</span><button type="button" class="sidebar__close" data-nav-close aria-label="Close menu">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Networks + Java</a>
+<div class="nav__progress progress" data-progress data-label="Your progress"><span class="progress__label">Your progress</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Start</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Start &amp; setup</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link nav__link--active" href="course.html" data-page-link="course" aria-current="page"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Course rules &amp; dates</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Glossary PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">All cheat sheets</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Lectures</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Internet &amp; protocols</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Network edge</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Network core</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Internet structure</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Delay &amp; throughput</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Security</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Layers &amp; encapsulation</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">Internet history</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Labs</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Process relay (first run)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP in Java: mini HTTP server</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Text-protocol client</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP together</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS by hand (UDP, bytes)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP in Wireshark</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Practical test</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Practical test: training</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Project</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Project: proxy network</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Start</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">🎓</span>How to pass SKJ — components, rules and dates</h1>
+<p class="article__lead">What the course consists of, what is known for sure from the materials (500-point project, server-based test, documentation, anti-plagiarism), what the materials don&#39;t say, and the study plan I suggest.</p>
+<div class="article__meta"><span class="badge badge--lecture">📘 Lecture + additions</span><span class="article__source">Based on: the 2025/26 project specification, documentation template, test template and lectures from the repository; plan and advice — original guide</span><span class="article__time">⏱ 5 min read</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Short summary for labs and the project"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Cheat sheet</span></button><button type="button" class="button button--ghost" data-done-toggle="course" aria-pressed="false" data-label-off="Mark as done" data-label-on="Done"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Mark as done</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">On this page</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#in-short">In short</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#course-components">Course components</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#what-is-known-for-sure-from-the-materials">What is known for sure (from the materials)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#the-project-2025-26-edition">The project (2025/26 edition)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#the-practical-test-2025-26-edition">The practical test (2025/26 edition)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#wireshark-labs">Wireshark labs</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#what-the-materials-don-t-say-ask-your-instructor">What the materials DON&#39;T say — ask your instructor</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#a-suggested-semester-plan">A suggested semester plan  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#checklist-before-submitting-the-project">Checklist before submitting the project  ✍️</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="in-short">In short<a class="content__anchor" href="#in-short" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">The course: <strong>SKJ — Computer Networks and Network Programming in Java</strong> (<em>Sieci komputerowe i programowanie sieciowe w Javie</em>). The lectures are given by <strong>dr inż. Kazimierz Zieliński</strong>, based on the Kurose &amp; Ross textbook.</li>
+<li class="content__list-item">The materials show two main practical components: a <strong>server-based test</strong> (tasks over TCP) and a <strong>project</strong> (a proxy network, up to <strong>500 pts</strong>).</li>
+<li class="content__list-item">A project <strong>without the PDF documentation is not graded</strong>; <strong>plagiarism</strong> gives <strong>negative points</strong>.</li>
+<li class="content__list-item">The dates in the materials belong to the <strong>2025/2026</strong> edition — they are already <strong>archival</strong>. The instructor will announce new ones.</li>
+</ul>
+
+<section class="dates" aria-label="Important dates"><p class="dates__title">📅 Important dates <span class="dates__edition">Edition 2025/2026</span></p><ul class="dates__list"><li class="dates__item dates__item--past" data-date="2025-12-05">
+<time class="dates__date" datetime="2025-12-05">05.12.2025</time>
+<span class="dates__label">Project specification (date of the archive with the task)</span>
+<span class="dates__status" data-past="passed" data-today="today" data-in-days="in {n} days" data-days-ago="{n} days ago">passed · 300 days ago</span>
+<span class="dates__source">Source: <code class="content__code">Specyfikacja projektu 2025 2026.zip</code></span>
+</li><li class="dates__item dates__item--past" data-date="2025-12-19">
+<time class="dates__date" datetime="2025-12-19T23:55">19.12.2025, 23:55</time>
+<span class="dates__label">Project submission deadline in GAKKO (group instructor may change it)</span>
+<span class="dates__status" data-past="passed" data-today="today" data-in-days="in {n} days" data-days-ago="{n} days ago">passed · 286 days ago</span>
+<span class="dates__source">Source: <code class="content__code">Specyfikacja projektu.pdf, pkt 5</code></span>
+</li><li class="dates__item dates__item--past" data-date="2026-01-11">
+<time class="dates__date" datetime="2026-01-11T12:45">11.01.2026, 12:45</time>
+<span class="dates__label">End of the practical test (server-based test)</span>
+<span class="dates__status" data-past="passed" data-today="today" data-in-days="in {n} days" data-days-ago="{n} days ago">passed · 263 days ago</span>
+<span class="dates__source">Source: <code class="content__code">Test_template/output.txt</code></span>
+</li></ul><p class="dates__note">Archival — previous edition. Your instructor will announce the new dates.</p></section>
+
+<aside class="callout callout--warning"><div class="callout__header"><span class="callout__icon" aria-hidden="true">⚠️</span><span class="callout__label">Warning</span><span class="callout__title">How current are the dates?</span></div><div class="callout__body"><p class="content__paragraph">Today&#39;s status (passed / in how many days) is computed automatically in your browser. All dates above come from the previous edition&#39;s files, so most likely they <strong>don&#39;t apply</strong> to your semester — treat them as a rough guide to when things happen. <span class="badge badge--own" title="Written by the site author — not part of the course materials">✍️ author&#39;s note</span></p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="course-components">Course components<a class="content__anchor" href="#course-components" aria-hidden="true" tabindex="-1">#</a></h2>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Component</th><th class="content__table-heading">What it is</th><th class="content__table-heading">Details on this site</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><strong>Lectures</strong></td><td class="content__table-cell">chapter 1 of Kurose &amp; Ross: the Internet, protocols, network edge and core, delay, security, layers, history</td><td class="content__table-cell"><a class="content__link" href="w1-internet.html">W1–W8</a></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>Labs</strong></td><td class="content__table-cell">Wireshark (HTTP, DNS, TCP) + Java programs with TCP/UDP sockets</td><td class="content__table-cell"><a class="content__link" href="c1-relay.html">C1–C7</a></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>Practical test</strong></td><td class="content__table-cell">a TCP client solving tasks sent by the instructor&#39;s server; every task several times</td><td class="content__table-cell"><a class="content__link" href="exam.html">Practical test</a></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>Project</strong></td><td class="content__table-cell">a proxy network connecting TCP/UDP key servers; protocol documentation</td><td class="content__table-cell"><a class="content__link" href="project.html">Project</a></td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="what-is-known-for-sure-from-the-materials">What is known for sure (from the materials)<a class="content__anchor" href="#what-is-known-for-sure-from-the-materials" aria-hidden="true" tabindex="-1">#</a></h2>
+<h3 class="content__heading content__heading--h3" id="the-project-2025-26-edition">The project (2025/26 edition)<a class="content__anchor" href="#the-project-2025-26-edition" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">A complete, correct project is worth <strong>500 points</strong>; tiers: 150 / 300 / 300 / 400 / 500 (details in the <a class="content__link" href="project.html">Project</a>).</li>
+<li class="content__list-item">You <strong>declare</strong> the project for a specific number of points and it is tested only for that — if it doesn&#39;t meet <strong>all</strong> requirements for that number, it gets <strong>0</strong>.</li>
+<li class="content__list-item">Java 8, standard classes only; files without packages; compilation with <code class="content__code">javac *.java</code>; tests on localhost.</li>
+<li class="content__list-item">You submit in <strong>GAKKO</strong>: your <code class="content__code">.java</code> files, optionally scripts, <strong>&quot;Dokumentacja (index number).pdf&quot;</strong> (a mandatory condition for grading).</li>
+<li class="content__list-item">Deadline in the specification: <strong>19.12.2025, 23:55</strong> (the group instructor could change it).</li>
+<li class="content__list-item">Anti-plagiarism: plagiarised projects <strong>are not checked</strong>, plagiarism gives <strong>negative points</strong>. The instructor writes plainly that it doesn&#39;t matter whether the author was a friend, an AI or StackOverflow — independent work is what counts.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="the-practical-test-2025-26-edition">The practical test (2025/26 edition)<a class="content__anchor" href="#the-practical-test-2025-26-edition" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">You connect to the instructor&#39;s server, log in, and receive a <strong>password</strong> and a <strong>task description</strong>.</li>
+<li class="content__list-item"><strong>5 tasks</strong>, each must be done <strong>5 times</strong>; the server grades the answers immediately.</li>
+<li class="content__list-item">The description contained the <strong>end time of the test</strong> (in 2025/26: <strong>11.01.2026, 12:45</strong>) — changes after it are not taken into account.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="wireshark-labs">Wireshark labs<a class="content__anchor" href="#wireshark-labs" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Kurose &amp; Ross labs: <strong>HTTP</strong>, <strong>DNS</strong>, <strong>TCP</strong> — answering questions based on your own traffic capture (or the ready-made <em>trace</em> files).</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="what-the-materials-don-t-say-ask-your-instructor">What the materials DON&#39;T say — ask your instructor<a class="content__anchor" href="#what-the-materials-don-t-say-ask-your-instructor" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<aside class="callout callout--danger"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🐞</span><span class="callout__label">Common mistake</span><span class="callout__title">No data in the repository <span class="badge badge--own" title="Written by the site author — not part of the course materials">✍️ author&#39;s note</span></span></div><div class="callout__body"><p class="content__paragraph">The files contain no information about:</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">the <strong>grading scale</strong> and the passing threshold (how many points for a 3.0 / 5.0),</li>
+<li class="content__list-item">the <strong>weight</strong> of the test vs the project,</li>
+<li class="content__list-item">whether there is an <strong>exam / test on the lectures</strong> and what it looks like,</li>
+<li class="content__list-item"><strong>attendance</strong> and <strong>retake</strong> rules.</li>
+</ul>
+<p class="content__paragraph">I don&#39;t guess these — check the syllabus, GAKKO, or ask your instructor in the first classes. If there is a lecture test, the <strong>Cheat sheet</strong> button in every topic W1–W8 and the <a class="content__link" href="cheatsheets.html">All cheat sheets</a> page will help.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="a-suggested-semester-plan">A suggested semester plan <span class="badge badge--own" title="Written by the site author — not part of the course materials">✍️ author&#39;s note</span><a class="content__anchor" href="#a-suggested-semester-plan" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">The dates of the previous edition suggest roughly this rhythm: labs from October, the project until mid-December, the test in January. Based on that I suggest:</p>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><strong>October</strong> — lectures W1–W8 (1–2 topics a week) + <a class="content__link" href="c1-relay.html">C1</a>, <a class="content__link" href="c2-http.html">C2</a>, <a class="content__link" href="c3-tcp-server.html">C3</a>. Install the JDK and Wireshark (<a class="content__link" href="start.html">Start</a>).</li>
+<li class="content__list-item"><strong>November</strong> — <a class="content__link" href="c4-text-protocol.html">C4</a>, <a class="content__link" href="c5-tcp-udp.html">C5</a>, <a class="content__link" href="c6-dns.html">C6</a>, <a class="content__link" href="c7-tcp-wireshark.html">C7</a>. Start training with the <a class="content__link" href="exam.html">DrillServer</a> — once a week, against the clock.</li>
+<li class="content__list-item"><strong>As soon as the project specification is published</strong> — build the 150-point stage immediately, then the next ones. Write the documentation <strong>in parallel</strong>, not the last night.</li>
+<li class="content__list-item"><strong>A week before the project deadline</strong> — tests on <strong>another computer</strong>, <code class="content__code">javac *.java</code> in an empty folder, the PDF, submission in GAKKO.</li>
+<li class="content__list-item"><strong>Before the test</strong> — 2–3 full <code class="content__code">DrillServer</code> trainings with 5 repetitions; a ready client template.</li>
+</ol>
+</div>
+<h2 class="content__heading content__heading--h2" id="checklist-before-submitting-the-project">Checklist before submitting the project <span class="badge badge--own" title="Written by the site author — not part of the course materials">✍️ author&#39;s note</span><a class="content__anchor" href="#checklist-before-submitting-the-project" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><input disabled="" type="checkbox"> the folder contains <strong>only</strong> my <code class="content__code">.java</code> files, scripts and the PDF (no <code class="content__code">.class</code>, no IntelliJ project, no provided servers/clients),</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> no file has a <code class="content__code">package ...</code> line,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> <code class="content__code">javac *.java</code> in an <strong>empty</strong> folder compiles without errors (ideally <code class="content__code">javac --release 8 *.java</code>),</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> no hard-coded IP addresses, ports, paths,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> all requirements for the <strong>declared</strong> number of points work,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> the PDF is named with the index number and contains a <strong>complete protocol description</strong>,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> the template&#39;s table is filled in (author, index, points, test script),</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> submitted in GAKKO <strong>before</strong> the deadline.</li>
+</ul>
+
+
+
+</div>
+<nav class="pager" aria-label="Previous topic / Next topic">
+<a class="pager__link pager__link--prev" href="start.html"><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="pager__text"><span class="pager__label">Previous topic</span><span class="pager__title">Start here — how to use this site and set up your computer</span></span></a>
+<a class="pager__link pager__link--next" href="w1-internet.html"><span class="pager__text"><span class="pager__label">Next topic</span><span class="pager__title">What is the Internet and what is a protocol?</span></span><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="On this page"><p class="toc__title">On this page</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#in-short">In short</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#course-components">Course components</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#what-is-known-for-sure-from-the-materials">What is known for sure (from the materials)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#the-project-2025-26-edition">The project (2025/26 edition)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#the-practical-test-2025-26-edition">The practical test (2025/26 edition)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#wireshark-labs">Wireshark labs</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#what-the-materials-don-t-say-ask-your-instructor">What the materials DON&#39;T say — ask your instructor</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#a-suggested-semester-plan">A suggested semester plan  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#checklist-before-submitting-the-project">Checklist before submitting the project  ✍️</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Cheat sheet: How to pass SKJ — components, rules and dates</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Print"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Print</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Close"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Close</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-course-components">Components<a class="content__anchor" href="#cs-course-components" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Lectures (Kurose &amp; Ross, ch. 1) · Labs (Wireshark + Java) · Server-based test · Proxy project (up to 500 pts).</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-course-rules-known-for-sure-2025-26">Rules known for sure (2025/26)<a class="content__anchor" href="#cs-course-rules-known-for-sure-2025-26" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Project: you declare points → everything must work, otherwise 0.</li>
+<li class="content__list-item">PDF documentation = condition for grading; protocol description like an RFC.</li>
+<li class="content__list-item">Java 8, no packages, <code class="content__code">javac *.java</code>, localhost, no hard-coding.</li>
+<li class="content__list-item">Plagiarism → negative points.</li>
+<li class="content__list-item">Test: 5 tasks × 5 repetitions, hard deadline.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-course-2025-26-dates-archival">2025/26 dates (archival)<a class="content__anchor" href="#cs-course-2025-26-dates-archival" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Project: 19.12.2025, 23:55 (GAKKO).</li>
+<li class="content__list-item">End of the test: 11.01.2026, 12:45.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-course-ask-your-instructor">Ask your instructor<a class="content__anchor" href="#cs-course-ask-your-instructor" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">grading scale and threshold · weight of test/project · lecture exam? · attendance and retakes · current deadlines.</li>
+</ul>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ All cheat sheets</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Unofficial study notes. The tasks were rewritten (different wording, same logic) so that nothing from previous years is copied.</p>
+<p class="footer__text footer__text--small">Lectures based on: J. F. Kurose, K. W. Ross, “Computer Networking: A Top-Down Approach” (slides © 1996–2020 J.F. Kurose &amp; K.W. Ross) and Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Site source code</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+<script src="../assets/js/blocks/dates.js" defer></script>
+</body>
+</html>

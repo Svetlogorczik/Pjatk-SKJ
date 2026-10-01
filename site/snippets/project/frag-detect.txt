@@ -1,0 +1,17 @@
+for every "-server host port" from the command line:
+
+    answer = askTcp(host, port, "GET NAMES", 300 ms)
+    if answer != null:                     -> something speaks TCP on that port
+        protocol = TCP
+    else:
+        answer = askUdp(host, port, "GET NAMES", 300 ms)
+        if answer != null: protocol = UDP
+        else:              retry later (the node may not be started yet)
+
+    is it a key server or another proxy?
+        ask a question that ONLY your proxies understand (your own inter-proxy command)
+        a key server answers "NA" to anything it does not know  -> it is a key server
+        your proxy answers with your own reply                   -> it is a proxy
+
+    NEVER send QUIT, never send a half command ("GET", "SET a x") to a provided server:
+    its Scanner throws an exception that is not caught and the server process dies.

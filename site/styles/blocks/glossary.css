@@ -1,0 +1,77 @@
+.glossary__search { display: block; margin-bottom: 12px; }
+
+.glossary__input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  background: var(--color-surface);
+  font-size: 1rem;
+}
+
+.glossary__input:focus { border-color: var(--color-accent); outline: none; box-shadow: 0 0 0 3px var(--color-accent-soft); }
+
+.glossary__table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.45; }
+
+.glossary__head {
+  position: sticky;
+  top: 0;
+  padding: 10px 12px;
+  background: var(--color-surface-2);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.glossary__cell {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.glossary__cell--term { font-weight: 650; min-width: 120px; }
+
+.glossary__row--hidden { display: none; }
+
+/* Phones: every row becomes a small card (PL / EN / RU label + meaning). */
+@media (max-width: 640px) {
+  .glossary__table thead { display: none; }
+
+  .glossary__table,
+  .glossary__table tbody { display: block; }
+
+  .glossary__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .glossary__row--hidden { display: none; }
+
+  .glossary__cell {
+    padding: 0;
+    border: 0;
+  }
+
+  .glossary__cell--term { min-width: 0; }
+
+  .glossary__cell--term::before {
+    content: attr(lang);
+    display: inline-block;
+    min-width: 2.4em;
+    margin-right: 6px;
+    color: var(--color-accent);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .glossary__cell:last-child {
+    margin-top: 4px;
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+  }
+}

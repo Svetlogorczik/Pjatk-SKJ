@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jak zaliczyć SKJ — elementy, zasady i daty — SKJ</title>
+<meta name="description" content="Z czego składa się przedmiot, co wiadomo na pewno z materiałów (projekt 500 pkt, kolokwium z serwerem, dokumentacja, antyplagiat), czego materiały nie mówią i jaki plan nauki proponuję.">
+<meta name="theme-color" content="#f7f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem('skj-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<link rel="alternate" hreflang="pl" href="../pl/course.html">
+<link rel="alternate" hreflang="en" href="../en/course.html">
+<link rel="alternate" hreflang="ru" href="../ru/course.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="page" data-page-id="course">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<button type="button" class="header__menu" aria-controls="sidebar" aria-expanded="false" aria-label="Menu" data-nav-open><svg class="header__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="header__logo logo" href="index.html"><span class="logo__mark" aria-hidden="true">SKJ</span><span class="logo__text">Sieci + Java</span></a>
+<div class="header__actions">
+<nav class="lang-switch" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../pl/course.html" hreflang="pl" lang="pl" data-lang="pl" aria-current="true" title="Polski">PL</a><a class="lang-switch__link" href="../en/course.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../ru/course.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></nav>
+<button type="button" class="theme-toggle" aria-label="Przełącz motyw (jasny / ciemny)" title="Przełącz motyw (jasny / ciemny)"><svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-toc">
+<aside class="layout__sidebar sidebar" id="sidebar" aria-label="Menu">
+<div class="sidebar__head"><span class="sidebar__title">Menu</span><button type="button" class="sidebar__close" data-nav-close aria-label="Zamknij menu">✕</button></div>
+<nav class="nav">
+<a class="nav__home" href="index.html">🏠 Sieci + Java</a>
+<div class="nav__progress progress" data-progress data-label="Twój postęp"><span class="progress__label">Twój postęp</span><span class="progress__bar"><span class="progress__fill"></span></span><span class="progress__value">0%</span></div>
+<div class="nav__section">
+<p class="nav__title">Start</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="start.html" data-page-link="start"><span class="nav__num" aria-hidden="true">🧭</span><span class="nav__text">Start i środowisko</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link nav__link--active" href="course.html" data-page-link="course" aria-current="page"><span class="nav__num" aria-hidden="true">🎓</span><span class="nav__text">Zaliczenie i daty</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="glossary.html" data-page-link="glossary"><span class="nav__num" aria-hidden="true">📖</span><span class="nav__text">Słowniczek PL/EN/RU</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="cheatsheets.html" data-page-link="cheatsheets"><span class="nav__num" aria-hidden="true">🗂️</span><span class="nav__text">Wszystkie konspekty</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Wykłady</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="w1-internet.html" data-page-link="w1-internet"><span class="nav__num" aria-hidden="true">W1</span><span class="nav__text">Internet i protokoły</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w2-edge.html" data-page-link="w2-edge"><span class="nav__num" aria-hidden="true">W2</span><span class="nav__text">Brzeg sieci</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w3-core.html" data-page-link="w3-core"><span class="nav__num" aria-hidden="true">W3</span><span class="nav__text">Rdzeń sieci</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w4-structure.html" data-page-link="w4-structure"><span class="nav__num" aria-hidden="true">W4</span><span class="nav__text">Struktura Internetu</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w5-performance.html" data-page-link="w5-performance"><span class="nav__num" aria-hidden="true">W5</span><span class="nav__text">Opóźnienia i przepustowość</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w6-security.html" data-page-link="w6-security"><span class="nav__num" aria-hidden="true">W6</span><span class="nav__text">Bezpieczeństwo</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w7-layers.html" data-page-link="w7-layers"><span class="nav__num" aria-hidden="true">W7</span><span class="nav__text">Warstwy i enkapsulacja</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="w8-history.html" data-page-link="w8-history"><span class="nav__num" aria-hidden="true">W8</span><span class="nav__text">Historia Internetu</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Ćwiczenia</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="c1-relay.html" data-page-link="c1-relay"><span class="nav__num" aria-hidden="true">C1</span><span class="nav__text">Sztafeta procesów (pierwsze uruchomienie)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c2-http.html" data-page-link="c2-http"><span class="nav__num" aria-hidden="true">C2</span><span class="nav__text">Wireshark + HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c3-tcp-server.html" data-page-link="c3-tcp-server"><span class="nav__num" aria-hidden="true">C3</span><span class="nav__text">TCP w Javie: mini-serwer HTTP</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c4-text-protocol.html" data-page-link="c4-text-protocol"><span class="nav__num" aria-hidden="true">C4</span><span class="nav__text">Klient protokołu tekstowego</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c5-tcp-udp.html" data-page-link="c5-tcp-udp"><span class="nav__num" aria-hidden="true">C5</span><span class="nav__text">TCP + UDP razem</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c6-dns.html" data-page-link="c6-dns"><span class="nav__num" aria-hidden="true">C6</span><span class="nav__text">DNS ręcznie (UDP, bajty)</span><span class="nav__done" aria-hidden="true">✓</span></a></li><li class="nav__item"><a class="nav__link" href="c7-tcp-wireshark.html" data-page-link="c7-tcp-wireshark"><span class="nav__num" aria-hidden="true">C7</span><span class="nav__text">TCP w Wiresharku</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Kolokwium</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="exam.html" data-page-link="exam"><span class="nav__num" aria-hidden="true">📝</span><span class="nav__text">Kolokwium: trening</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div><div class="nav__section">
+<p class="nav__title">Projekt</p>
+<ul class="nav__list"><li class="nav__item"><a class="nav__link" href="project.html" data-page-link="project"><span class="nav__num" aria-hidden="true">🛠️</span><span class="nav__text">Projekt: sieć proxy</span><span class="nav__done" aria-hidden="true">✓</span></a></li></ul>
+</div>
+</nav>
+</aside>
+<div class="layout__overlay" data-nav-close hidden></div>
+<main class="layout__main" id="main" tabindex="-1">
+<article class="article">
+<header class="article__header">
+<p class="article__eyebrow">Start</p>
+<h1 class="article__title"><span class="article__icon" aria-hidden="true">🎓</span>Jak zaliczyć SKJ — elementy, zasady i daty</h1>
+<p class="article__lead">Z czego składa się przedmiot, co wiadomo na pewno z materiałów (projekt 500 pkt, kolokwium z serwerem, dokumentacja, antyplagiat), czego materiały nie mówią i jaki plan nauki proponuję.</p>
+<div class="article__meta"><span class="badge badge--lecture">📘 Wykład + dodatki</span><span class="article__source">Na podstawie: specyfikacja projektu 2025/26, szablon dokumentacji, szablon testu i wykłady z repozytorium; plan i porady — opracowanie własne</span><span class="article__time">⏱ 4 min czytania</span></div>
+<div class="article__actions"><button type="button" class="button button--primary" data-cheatsheet-open aria-haspopup="dialog" aria-controls="cheatsheet" title="Krótka ściąga na ćwiczenia i projekt"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg><span class="button__text">Konspekt</span></button><button type="button" class="button button--ghost" data-done-toggle="course" aria-pressed="false" data-label-off="Oznacz jako przerobione" data-label-on="Przerobione"><svg class="button__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="button__text">Oznacz jako przerobione</span></button></div>
+</header>
+<details class="toc toc--mobile"><summary class="toc__title toc__title--toggle">Na tej stronie</summary><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#w-skrocie">W skrócie</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#elementy-przedmiotu">Elementy przedmiotu</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#co-wiadomo-na-pewno-z-materialow">Co wiadomo na pewno (z materiałów)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#projekt-edycja-2025-26">Projekt (edycja 2025/26)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#kolokwium-praktyczne-edycja-2025-26">Kolokwium praktyczne (edycja 2025/26)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#cwiczenia-z-wiresharkiem">Ćwiczenia z Wiresharkiem</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czego-materialy-nie-mowia-zapytaj-prowadzacego">Czego materiały NIE mówią — zapytaj prowadzącego</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#proponowany-plan-semestru">Proponowany plan semestru  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#lista-kontrolna-przed-oddaniem-projektu">Lista kontrolna przed oddaniem projektu  ✍️</a></li></ol></details>
+<div class="article__body content">
+<h2 class="content__heading content__heading--h2" id="w-skrocie">W skrócie<a class="content__anchor" href="#w-skrocie" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Przedmiot: <strong>SKJ — Sieci komputerowe i programowanie sieciowe w Javie</strong> (<em>Computer Networks and Network Programming in Java</em>). Wykłady prowadzi <strong>dr inż. Kazimierz Zieliński</strong>, na podstawie podręcznika Kurose &amp; Ross.</li>
+<li class="content__list-item">Z materiałów wynikają dwa główne elementy praktyczne: <strong>kolokwium z serwerem</strong> (zadania przez TCP) i <strong>projekt</strong> (sieć proxy, do <strong>500 pkt</strong>).</li>
+<li class="content__list-item">Projekt <strong>bez dokumentacji PDF nie jest oceniany</strong>; za <strong>plagiat</strong> są <strong>punkty ujemne</strong>.</li>
+<li class="content__list-item">Daty w materiałach dotyczą edycji <strong>2025/2026</strong> — są już <strong>archiwalne</strong>. Nowe terminy ogłosi prowadzący.</li>
+</ul>
+
+<section class="dates" aria-label="Ważne daty"><p class="dates__title">📅 Ważne daty <span class="dates__edition">Edycja 2025/2026</span></p><ul class="dates__list"><li class="dates__item dates__item--past" data-date="2025-12-05">
+<time class="dates__date" datetime="2025-12-05">05.12.2025</time>
+<span class="dates__label">Specyfikacja projektu (data archiwum z treścią zadania)</span>
+<span class="dates__status" data-past="minęło" data-today="dzisiaj" data-in-days="za {n} dni" data-days-ago="{n} dni temu">minęło · 300 dni temu</span>
+<span class="dates__source">Źródło: <code class="content__code">Specyfikacja projektu 2025 2026.zip</code></span>
+</li><li class="dates__item dates__item--past" data-date="2025-12-19">
+<time class="dates__date" datetime="2025-12-19T23:55">19.12.2025, 23:55</time>
+<span class="dates__label">Termin oddania projektu w GAKKO (może zmienić prowadzący grupy)</span>
+<span class="dates__status" data-past="minęło" data-today="dzisiaj" data-in-days="za {n} dni" data-days-ago="{n} dni temu">minęło · 286 dni temu</span>
+<span class="dates__source">Źródło: <code class="content__code">Specyfikacja projektu.pdf, pkt 5</code></span>
+</li><li class="dates__item dates__item--past" data-date="2026-01-11">
+<time class="dates__date" datetime="2026-01-11T12:45">11.01.2026, 12:45</time>
+<span class="dates__label">Koniec testu praktycznego (kolokwium z serwerem)</span>
+<span class="dates__status" data-past="minęło" data-today="dzisiaj" data-in-days="za {n} dni" data-days-ago="{n} dni temu">minęło · 263 dni temu</span>
+<span class="dates__source">Źródło: <code class="content__code">Test_template/output.txt</code></span>
+</li></ul><p class="dates__note">Archiwalne — dotyczy poprzedniej edycji. Nowe terminy poda prowadzący.</p></section>
+
+<aside class="callout callout--warning"><div class="callout__header"><span class="callout__icon" aria-hidden="true">⚠️</span><span class="callout__label">Uwaga</span><span class="callout__title">Aktualność dat</span></div><div class="callout__body"><p class="content__paragraph">Dzisiejszy status (minęło / za ile dni) liczy się automatycznie w Twojej przeglądarce. Wszystkie powyższe daty pochodzą z plików poprzedniej edycji, więc najpewniej <strong>nie dotyczą</strong> Twojego semestru — traktuj je jako orientację, kiedy mniej więcej co się dzieje. <span class="badge badge--own" title="Ten fragment dopisał autor strony — nie ma go w materiałach z zajęć">✍️ od autora</span></p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="elementy-przedmiotu">Elementy przedmiotu<a class="content__anchor" href="#elementy-przedmiotu" aria-hidden="true" tabindex="-1">#</a></h2>
+<div class="content__table-wrap" tabindex="0"><table class="content__table"><thead class="content__table-head"><tr class="content__table-row"><th class="content__table-heading">Element</th><th class="content__table-heading">Co to jest</th><th class="content__table-heading">Szczegóły na stronie</th></tr></thead><tbody class="content__table-body"><tr class="content__table-row"><td class="content__table-cell"><strong>Wykłady</strong></td><td class="content__table-cell">rozdział 1 Kurose &amp; Ross: Internet, protokoły, brzeg i rdzeń sieci, opóźnienia, bezpieczeństwo, warstwy, historia</td><td class="content__table-cell"><a class="content__link" href="w1-internet.html">W1–W8</a></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>Ćwiczenia</strong></td><td class="content__table-cell">Wireshark (HTTP, DNS, TCP) + programy w Javie z gniazdami TCP/UDP</td><td class="content__table-cell"><a class="content__link" href="c1-relay.html">C1–C7</a></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>Kolokwium</strong></td><td class="content__table-cell">klient TCP rozwiązujący zadania wysyłane przez serwer prowadzącego; każde zadanie kilka razy</td><td class="content__table-cell"><a class="content__link" href="exam.html">Kolokwium</a></td></tr><tr class="content__table-row"><td class="content__table-cell"><strong>Projekt</strong></td><td class="content__table-cell">sieć proxy łącząca serwery kluczy TCP/UDP; dokumentacja protokołu</td><td class="content__table-cell"><a class="content__link" href="project.html">Projekt</a></td></tr></tbody></table></div>
+<h2 class="content__heading content__heading--h2" id="co-wiadomo-na-pewno-z-materialow">Co wiadomo na pewno (z materiałów)<a class="content__anchor" href="#co-wiadomo-na-pewno-z-materialow" aria-hidden="true" tabindex="-1">#</a></h2>
+<h3 class="content__heading content__heading--h3" id="projekt-edycja-2025-26">Projekt (edycja 2025/26)<a class="content__anchor" href="#projekt-edycja-2025-26" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Pełny, poprawny projekt jest wart <strong>500 punktów</strong>; progi: 150 / 300 / 300 / 400 / 500 (szczegóły w <a class="content__link" href="project.html">Projekcie</a>).</li>
+<li class="content__list-item">Projekt <strong>deklarujesz</strong> na konkretną liczbę punktów i jest testowany tylko na nią — jeśli nie spełnia <strong>wszystkich</strong> wymagań dla tej liczby, dostaje <strong>0</strong>.</li>
+<li class="content__list-item">Java 8, tylko standardowe klasy; pliki bez pakietów; kompilacja <code class="content__code">javac *.java</code>; testy na localhost.</li>
+<li class="content__list-item">Oddajesz w <strong>GAKKO</strong>: swoje <code class="content__code">.java</code>, opcjonalnie skrypty, <strong>„Dokumentacja (nr indeksu).pdf”</strong> (warunek konieczny oceny).</li>
+<li class="content__list-item">Termin w specyfikacji: <strong>19.12.2025, 23:55</strong> (mógł go zmienić prowadzący grupy).</li>
+<li class="content__list-item">Antyplagiat: projekty „splagiatowane” <strong>nie są sprawdzane</strong>, za plagiat są <strong>ujemne punkty</strong>. Prowadzący pisze wprost, że nie ma znaczenia, czy autorem był kolega, AI czy StackOverflow — liczy się samodzielna praca.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="kolokwium-praktyczne-edycja-2025-26">Kolokwium praktyczne (edycja 2025/26)<a class="content__anchor" href="#kolokwium-praktyczne-edycja-2025-26" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Łączysz się z serwerem prowadzącego, logujesz się, dostajesz <strong>hasło</strong> i <strong>opis zadań</strong>.</li>
+<li class="content__list-item"><strong>5 zadań</strong>, każde trzeba wykonać <strong>5 razy</strong>; serwer od razu ocenia odpowiedzi.</li>
+<li class="content__list-item">Opis zawierał <strong>godzinę zakończenia testu</strong> (w edycji 2025/26: <strong>11.01.2026, 12:45</strong>) — po niej zmiany nie są uwzględniane.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cwiczenia-z-wiresharkiem">Ćwiczenia z Wiresharkiem<a class="content__anchor" href="#cwiczenia-z-wiresharkiem" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Laboratoria Kurose &amp; Ross: <strong>HTTP</strong>, <strong>DNS</strong>, <strong>TCP</strong> — odpowiedzi na pytania na podstawie własnego przechwycenia ruchu (albo gotowych plików <em>trace</em>).</li>
+</ul>
+<h2 class="content__heading content__heading--h2" id="czego-materialy-nie-mowia-zapytaj-prowadzacego">Czego materiały NIE mówią — zapytaj prowadzącego<a class="content__anchor" href="#czego-materialy-nie-mowia-zapytaj-prowadzacego" aria-hidden="true" tabindex="-1">#</a></h2>
+
+<aside class="callout callout--danger"><div class="callout__header"><span class="callout__icon" aria-hidden="true">🐞</span><span class="callout__label">Częsty błąd</span><span class="callout__title">Brak danych w repozytorium <span class="badge badge--own" title="Ten fragment dopisał autor strony — nie ma go w materiałach z zajęć">✍️ od autora</span></span></div><div class="callout__body"><p class="content__paragraph">W plikach nie ma informacji o:</p>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><strong>skali ocen</strong> i progu zaliczenia (ile punktów na 3,0 / 5,0),</li>
+<li class="content__list-item"><strong>wadze</strong> kolokwium względem projektu,</li>
+<li class="content__list-item">tym, czy jest <strong>egzamin / test z wykładów</strong> i jak wygląda,</li>
+<li class="content__list-item">zasadach <strong>obecności</strong> i <strong>poprawkach</strong>.</li>
+</ul>
+<p class="content__paragraph">Nie zgaduję tych rzeczy — sprawdź je w sylabusie, w GAKKO albo zapytaj prowadzącego na pierwszych zajęciach. Jeśli jest test z wykładów, przyda się przycisk <strong>Konspekt</strong> w każdym temacie W1–W8 i strona <a class="content__link" href="cheatsheets.html">Wszystkie konspekty</a>.</p>
+</div></aside>
+<h2 class="content__heading content__heading--h2" id="proponowany-plan-semestru">Proponowany plan semestru <span class="badge badge--own" title="Ten fragment dopisał autor strony — nie ma go w materiałach z zajęć">✍️ od autora</span><a class="content__anchor" href="#proponowany-plan-semestru" aria-hidden="true" tabindex="-1">#</a></h2>
+<p class="content__paragraph">Daty z poprzedniej edycji sugerują mniej więcej taki rytm: laboratoria od października, projekt do połowy grudnia, kolokwium w styczniu. Na tej podstawie proponuję:</p>
+
+<div class="steps"><ol class="content__list content__list--ordered">
+<li class="content__list-item"><strong>Październik</strong> — wykłady W1–W8 (po 1–2 tematy tygodniowo) + <a class="content__link" href="c1-relay.html">C1</a>, <a class="content__link" href="c2-http.html">C2</a>, <a class="content__link" href="c3-tcp-server.html">C3</a>. Zainstaluj JDK i Wiresharka (<a class="content__link" href="start.html">Start</a>).</li>
+<li class="content__list-item"><strong>Listopad</strong> — <a class="content__link" href="c4-text-protocol.html">C4</a>, <a class="content__link" href="c5-tcp-udp.html">C5</a>, <a class="content__link" href="c6-dns.html">C6</a>, <a class="content__link" href="c7-tcp-wireshark.html">C7</a>. Zacznij trenować z <a class="content__link" href="exam.html">DrillServer</a> — raz w tygodniu, na czas.</li>
+<li class="content__list-item"><strong>Od momentu publikacji specyfikacji projektu</strong> — od razu zbuduj etap na 150 pkt, potem kolejne. Dokumentację pisz <strong>równolegle</strong>, nie w ostatnią noc.</li>
+<li class="content__list-item"><strong>Tydzień przed terminem projektu</strong> — testy na <strong>innym komputerze</strong>, <code class="content__code">javac *.java</code> w pustym folderze, PDF, wysyłka w GAKKO.</li>
+<li class="content__list-item"><strong>Przed kolokwium</strong> — 2–3 pełne treningi <code class="content__code">DrillServer</code> z 5 powtórzeniami; gotowy szablon klienta.</li>
+</ol>
+</div>
+<h2 class="content__heading content__heading--h2" id="lista-kontrolna-przed-oddaniem-projektu">Lista kontrolna przed oddaniem projektu <span class="badge badge--own" title="Ten fragment dopisał autor strony — nie ma go w materiałach z zajęć">✍️ od autora</span><a class="content__anchor" href="#lista-kontrolna-przed-oddaniem-projektu" aria-hidden="true" tabindex="-1">#</a></h2>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item"><input disabled="" type="checkbox"> w folderze są <strong>tylko</strong> moje pliki <code class="content__code">.java</code>, skrypty i PDF (bez <code class="content__code">.class</code>, bez projektu IntelliJ, bez dostarczonych serwerów/klientów),</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> żaden plik nie ma linii <code class="content__code">package ...</code>,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> <code class="content__code">javac *.java</code> w <strong>pustym</strong> folderze kompiluje się bez błędów (najlepiej <code class="content__code">javac --release 8 *.java</code>),</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> brak zahardkodowanych adresów IP, portów, ścieżek,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> wszystkie wymagania dla <strong>zadeklarowanej</strong> liczby punktów działają,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> PDF ma nazwę z numerem indeksu i zawiera <strong>pełny opis protokołu</strong>,</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> w PDF wypełniona tabelka z szablonu (autor, indeks, punkty, skrypt testowy),</li>
+<li class="content__list-item"><input disabled="" type="checkbox"> wysłane w GAKKO <strong>przed</strong> terminem.</li>
+</ul>
+
+
+
+</div>
+<nav class="pager" aria-label="Poprzedni temat / Następny temat">
+<a class="pager__link pager__link--prev" href="start.html"><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span class="pager__text"><span class="pager__label">Poprzedni temat</span><span class="pager__title">Zacznij tutaj — jak korzystać ze strony i przygotować komputer</span></span></a>
+<a class="pager__link pager__link--next" href="w1-internet.html"><span class="pager__text"><span class="pager__label">Następny temat</span><span class="pager__title">Czym jest Internet i czym jest protokół?</span></span><svg class="pager__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a>
+</nav>
+</article>
+</main>
+<aside class="layout__toc"><nav class="toc toc--desktop" aria-label="Na tej stronie"><p class="toc__title">Na tej stronie</p><ol class="toc__list"><li class="toc__item toc__item--h2"><a class="toc__link" href="#w-skrocie">W skrócie</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#elementy-przedmiotu">Elementy przedmiotu</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#co-wiadomo-na-pewno-z-materialow">Co wiadomo na pewno (z materiałów)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#projekt-edycja-2025-26">Projekt (edycja 2025/26)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#kolokwium-praktyczne-edycja-2025-26">Kolokwium praktyczne (edycja 2025/26)</a></li><li class="toc__item toc__item--h3"><a class="toc__link" href="#cwiczenia-z-wiresharkiem">Ćwiczenia z Wiresharkiem</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#czego-materialy-nie-mowia-zapytaj-prowadzacego">Czego materiały NIE mówią — zapytaj prowadzącego</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#proponowany-plan-semestru">Proponowany plan semestru  ✍️</a></li><li class="toc__item toc__item--h2"><a class="toc__link" href="#lista-kontrolna-przed-oddaniem-projektu">Lista kontrolna przed oddaniem projektu  ✍️</a></li></ol></nav></aside>
+</div>
+<dialog class="cheatsheet" id="cheatsheet" aria-labelledby="cheatsheet-title">
+<div class="cheatsheet__header"><h2 class="cheatsheet__title" id="cheatsheet-title">📝 Konspekt: Jak zaliczyć SKJ — elementy, zasady i daty</h2>
+<div class="cheatsheet__tools"><button type="button" class="cheatsheet__button" data-cheatsheet-print title="Drukuj"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg><span class="visually-hidden">Drukuj</span></button><button type="button" class="cheatsheet__button" data-cheatsheet-close title="Zamknij"><svg class="cheatsheet__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="visually-hidden">Zamknij</span></button></div></div>
+<div class="cheatsheet__body content"><h3 class="content__heading content__heading--h3" id="cs-course-elementy">Elementy<a class="content__anchor" href="#cs-course-elementy" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Wykłady (Kurose &amp; Ross, rozdz. 1) · Ćwiczenia (Wireshark + Java) · Kolokwium z serwerem · Projekt proxy (do 500 pkt).</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-course-pewne-zasady-2025-26">Pewne zasady (2025/26)<a class="content__anchor" href="#cs-course-pewne-zasady-2025-26" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Projekt: deklarujesz punkty → wszystko musi działać, inaczej 0.</li>
+<li class="content__list-item">Dokumentacja PDF = warunek oceny; opis protokołu jak RFC.</li>
+<li class="content__list-item">Java 8, bez pakietów, <code class="content__code">javac *.java</code>, localhost, bez hardkodowania.</li>
+<li class="content__list-item">Plagiat → ujemne punkty.</li>
+<li class="content__list-item">Kolokwium: 5 zadań × 5 powtórzeń, twardy termin.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-course-daty-2025-26-archiwalne">Daty 2025/26 (archiwalne)<a class="content__anchor" href="#cs-course-daty-2025-26-archiwalne" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">Projekt: 19.12.2025, 23:55 (GAKKO).</li>
+<li class="content__list-item">Koniec testu: 11.01.2026, 12:45.</li>
+</ul>
+<h3 class="content__heading content__heading--h3" id="cs-course-zapytaj-prowadzacego">Zapytaj prowadzącego<a class="content__anchor" href="#cs-course-zapytaj-prowadzacego" aria-hidden="true" tabindex="-1">#</a></h3>
+<ul class="content__list content__list--bullet">
+<li class="content__list-item">skala ocen i próg · waga kolokwium/projektu · egzamin z wykładów? · obecności i poprawki · aktualne terminy.</li>
+</ul>
+</div>
+<div class="cheatsheet__footer"><a class="cheatsheet__all" href="cheatsheets.html">🗂️ Wszystkie konspekty</a></div>
+</dialog>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Nieoficjalne materiały do nauki. Zadania zostały przerobione (inna treść, ta sama logika), aby nie kopiować prac z poprzednich lat.</p>
+<p class="footer__text footer__text--small">Wykłady oparte na: J. F. Kurose, K. W. Ross, „Computer Networking: A Top-Down Approach” (slajdy © 1996–2020 J.F. Kurose &amp; K.W. Ross) oraz Wireshark Labs © 2005–2025 J.F. Kurose &amp; K.W. Ross.</p>
+<p class="footer__text footer__text--small"><a class="footer__link" href="https://github.com/Svetlogorczik/Pjatk-SKJ" target="_blank" rel="noopener noreferrer">Kod źródłowy strony</a> · 2026-10-01</p>
+</div>
+</footer>
+<script src="../assets/js/blocks/theme-toggle.js" defer></script>
+<script src="../assets/js/blocks/lang-switch.js" defer></script>
+<script src="../assets/js/blocks/nav.js" defer></script>
+<script src="../assets/js/blocks/code-block.js" defer></script>
+<script src="../assets/js/blocks/progress.js" defer></script>
+<script src="../assets/js/blocks/toc.js" defer></script>
+<script src="../assets/js/blocks/cheatsheet.js" defer></script>
+<script src="../assets/js/blocks/dates.js" defer></script>
+</body>
+</html>
